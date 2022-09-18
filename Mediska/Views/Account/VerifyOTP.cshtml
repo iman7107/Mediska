@@ -1,0 +1,147 @@
+﻿@model Mediska.Models.clsGuidCode
+@{
+    ViewBag.Title = "VerifySMSCode";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+<script src="https://www.google.com/recaptcha/api.js?render=6LcXnQAhAAAAAHsJdddHoZkMmX7PrBr1dTPfaJyq"></script>
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6LcXnQAhAAAAAHsJdddHoZkMmX7PrBr1dTPfaJyq', { action: 'VerifyOTP' }).then(function (token) {
+            $("#GoogleCaptchaToken").val(token);
+        });
+    });
+</script>
+
+<!--loader start-->
+<div id="preloader">
+    <div class="loader1">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+<!--loader end-->
+<!--body content wrap start-->
+<div class="main">
+
+    <!--hero section start-->
+    <section class="hero-section full-screen gray-light-bg">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-center">
+
+                <div class="col-12 col-md-7 col-lg-6 col-xl-8 d-none d-lg-block">
+                    <!-- Image -->
+                    <div class="bg-cover vh-100 ml-n3 gradient-overlay" style="background-image: url('../../Content/image/medical-15_s.jpg');">
+                        <div class="position-absolute login-signup-content">
+                            <div class="position-relative text-white col-md-12 col-lg-7">
+                                <h2 class="text-white">ورود با رمز یکبار مصرف</h2>
+                                <p>رمز یکبار مصرف 4 رقمی خود را وارد نمایید</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-6 col-xl-4">
+                    <div class="login-signup-wrap px-4 px-lg-5 my-5">
+                        <div id="message_div" class="text_center margin_bottom_20"></div>
+                        <!-- Heading -->
+                        <!--login form-->
+                        @using (Html.BeginForm("VerifyOTP", "Account", FormMethod.Post, new { @class = "login-signup-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                <label class="pb-1">کد تایید</label>
+                                <div class="input-group input-group-merge">
+                                    <div class="input-icon">
+                                        <span class="ti-arrow-circle-left"></span>
+                                    </div>
+
+                                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control text_center", placeholder = "کد تایید را وارد کنید" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger margin_right_20" })
+                            </div>
+                            @Html.HiddenFor(model => model.Guid)
+                            @Html.HiddenFor(model => model.GoogleCaptchaToken)
+
+
+                            <button type="submit" class="btn btn-block secondary-solid-btn border-radius mt-4 mb-3">
+                                ورود
+                            </button>
+
+                            <div class="text-center">
+                                <div class="margin_top_20 sms_auth_div">
+                                    <button type="button" id="resend_sms_button" class="btn btn-block secondary-solid-btn border-radius mt-4 mb-3 disabled" onclick="fnResendSMS('@Model.Guid')">ارسال مجدد پیامک (01:59)</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div> <!-- / .row -->
+        </div>
+    </section>
+    <!--hero section end-->
+
+</div>
+<!--body content wrap end-->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    var AllSeconds = 120;
+
+    var x = setInterval(function () {
+        if (AllSeconds > 0)
+            AllSeconds = AllSeconds - 1;
+
+        var minutes = Math.floor(AllSeconds / (60));
+        var seconds = Math.floor((AllSeconds % (60)));
+
+        document.getElementById("resend_sms_button").innerHTML = "ارسال مجدد پیامک " + "(" + (("0" + minutes).slice(-2)) + ":" + (("0" + seconds).slice(-2)) + ")";
+
+        if (AllSeconds <= 0) {
+            document.getElementById("resend_sms_button").innerHTML = "ارسال مجدد پیامک";
+            $('#resend_sms_button').removeClass('disabled');
+        }
+    }, 1000);
+
+    //===================================================================================================================
+    //===================================================================================================================
+    function fnResendSMS(guid) {
+        var obj = $('#resend_sms_button');
+        if (obj.hasClass('disabled'))
+            return;
+        else {
+            $.ajax({
+                url: "/Account/ResendOTPSMS",
+                type: 'POST',
+                contentType:
+                    "application/json;charset=utf-8",
+                data: JSON.stringify({ 'guid': guid }),
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.Status === 'Success') {
+                        $('#message_div').empty();
+                        $('#message_div').append('<div class="success_message">' + data.Message + '</div>');
+                        $('#resend_sms_button').addClass('disabled');
+                        AllSeconds = 120;
+                    }
+                    else if (data.Status === 'Error') {
+                        $('#message_div').empty();
+                        $('#message_div').append('<div class="error_message">' + data.Message + '</div>');
+                    }
+                },
+                error: function (er) {
+                    $('#message_div').empty();
+                    $('#message_div').append('<div class="error_message">' + 'ارسال پیامک با خطا مواجه شد' + '</div>');
+                }
+            });
+        }
+    };
+
+</script>

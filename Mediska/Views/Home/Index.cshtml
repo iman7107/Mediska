@@ -1,0 +1,336 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Mediska.Models
+@using Mediska.Models.Repository
+
+@{
+    repProduct RepP = new repProduct();
+    var ProductList = RepP.GetProductList();
+    var ProductGroupList = RepP.GetProductGroup();
+}
+
+<!--hero section start-->
+<section class="ptb-70 gradient-bg">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-lg-5">
+                <div class="hero-slider-content text-white pt-5">
+                    <strong></strong>
+                    <h1 class="text-white">به مدیســکا خوش آمدید</h1>
+                    <p class="lead">در این سایت، همراه شما هستیم تا بتوانید از خرید نرم افزار تخصصی در حوزه ی پزشکی خود، لذت ببرید. </p>
+                    <p class="lead">پس از خرید کارشناسان پشتیبانی شرکت، با دقت و حوصله در کنار شما هستند، تا بتوانید تجربه ی دلچسبی از همکاری با ما داشته باشید. </p>
+
+                    <div class="action-btns mt-3">
+                        <a href="#" class="btn secondary-solid-btn">الان شروع کن</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-7">
+                <div class="image-wrap pt-5">
+                    <img src="~/Content/image/b4.png" class="img-fluid custom-width" alt="قهرمان">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--outstanding section end-->
+<!--our work or portfolio section start-->
+<section class="our-portfolio-section ptb-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="section-heading text-center mb-4">
+                    <h2>محصولات ما</h2>
+                    <span class="animate-border mr-auto ml-auto mb-4"></span>
+                    @*<p class="lead">بطور پویا به جای بهبود روند 24/7 ، همگرایی قابل اعتماد را دنبال کنید. بطور ذاتی خدمات نهایی مشتری را بدون داده های گسترده توسعه می دهد.</p>*@
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center pb-2">
+                    @foreach (var Pgroup in ProductGroupList)
+                    {
+                        <button type="button" class="filter-btn" data-mixitup-control="" data-filter="@Pgroup.ClassName">
+                            @Pgroup.prdgrpName
+                        </button>
+                    }
+                </div>
+                <div class="portfolio-container" id="MixItUp">
+                    @foreach (var product in ProductList)
+                    {
+                        @Html.Partial("_pwProduct", product)
+                    }
+
+                    <div class="gap"></div>
+                    <div class="gap"></div>
+                    <div class="gap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--work process section start-->
+<section class="work-process-section ptb-100 gray-light-bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-9">
+                <div class="section-heading text-center">
+                    <h2><strong class="color-secondary">فرآیند خرید آنلاین</strong></h2>
+                    <span class="animate-border mr-auto ml-auto mb-4"></span>
+                </div>
+            </div>
+        </div>
+        <!-- ============ step 1 =========== -->
+        <div class="row mt-5">
+            <div class="col-md-12 col-lg-5 process-width">
+                <div class="process-box process-left">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="process-step-number">
+                                <strong>گام</strong>
+                                <h2 class="m-0">1</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h5>ثبت نام در سایت</h5>
+                            <p>ابتدا لازم است در سایت ثبت نام انجام دهید.</p>
+                        </div>
+                    </div>
+                    <div class="process-line-l"></div>
+                </div>
+            </div>
+            <div class="col-md-2 process-none"></div>
+            <div class="col-md-5 col-md-5 col-lg-5 process-none">
+                <div class="process-point-right"></div>
+            </div>
+        </div>
+        <!-- ============ step 2 =========== -->
+        <div class="row">
+            <div class="col-md-5 col-lg-5 process-none">
+                <div class="process-point-left"></div>
+            </div>
+            <div class="col-md-2 process-none"></div>
+            <div class="col-md-12 col-lg-5 process-width">
+                <div class="process-box process-right">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="process-step-number">
+                                <strong>گام</strong>
+                                <h2 class="m-0">2</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h5>انتخاب محصول</h5>
+                            <p>محصول مورد نظر را انتخاب و به سبد خرید اضافه کنید.</p>
+                        </div>
+                    </div>
+                    <div class="process-line-r"></div>
+                </div>
+            </div>
+
+        </div>
+        <!-- ============ step 3 =========== -->
+        <div class="row">
+            <div class="col-md-12 col-lg-5 process-width">
+                <div class="process-box process-left">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="process-step-number">
+                                <strong>گام</strong>
+                                <h2 class="m-0">3</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h5>نهایی کردن سفارش</h5>
+                            <p>به سبد خرید بروید و با پرداخت وجه آنلاین، سفارش خود را نهایی کنید.</p>
+                        </div>
+                    </div>
+                    <div class="process-line-l"></div>
+                </div>
+            </div>
+            <div class="col-md-2 process-none"></div>
+            <div class="col-md-5 col-lg-5 process-none">
+                <div class="process-point-right"></div>
+            </div>
+        </div>
+        <!-- ============ step 4 =========== -->
+        <div class="row">
+            <div class="col-md-5 col-lg-5 process-none">
+                <div class="process-point-left"></div>
+            </div>
+            <div class="col-md-2 process-none"></div>
+            <div class="col-md-12 col-lg-5 process-width">
+                <div class="process-box process-right">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="process-step-number">
+                                <strong>گام</strong>
+                                <h2 class="m-0">4</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h5>دریافت محصول</h5>
+                            <p>دانلود محصول برای محصولات دانلودی یا ارسال برای محصولات فیزیکی</p>
+                        </div>
+                    </div>
+                    <div class="process-line-r line-r"></div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- ============ step 3 =========== -->
+        <div class="row">
+            <div class="col-md-12 col-lg-5 process-width">
+                <div class="process-box process-left">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="process-step-number">
+                                <strong>گام</strong>
+                                <h2 class="m-0">5</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h5>راه اندازی و آموزش</h5>
+                            <p>تماس با کارشناسان واحد پشتیبانی برای شروع راه اندازی و گرفتن آموزش و شروع کار با نرم افزار</p>
+                        </div>
+                    </div>
+                    <div class="process-line-l line-5"></div>
+                </div>
+            </div>
+            <div class="col-md-2 custom-none"></div>
+            <div class="col-md-5 col-lg-5 custom-none">
+                <div class="process-point-right process-last"></div>
+            </div>
+        </div>
+        <!-- ============ -->
+        <br />
+        <div style="text-align:center;"><a href="#" class="big_button">نیاز به مشاوره ی بیشتر دارم</a></div>
+    </div>
+</section>
+<!--work process section end-->
+<!--hero section end-->
+<!--call to action section end-->
+<!--services section start-->
+<section class="services-section ptb-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="section-heading text-center mb-5">
+                    <strong class="color-secondary">خدمات ما</strong>
+                    <h2>چه کار میتوانیم برایتان بکنیم</h2>
+                    <span class="animate-border mr-auto ml-auto mb-4"></span>
+                    <p class="lead">به طور مؤثر صلاحیت های اصلی پایان تا پایان بدون ایده های مناسب. راه حل های تاکتیکی پویا و بدون مقدار فعال سازی را تقویت کنید.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="services-single text-center p-5 my-md-3 my-lg-3 my-sm-0 shadow-sm white-bg rounded">
+                    <span class="ti-announcement icon-lg color-secondary d-block mb-4"></span>
+                    <h5>بازاریابی دیجیتال</h5>
+                    <p class="mb-0">به تدریج با مشارکت در سطح بندی منابع ، تجارت را در خارج از صندوق توانمند می کند.</p>
+                    <a href="services-details.html" target="_blank" class="detail-link mt-4">بیشتر بخوانید <span class="ti-arrow-left"></span></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="services-single text-center p-5 my-md-3 my-lg-3 my-sm-0 shadow-sm white-bg rounded">
+                    <span class="ti-light-bulb icon-lg color-secondary d-block mb-4"></span>
+                    <h5>بازاریابی محتوا</h5>
+                    <p class="mb-0">به تدریج با مشارکت در سطح بندی منابع ، تجارت را در خارج از صندوق توانمند می کند.</p>
+                    <a href="services-details.html" target="_blank" class="detail-link mt-4">بیشتر بخوانید <span class="ti-arrow-left"></span></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="services-single text-center p-5 my-md-3 my-lg-3 my-sm-0 shadow-sm white-bg rounded">
+                    <span class="ti-headphone-alt icon-lg color-secondary d-block mb-4"></span>
+                    <h5>بازاریابی از طریق رسانه ها</h5>
+                    <p class="mb-0">به تدریج با مشارکت در سطح بندی منابع ، تجارت را در خارج از صندوق توانمند می کند.</p>
+                    <a href="services-details.html" target="_blank" class="detail-link mt-4">بیشتر بخوانید <span class="ti-arrow-left"></span></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="services-single text-center p-5 my-md-3 my-lg-3 my-sm-0 shadow-sm white-bg rounded">
+                    <span class="ti-bell icon-lg color-secondary d-block mb-4"></span>
+                    <h5>متن ساختگی</h5>
+                    <p class="mb-0">به تدریج با مشارکت در سطح بندی منابع ، تجارت را در خارج از صندوق توانمند می کند.</p>
+                    <a href="services-details.html" target="_blank" class="detail-link mt-4">بیشتر بخوانید <span class="ti-arrow-left"></span></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="services-single text-center p-5 my-md-3 my-lg-3 my-sm-0 shadow-sm white-bg rounded">
+                    <span class="ti-briefcase icon-lg color-secondary d-block mb-4"></span>
+                    <h5>بازاریابی ایمیلی</h5>
+                    <p class="mb-0">به تدریج با مشارکت در سطح بندی منابع ، تجارت را در خارج از صندوق توانمند می کند.</p>
+                    <a href="services-details.html" target="_blank" class="detail-link mt-4">بیشتر بخوانید <span class="ti-arrow-left"></span></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="services-single text-center p-5 my-md-3 my-lg-3 my-sm-0 shadow-sm white-bg rounded">
+                    <span class="ti-vector icon-lg color-secondary d-block mb-4"></span>
+                    <h5>مشاوره خلاق</h5>
+                    <p class="mb-0">به تدریج با مشارکت در سطح بندی منابع ، تجارت را در خارج از صندوق توانمند می کند.</p>
+                    <a href="services-details.html" target="_blank" class="detail-link mt-4">بیشتر بخوانید <span class="ti-arrow-left"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="buyProductModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="buyModalContent" class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+    });
+
+    //===================================================================================================================
+    //===================================================================================================================
+    function fnAddToCart(obj) {
+        var ProductID = $(obj).data("id");
+
+        $.ajax({
+            url: "/ShopCart/AddToCart/" + ProductID,
+            type: "Get"
+        }).done(function (result) {
+            if (result === -1) {
+                showAlert('تکراری', 'این دوره قبلا به سبد خرید اضافه شده است', 'error');
+                return;
+            }
+
+            setTimeout(function () {
+                $.ajax({
+                    url: "/ShopCart/ShopCartCount",
+                    type: "Get"
+                }).done(function (result) {
+                    $("#shopcartcount").html(result);
+                    if (result > 0) {
+                        $('#shopcarticon').removeClass('ti-shopping-cart');
+                        $('#shopcarticon').addClass('ti-shopping-cart-full');
+                        $(obj).html('تکمیل خرید');
+                        $(obj).addClass('course_in_basket_a');
+                        $(obj).prop("onclick", null).off("click");
+                        $(obj).prop("href", '/ShopCart/Index');
+                    }
+                });
+                //$("#shopcartcount").load("/ShopCart/ShopCartCount");
+            }, 1500);
+        });
+    };
+</script>

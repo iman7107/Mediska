@@ -1,0 +1,524 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SupportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="spMDSKChangePassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="MustChangePass" Type="bit" Mode="In" />
+          <Parameter Name="ChangePassGUID" Type="varchar" Mode="In" />
+          <Parameter Name="StopChangeSMSInMinute" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKChangeUserActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="Active" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetCustomerInfoByAuthGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GUID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetCustomerInfoByChangePassGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GUID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetCustomerInfoByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetCustomerInfoByMobile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MobileNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetCustomerInfoByOTPGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GUID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetPackageListByIDs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDs" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetPackagePictures" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="int" Mode="In" />
+          <Parameter Name="PackageID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetPackageSpecByProductID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="int" Mode="In" />
+          <Parameter Name="PackageID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetProductGroupList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spMDSKGetProductList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetProductListByIDs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDs" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetProductPackages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetProductPictures" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetSMSSetting" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spMDSKRegisterUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MobileNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="FName" Type="nvarchar" Mode="In" />
+          <Parameter Name="LName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Gender" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="spMDSKUpdateCustomerUserAuthCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="AuthCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="GUID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKUpdateCustomerUserOTPCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="OTPCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="GUID" Type="varchar" Mode="In" />
+          <Parameter Name="ExpireInMinute" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="SupportModelStoreContainer" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SupportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SupportContext" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="MDSKGetProductList" ReturnType="Collection(SupportModel.cmplxProduct)" >
+          <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetProductGroupList" ReturnType="Collection(SupportModel.cmplxProductGroup)" />
+          <FunctionImport Name="MDSKGetCustomerInfoByMobile" ReturnType="Collection(SupportModel.cmplxCustomerInfoByMobile)">
+          <Parameter Name="MobileNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKRegisterUser" ReturnType="Collection(SupportModel.cmplxCustomerInfoByMobile)">
+            <Parameter Name="MobileNo" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="FName" Mode="In" Type="String" />
+            <Parameter Name="LName" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetSMSSetting" ReturnType="Collection(SupportModel.cmplxSMSSetting)" />
+          <FunctionImport Name="MDSKUpdateCustomerUserAuthCode">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="AuthCode" Mode="In" Type="String" />
+            <Parameter Name="GUID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetCustomerInfoByID" ReturnType="Collection(SupportModel.cmplxCustomerInfoByID)">
+          <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetCustomerInfoByAuthGUID" ReturnType="Collection(SupportModel.cmplxCustomerInfoByID)">
+          <Parameter Name="GUID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKChangeUserActive">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="Active" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKChangePassword">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="MustChangePass" Mode="In" Type="Boolean" />
+            <Parameter Name="ChangePassGUID" Mode="In" Type="String" />
+            <Parameter Name="StopChangeSMSInMinute" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetCustomerInfoByChangePassGUID" ReturnType="Collection(SupportModel.cmplxCustomerInfoByID)">
+          <Parameter Name="GUID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKUpdateCustomerUserOTPCode">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="OTPCode" Mode="In" Type="String" />
+            <Parameter Name="GUID" Mode="In" Type="String" />
+            <Parameter Name="ExpireInMinute" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetCustomerInfoByOTPGUID" ReturnType="Collection(SupportModel.cmplxCustomerInfoByID)">
+          <Parameter Name="GUID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetProductPackages" ReturnType="Collection(SupportModel.cmplxPackage)">
+          <Parameter Name="ProductID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetPackageListByIDs" ReturnType="Collection(SupportModel.cmplxPackage)">
+          <Parameter Name="IDs" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetPackageSpecByProductID" ReturnType="Collection(SupportModel.cmplxPackageSpec)">
+            <Parameter Name="ProductID" Mode="In" Type="Int32" />
+            <Parameter Name="PackageID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetProductListByIDs" ReturnType="Collection(SupportModel.cmplxProduct)">
+          <Parameter Name="IDs" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetProductPictures" ReturnType="Collection(SupportModel.cmplxProductPicture)">
+            <Parameter Name="ProductID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetPackagePictures" ReturnType="Collection(SupportModel.cmplxPackagePicture)">
+            <Parameter Name="ProductID" Mode="In" Type="Int32" />
+            <Parameter Name="PackageID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="cmplxProduct">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="prdxtraProductID" Nullable="false" />
+          <Property Type="String" Name="prdxtraTitle" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="prdxtraShortDesc" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="prdxtraFullDesc" Nullable="false" />
+          <Property Type="String" Name="prdxtraAvatarPhotoName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="prdxtraMainPhotoName" Nullable="false" MaxLength="100" />
+          <Property Type="Boolean" Name="prdxtraHasOff" Nullable="false" />
+          <Property Type="Decimal" Name="prdxtraOffPercent" Nullable="false" Precision="19" />
+          <Property Type="DateTime" Name="prdxtraOffStartDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="prdxtraOffEndDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="prdxtraCatalogFileName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="CategoryClassName" Nullable="true" MaxLength="4000" />
+          <Property Type="Boolean" Name="HasOff" Nullable="true" />
+          <Property Type="Decimal" Name="productPrice" Nullable="false" Precision="19" />
+          <Property Type="String" Name="prdxtraPlatform" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="prdxtraFreeBackupMonth" Nullable="true" />
+          <Property Type="String" Name="packageName" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="PackageCount" Nullable="true" />
+          <Property Type="Int32" Name="PackageID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="cmplxProductGroup">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="prdgrpName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="ClassName" Nullable="true" MaxLength="36" />
+        </ComplexType>
+        <ComplexType Name="cmplxCustomerInfoByMobile">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="custusrMobileNo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="custusrPassword" Nullable="false" MaxLength="1000" />
+          <Property Type="Boolean" Name="custusrPasswordMustChange" Nullable="false" />
+          <Property Type="Boolean" Name="custusrActivated" Nullable="false" />
+          <Property Type="String" Name="custusrManagerName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="custusrManagerFamily" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="custusrManagerGender" Nullable="false" />
+          <Property Type="String" Name="custusrAuthCodeGUID" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="custusrChangePasswordDateTime" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="NowDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="custusrChangePasswordGUID" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="custusrOTPDateTime" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="cmplxSMSSetting">
+          <Property Type="String" Name="setSMSCenterWebServiceAddress" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="setSMSCenterUserName" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="setSMSCenterPassword" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="setSMSCenterFromNo" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="cmplxCustomerInfoByID">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="custusrMobileNo" Nullable="false" MaxLength="20" />
+          <Property Type="Boolean" Name="custusrPasswordMustChange" Nullable="false" />
+          <Property Type="Boolean" Name="custusrActivated" Nullable="false" />
+          <Property Type="String" Name="custusrManagerName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="custusrManagerFamily" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="custusrManagerGender" Nullable="false" />
+          <Property Type="String" Name="custusrAuthCode" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="custusrAuthCodeExpireDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="custusrOTP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="custusrOTPGUID" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="custusrChangePasswordDateTime" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="NowDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="custusrChangePasswordGUID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="custusrPassword" Nullable="false" MaxLength="1000" />
+          <Property Type="DateTime" Name="custusrOTPDateTime" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="cmplxPackage">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="packageName" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="packagePrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="packageRasmiPrice" Nullable="false" Precision="19" />
+          <Property Type="Byte" Name="packagePartitionIndex" Nullable="true" />
+          <Property Type="Int32" Name="packageProductID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="cmplxPackageSpec">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="pkgspecPackageID" Nullable="false" />
+          <Property Type="String" Name="pkgspecDescription" Nullable="false" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="cmplxProductPicture">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="prdpicProductID" Nullable="false" />
+          <Property Type="String" Name="prdpicBeforePicText" Nullable="true" />
+          <Property Type="String" Name="prdpicPictureFileName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="prdpicAfterPicText" Nullable="true" />
+          <Property Type="Int32" Name="prdpicOrder" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="cmplxPackagePicture">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="pkgpicPackageID" Nullable="false" />
+          <Property Type="String" Name="pkgpicBeforePicText" Nullable="true" />
+          <Property Type="String" Name="pkgpicPictureFileName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="pkgpicAfterPicText" Nullable="true" />
+          <Property Type="Int32" Name="pkgpicOrder" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SupportModelStoreContainer" CdmEntityContainer="SupportContext" >
+          <FunctionImportMapping FunctionImportName="MDSKGetProductList" FunctionName="SupportModel.Store.spMDSKGetProductList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxProduct">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="prdxtraProductID" ColumnName="prdxtraProductID" />
+                <ScalarProperty Name="prdxtraTitle" ColumnName="prdxtraTitle" />
+                <ScalarProperty Name="prdxtraShortDesc" ColumnName="prdxtraShortDesc" />
+                <ScalarProperty Name="prdxtraFullDesc" ColumnName="prdxtraFullDesc" />
+                <ScalarProperty Name="prdxtraAvatarPhotoName" ColumnName="prdxtraAvatarPhotoName" />
+                <ScalarProperty Name="prdxtraMainPhotoName" ColumnName="prdxtraMainPhotoName" />
+                <ScalarProperty Name="prdxtraHasOff" ColumnName="prdxtraHasOff" />
+                <ScalarProperty Name="prdxtraOffPercent" ColumnName="prdxtraOffPercent" />
+                <ScalarProperty Name="prdxtraOffStartDate" ColumnName="prdxtraOffStartDate" />
+                <ScalarProperty Name="prdxtraOffEndDate" ColumnName="prdxtraOffEndDate" />
+                <ScalarProperty Name="prdxtraCatalogFileName" ColumnName="prdxtraCatalogFileName" />
+                <ScalarProperty Name="CategoryClassName" ColumnName="CategoryClassName" />
+                <ScalarProperty Name="HasOff" ColumnName="HasOff" />
+                <ScalarProperty Name="productPrice" ColumnName="productPrice" />
+                <ScalarProperty Name="prdxtraPlatform" ColumnName="prdxtraPlatform" />
+                <ScalarProperty Name="prdxtraFreeBackupMonth" ColumnName="prdxtraFreeBackupMonth" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="PackageCount" ColumnName="PackageCount" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetProductGroupList" FunctionName="SupportModel.Store.spMDSKGetProductGroupList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxProductGroup">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="prdgrpName" ColumnName="prdgrpName" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerInfoByMobile" FunctionName="SupportModel.Store.spMDSKGetCustomerInfoByMobile">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerInfoByMobile">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custusrMobileNo" ColumnName="custusrMobileNo" />
+                <ScalarProperty Name="custusrPassword" ColumnName="custusrPassword" />
+                <ScalarProperty Name="custusrPasswordMustChange" ColumnName="custusrPasswordMustChange" />
+                <ScalarProperty Name="custusrActivated" ColumnName="custusrActivated" />
+                <ScalarProperty Name="custusrManagerName" ColumnName="custusrManagerName" />
+                <ScalarProperty Name="custusrManagerFamily" ColumnName="custusrManagerFamily" />
+                <ScalarProperty Name="custusrManagerGender" ColumnName="custusrManagerGender" />
+                <ScalarProperty Name="custusrAuthCodeGUID" ColumnName="custusrAuthCodeGUID" />
+                <ScalarProperty Name="custusrChangePasswordDateTime" ColumnName="custusrChangePasswordDateTime" />
+                <ScalarProperty Name="NowDate" ColumnName="NowDate" />
+                <ScalarProperty Name="custusrChangePasswordGUID" ColumnName="custusrChangePasswordGUID" />
+                <ScalarProperty Name="custusrOTPDateTime" ColumnName="custusrOTPDateTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKRegisterUser" FunctionName="SupportModel.Store.spMDSKRegisterUser" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerInfoByMobile">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custusrMobileNo" ColumnName="custusrMobileNo" />
+                <ScalarProperty Name="custusrPassword" ColumnName="custusrPassword" />
+                <ScalarProperty Name="custusrPasswordMustChange" ColumnName="custusrPasswordMustChange" />
+                <ScalarProperty Name="custusrActivated" ColumnName="custusrActivated" />
+                <ScalarProperty Name="custusrManagerName" ColumnName="custusrManagerName" />
+                <ScalarProperty Name="custusrManagerFamily" ColumnName="custusrManagerFamily" />
+                <ScalarProperty Name="custusrManagerGender" ColumnName="custusrManagerGender" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetSMSSetting" FunctionName="SupportModel.Store.spMDSKGetSMSSetting">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxSMSSetting">
+                <ScalarProperty Name="setSMSCenterWebServiceAddress" ColumnName="setSMSCenterWebServiceAddress" />
+                <ScalarProperty Name="setSMSCenterUserName" ColumnName="setSMSCenterUserName" />
+                <ScalarProperty Name="setSMSCenterPassword" ColumnName="setSMSCenterPassword" />
+                <ScalarProperty Name="setSMSCenterFromNo" ColumnName="setSMSCenterFromNo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKUpdateCustomerUserAuthCode" FunctionName="SupportModel.Store.spMDSKUpdateCustomerUserAuthCode" />
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerInfoByID" FunctionName="SupportModel.Store.spMDSKGetCustomerInfoByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerInfoByID">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custusrMobileNo" ColumnName="custusrMobileNo" />
+                <ScalarProperty Name="custusrPasswordMustChange" ColumnName="custusrPasswordMustChange" />
+                <ScalarProperty Name="custusrActivated" ColumnName="custusrActivated" />
+                <ScalarProperty Name="custusrManagerName" ColumnName="custusrManagerName" />
+                <ScalarProperty Name="custusrManagerFamily" ColumnName="custusrManagerFamily" />
+                <ScalarProperty Name="custusrManagerGender" ColumnName="custusrManagerGender" />
+                <ScalarProperty Name="custusrAuthCode" ColumnName="custusrAuthCode" />
+                <ScalarProperty Name="custusrAuthCodeExpireDate" ColumnName="custusrAuthCodeExpireDate" />
+                <ScalarProperty Name="custusrOTP" ColumnName="custusrOTP" />
+                <ScalarProperty Name="custusrOTPGUID" ColumnName="custusrOTPGUID" />
+                <ScalarProperty Name="custusrChangePasswordDateTime" ColumnName="custusrChangePasswordDateTime" />
+                <ScalarProperty Name="NowDate" ColumnName="NowDate" />
+                <ScalarProperty Name="custusrChangePasswordGUID" ColumnName="custusrChangePasswordGUID" />
+                <ScalarProperty Name="custusrPassword" ColumnName="custusrPassword" />
+                <ScalarProperty Name="custusrOTPDateTime" ColumnName="custusrOTPDateTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerInfoByAuthGUID" FunctionName="SupportModel.Store.spMDSKGetCustomerInfoByAuthGUID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerInfoByID">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custusrMobileNo" ColumnName="custusrMobileNo" />
+                <ScalarProperty Name="custusrPasswordMustChange" ColumnName="custusrPasswordMustChange" />
+                <ScalarProperty Name="custusrActivated" ColumnName="custusrActivated" />
+                <ScalarProperty Name="custusrManagerName" ColumnName="custusrManagerName" />
+                <ScalarProperty Name="custusrManagerFamily" ColumnName="custusrManagerFamily" />
+                <ScalarProperty Name="custusrManagerGender" ColumnName="custusrManagerGender" />
+                <ScalarProperty Name="custusrAuthCode" ColumnName="custusrAuthCode" />
+                <ScalarProperty Name="custusrAuthCodeExpireDate" ColumnName="custusrAuthCodeExpireDate" />
+                <ScalarProperty Name="custusrOTP" ColumnName="custusrOTP" />
+                <ScalarProperty Name="custusrOTPGUID" ColumnName="custusrOTPGUID" />
+                <ScalarProperty Name="custusrChangePasswordDateTime" ColumnName="custusrChangePasswordDateTime" />
+                <ScalarProperty Name="NowDate" ColumnName="NowDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKChangeUserActive" FunctionName="SupportModel.Store.spMDSKChangeUserActive" />
+          <FunctionImportMapping FunctionImportName="MDSKChangePassword" FunctionName="SupportModel.Store.spMDSKChangePassword" />
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerInfoByChangePassGUID" FunctionName="SupportModel.Store.spMDSKGetCustomerInfoByChangePassGUID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerInfoByID">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custusrMobileNo" ColumnName="custusrMobileNo" />
+                <ScalarProperty Name="custusrPasswordMustChange" ColumnName="custusrPasswordMustChange" />
+                <ScalarProperty Name="custusrActivated" ColumnName="custusrActivated" />
+                <ScalarProperty Name="custusrManagerName" ColumnName="custusrManagerName" />
+                <ScalarProperty Name="custusrManagerFamily" ColumnName="custusrManagerFamily" />
+                <ScalarProperty Name="custusrManagerGender" ColumnName="custusrManagerGender" />
+                <ScalarProperty Name="custusrAuthCode" ColumnName="custusrAuthCode" />
+                <ScalarProperty Name="custusrAuthCodeExpireDate" ColumnName="custusrAuthCodeExpireDate" />
+                <ScalarProperty Name="custusrOTP" ColumnName="custusrOTP" />
+                <ScalarProperty Name="custusrOTPGUID" ColumnName="custusrOTPGUID" />
+                <ScalarProperty Name="custusrChangePasswordDateTime" ColumnName="custusrChangePasswordDateTime" />
+                <ScalarProperty Name="NowDate" ColumnName="NowDate" />
+                <ScalarProperty Name="custusrChangePasswordGUID" ColumnName="custusrChangePasswordGUID" />
+                <ScalarProperty Name="custusrPassword" ColumnName="custusrPassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKUpdateCustomerUserOTPCode" FunctionName="SupportModel.Store.spMDSKUpdateCustomerUserOTPCode" />
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerInfoByOTPGUID" FunctionName="SupportModel.Store.spMDSKGetCustomerInfoByOTPGUID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerInfoByID">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custusrMobileNo" ColumnName="custusrMobileNo" />
+                <ScalarProperty Name="custusrPasswordMustChange" ColumnName="custusrPasswordMustChange" />
+                <ScalarProperty Name="custusrActivated" ColumnName="custusrActivated" />
+                <ScalarProperty Name="custusrManagerName" ColumnName="custusrManagerName" />
+                <ScalarProperty Name="custusrManagerFamily" ColumnName="custusrManagerFamily" />
+                <ScalarProperty Name="custusrManagerGender" ColumnName="custusrManagerGender" />
+                <ScalarProperty Name="custusrAuthCode" ColumnName="custusrAuthCode" />
+                <ScalarProperty Name="custusrAuthCodeExpireDate" ColumnName="custusrAuthCodeExpireDate" />
+                <ScalarProperty Name="custusrOTP" ColumnName="custusrOTP" />
+                <ScalarProperty Name="custusrOTPGUID" ColumnName="custusrOTPGUID" />
+                <ScalarProperty Name="custusrChangePasswordDateTime" ColumnName="custusrChangePasswordDateTime" />
+                <ScalarProperty Name="NowDate" ColumnName="NowDate" />
+                <ScalarProperty Name="custusrChangePasswordGUID" ColumnName="custusrChangePasswordGUID" />
+                <ScalarProperty Name="custusrPassword" ColumnName="custusrPassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetProductPackages" FunctionName="SupportModel.Store.spMDSKGetProductPackages">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxPackage">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
+                <ScalarProperty Name="packageRasmiPrice" ColumnName="packageRasmiPrice" />
+                <ScalarProperty Name="packagePartitionIndex" ColumnName="packagePartitionIndex" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetPackageListByIDs" FunctionName="SupportModel.Store.spMDSKGetPackageListByIDs">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxPackage">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
+                <ScalarProperty Name="packageRasmiPrice" ColumnName="packageRasmiPrice" />
+                <ScalarProperty Name="packagePartitionIndex" ColumnName="packagePartitionIndex" />
+                <ScalarProperty Name="packageProductID" ColumnName="packageProductID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetPackageSpecByProductID" FunctionName="SupportModel.Store.spMDSKGetPackageSpecByProductID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxPackageSpec">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="pkgspecPackageID" ColumnName="pkgspecPackageID" />
+                <ScalarProperty Name="pkgspecDescription" ColumnName="pkgspecDescription" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetProductListByIDs" FunctionName="SupportModel.Store.spMDSKGetProductListByIDs">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxProduct">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="prdxtraProductID" ColumnName="prdxtraProductID" />
+                <ScalarProperty Name="prdxtraTitle" ColumnName="prdxtraTitle" />
+                <ScalarProperty Name="prdxtraShortDesc" ColumnName="prdxtraShortDesc" />
+                <ScalarProperty Name="prdxtraFullDesc" ColumnName="prdxtraFullDesc" />
+                <ScalarProperty Name="prdxtraAvatarPhotoName" ColumnName="prdxtraAvatarPhotoName" />
+                <ScalarProperty Name="prdxtraMainPhotoName" ColumnName="prdxtraMainPhotoName" />
+                <ScalarProperty Name="prdxtraHasOff" ColumnName="prdxtraHasOff" />
+                <ScalarProperty Name="prdxtraOffPercent" ColumnName="prdxtraOffPercent" />
+                <ScalarProperty Name="prdxtraOffStartDate" ColumnName="prdxtraOffStartDate" />
+                <ScalarProperty Name="prdxtraOffEndDate" ColumnName="prdxtraOffEndDate" />
+                <ScalarProperty Name="prdxtraCatalogFileName" ColumnName="prdxtraCatalogFileName" />
+                <ScalarProperty Name="CategoryClassName" ColumnName="CategoryClassName" />
+                <ScalarProperty Name="HasOff" ColumnName="HasOff" />
+                <ScalarProperty Name="productPrice" ColumnName="productPrice" />
+                <ScalarProperty Name="prdxtraPlatform" ColumnName="prdxtraPlatform" />
+                <ScalarProperty Name="prdxtraFreeBackupMonth" ColumnName="prdxtraFreeBackupMonth" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="PackageCount" ColumnName="PackageCount" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetProductPictures" FunctionName="SupportModel.Store.spMDSKGetProductPictures">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxProductPicture">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="prdpicProductID" ColumnName="prdpicProductID" />
+                <ScalarProperty Name="prdpicBeforePicText" ColumnName="prdpicBeforePicText" />
+                <ScalarProperty Name="prdpicPictureFileName" ColumnName="prdpicPictureFileName" />
+                <ScalarProperty Name="prdpicAfterPicText" ColumnName="prdpicAfterPicText" />
+                <ScalarProperty Name="prdpicOrder" ColumnName="prdpicOrder" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetPackagePictures" FunctionName="SupportModel.Store.spMDSKGetPackagePictures">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxPackagePicture">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="pkgpicPackageID" ColumnName="pkgpicPackageID" />
+                <ScalarProperty Name="pkgpicBeforePicText" ColumnName="pkgpicBeforePicText" />
+                <ScalarProperty Name="pkgpicPictureFileName" ColumnName="pkgpicPictureFileName" />
+                <ScalarProperty Name="pkgpicAfterPicText" ColumnName="pkgpicAfterPicText" />
+                <ScalarProperty Name="pkgpicOrder" ColumnName="pkgpicOrder" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

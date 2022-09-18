@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @{
+        if (string.IsNullOrEmpty(ViewBag.MetaDescription))
+        {
+            ViewBag.MetaDescription = "خرید آنلاین نرم افزارهای کلینیکی و پزشکی";
+        }
+        if (string.IsNullOrEmpty(ViewBag.MetaKeywords))
+        {
+            ViewBag.MetaKeywords = "نرم افزار,فیزیوتراپی,توانبخشی,کاردرمانی,گفتار درمانی,شنوایی سنجی,ارتوپد فنی,طب فیزیکی,زیبایی,پزشکی,کلینیک,بیمه,تامین,سلامت,مسلح,API";
+        }
+        if (string.IsNullOrEmpty(ViewBag.Title))
+        {
+            ViewBag.Title = "مدیسکــا";
+        }
+
+        int ShopCartCount = 0;
+        if (Session["ShopCart"] != null)
+        {
+            List<int> cart = Session["ShopCart"] as List<int>;
+            ShopCartCount = cart.Count;
+        }
+
+    }
+    <meta name="description" content="@ViewBag.MetaDescription">
+    <meta name="keywords" content="@ViewBag.MetaKeywords">
+    <meta property="og:site_name" content="مدیســکا" /> <!-- website name -->
+    <meta property="og:site" content="https://www.mediska.ir" /> <!-- website link -->
+    <meta property="og:title" content="نرم افزارهای پزشکی مدیسکا" /> <!-- title shown in the actual shared post -->
+    <meta property="og:description" content="@ViewBag.MetaDescription" /> <!-- description shown in the actual shared post -->
+    <meta property="og:image" content="~/Content/image/logo_40.jpg" /> <!-- image link, make sure it's jpg -->
+    <meta property="og:url" content="" /> <!-- where do you want your post to link to -->
+    <meta property="og:type" content="article" />
+
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="~/Content/image/logo_40.png" />
+    @*<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700%7COpen+Sans:400,600&amp;display=swap" rel="stylesheet">*@
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css">
+    <!--Magnific popup css-->
+    <link rel="stylesheet" href="~/Content/css/magnific-popup.css">
+    <!--Themify icon css-->
+    <link rel="stylesheet" href="~/Content/css/themify-icons.css">
+    <!--Fontawesome icon css-->
+    <link rel="stylesheet" href="~/Content/css/all.min.css">
+    <!--animated css-->
+    <link rel="stylesheet" href="~/Content/css/animate.min.css">
+    <!--ytplayer css-->
+    <link rel="stylesheet" href="~/Content/css/jquery.mb.YTPlayer.min.css">
+    <!--Owl carousel css-->
+    <link rel="stylesheet" href="~/Content/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/Content/css/owl.theme.default.min.css">
+    <!--custom css-->
+    <link rel="stylesheet" href="~/Content/css/style.css">
+    <!--responsive css-->
+    <link rel="stylesheet" href="~/Content/css/responsive.css">
+    <link href="~/Content/css/fontiran.css" rel="stylesheet" />
+    <link href="~/Content/css/notify.min.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery-3.5.0.min.js"></script>
+    <script src="~/Content/js/notify.min.js"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <input type="hidden" id="notify_message_success" value="@TempData["SuccessMessage"].ToString()" />
+        TempData["SuccessMessage"] = null;
+    }
+
+    @if (TempData["WellcomeMessage"] != null)
+    {
+        <input type="hidden" id="notify_message_wellcome" value="@TempData["WellcomeMessage"].ToString()" />
+        TempData["WellcomeMessage"] = null;
+    }
+
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success z-index msg_div">
+            <span class="fa fa-window-close padding_10" onclick="close_msg(this)"></span><strong>عملیات موفق</strong> @ViewBag.SuccessMessage
+        </div>
+    }
+
+
+    @if (!string.IsNullOrEmpty(ViewBag.InfoMessage))
+    {
+        <div class="alert alert-primary z-index msg_div">
+            <span class="fa fa-window-close padding_10" onclick="close_msg(this)"></span><strong>پیغام</strong> @ViewBag.InfoMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger z-index msg_div">
+            <span class="fa fa-window-close padding_10" onclick="close_msg(this)"></span><strong>خطا</strong> @ViewBag.ErrorMessage
+        </div>
+    }
+
+    <!--header section start-->
+    <header class="header">
+        <!--topbar start-->
+        <div id="header-top-bar" class="primary-bg py-2">
+            <div class="container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-md-7 col-lg-7 d-none d-md-block d-lg-block">
+                        <div class="topbar-text text-white">
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><span class="fas fa-headphones-alt mr-1"></span> پشتیبانی فنی 24x7</li>
+                                <li class="list-inline-item"><span class="fas fa-phone-alt mr-1"></span> 883-4565-123456</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="topbar-text text-white">
+                            <ul class="list-inline text-md-right text-lg-right text-left  mb-0">
+                                <li class="list-inline-item">
+                                    <a href="#" class="rounded"><span class="fab fa-facebook-f"></span></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="rounded"><span class="fab fa-twitter"></span></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="rounded"><span class="fab fa-linkedin-in"></span></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="rounded"><span class="fab fa-dribbble"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--topbar end-->
+        <!--start navbar-->
+        <nav id="main_nav" class="navbar navbar-expand-lg white-bg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="~/Content/image/logo_40.jpg" alt="لوگو" class="img-fluid">
+                </a>
+                <button style="float:left;" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="ناوبری را تغییر دهید">
+                    <span class="ti-menu"></span>
+                </button>
+
+                @if (Session["CustomerID"] == null)
+                {
+                    <div><a href="/Account/Login" class="btn secondary-solid-btn check-btn">ورود / ثبت نام</a></div>
+                }
+                else
+                {
+                    <div id="user_mainmenu">
+                        <a id="customer_name_a" href="#" class="btn secondary-solid-btn check-btn">@Session["CustomerFullName"].ToString()</a>
+                        <ul class="mainmenu_container">
+                            <li> <a href="#">پروفایل</a></li>
+                            <li> <a href="/Account/ChangePassword">تغییر رمز عبور</a></li>
+                            <li> <a href="/Account/Logout">خروج</a></li>
+                        </ul>
+                    </div>
+                }
+
+                <div class="shop_cart_li">
+                    <a href="/ShopCart/Index">
+                        @if (ShopCartCount > 0)
+                        {
+                            <span id="shopcarticon" class="ti-shopping-cart-full shop_cart_span"></span>
+                        }
+                        else
+                        {
+                            <span id="shopcarticon" class="ti-shopping-cart shop_cart_span"></span>
+                        }
+                        <span id="shop_cart_count" class="basketpage_cart_count basketpage_cart_count_pos">@ShopCartCount</span>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse h-auto" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto menu">
+                        <li>
+                            <a href="#" class="dropdown-toggle"> خانه</a>
+                            <ul class="sub-menu">
+                                <li><a href="/Home/index">صفحه اصلی 1</a></li>
+                                <li><a href="index-7.html">صفحه اصلی 7 <span class="badge badge-warning ml-2">جدید</span></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about-us.html">درباره ما</a></li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">صفحات</a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="#" class="dropdown-toggle-inner">ورود و ثبت نام</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="basic-login.html">صفحه ورود 1</a></li>
+                                        <li><a href="login.html">ورود به صفحه 2</a></li>
+                                        <li><a href="basic-sign-up.html">ثبت نام صفحه 1</a></li>
+                                        <li><a href="sign-up.html">ثبت نام صفحه 2</a></li>
+                                        <li><a href="password-reset.html">بازنشانی گذرواژه</a></li>
+                                        <li><a href="change-password.html">تغییر رمز عبور</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-toggle-inner">خدمات رفاهی</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="download.html">صفحه بارگیری</a></li>
+                                        <li><a href="review.html">صفحه نقد و بررسی</a></li>
+                                        <li><a href="faq.html">صفحه پرسش و پاسخ</a></li>
+                                        <li><a href="404.html">صفحه 404</a></li>
+                                        <li><a href="coming-soon.html">به زودی</a></li>
+                                        <li><a href="thank-you.html">صفحه ممنون</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-toggle-inner">تیم</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="team.html">اعضای تیم ما</a></li>
+                                        <li><a href="team-single.html">پروفایل اعضای تیم</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-toggle-inner">وبلاگ ما</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="blog-default.html">شبکه وبلاگ</a></li>
+                                        <li><a href="blog-no-sidebar.html">وبلاگ بدون نوار کناری</a></li>
+                                        <li><a href="blog-left-sidebar.html">وبلاگ سمت چپ</a></li>
+                                        <li><a href="blog-right-sidebar.html">وبلاگ سمت راست نوار</a></li>
+                                        <li><a href="blog-right-sidebar-2.html">وبلاگ سمت راست نوار 2</a></li>
+                                        <li><a href="blog-single-left-sidebar.html">جزئیات نوار کناری سمت چپ</a></li>
+                                        <li><a href="blog-single-right-sidebar.html">جزئیات سمت راست نوار</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="project-details.html">جزئیات پروژه </a></li>
+                                <li><a href="services-details.html">جزئیات خدمات</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="services.html">خدمات</a></li>
+                        <li><a href="project.html">پروژه</a></li>
+                        <li><a href="/Home/ContactUs">با ما تماس بگیرید</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    <!--header section end-->
+
+
+    <div class="main">
+        @RenderBody()
+    </div>
+
+    <!--footer section start-->
+    <footer class="footer-section">
+        <!--footer top start-->
+        <div class="footer-top gradient-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-9">
+                        <div class="row footer-top-wrap">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="footer-nav-wrap text-white">
+                                    <img src="~/Content/image/logo_40.png" alt="لوگو" class="mb-2">
+                                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است</p>
+                                    <div class="social-nav mt-4">
+                                        <ul class="list-unstyled social-list mb-0">
+                                            <li class="list-inline-item tooltip-hover">
+                                                <a href="#" class="rounded"><span class="ti-facebook"></span></a>
+                                                <div class="tooltip-item">فیس بوک</div>
+                                            </li>
+                                            <li class="list-inline-item tooltip-hover">
+                                                <a href="#" class="rounded"><span class="ti-twitter"></span></a>
+                                                <div class="tooltip-item">توییتر</div>
+                                            </li>
+                                            <li class="list-inline-item tooltip-hover">
+                                                <a href="#" class="rounded"><span class="ti-linkedin"></span></a>
+                                                <div class="tooltip-item">لینکدین</div>
+                                            </li>
+                                            <li class="list-inline-item tooltip-hover">
+                                                <a href="#" class="rounded"><span class="ti-dribbble"></span></a>
+                                                <div class="tooltip-item">دریبل</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="footer-nav-wrap text-white">
+                                    <h4 class="text-white">شرکت</h4>
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">درباره خدمات ما</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">نرم افزار</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">مشاهده وبلاگ ما</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">ایجاد شغل</a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="footer-nav-wrap text-white">
+                                    <h4 class="text-white">مجاز</h4>
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">اطلاعات حقوقی</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">سیاست حفظ حریم خصوصی</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">گزارش سوءاستفاده</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">شرایط استفاده از خدمات</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3">
+                        <div class="row footer-top-wrap mt-md-4 mt-sm-0 mt-lg-0">
+                            <div class="col-12">
+                                <div class="footer-nav-wrap text-white">
+                                    <h4 class="text-white">در تماس باشید</h4>
+                                    <ul class="get-in-touch-list">
+                                        <li class="d-flex align-items-center py-2">
+                                            <span class="fas fa-map-marker-alt mr-2"></span> تهران  ونک  خیابان بهار
+                                        </li>
+                                        <li class="d-flex align-items-center py-2">
+                                            <span class="fas fa-envelope mr-2"></span> info@gmail.com
+                                        </li>
+                                        <!--<li class="d-flex align-items-center py-2"><span class="fas fa-phone-alt mr-2"></span> (123) 456-7890 - (123) 456-7890</li>-->
+                                    </ul>
+                                    <form class="newsletter-form mt-3">
+                                        <input type="text" class="input-newsletter" placeholder="ایمیل خود را وارد کنید" name="EMAIL" required="" autocomplete="off">
+                                        <button type="submit" class="disabled" style="pointer-events: all; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--footer top end-->
+        <!--footer copyright start-->
+        <div class="footer-bottom gray-light-bg py-2">
+            <div class="container">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-md-5 col-lg-5">
+                        <p class="copyright-text pb-0 mb-0">
+                            کپی رایت © 1399. کلیه حقوق محفوظ است توسط
+                            <a href="#" target="_blank">Amir.h</a>
+                    </div>
+                    <div class="col-md-7 col-lg-6 d-none d-md-block d-lg-block">
+                        <ul class="list-inline policy-nav text-right social-list">
+                            <li class="list-inline-item"><a href="#">سیاست حفظ حریم خصوصی</a></li>
+                            <li class="list-inline-item"><a href="#">شرایط و ضوابط</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--footer copyright end-->
+    </footer>
+    <!--footer section end-->
+    <!--bottom to top button start-->
+    <button class="scroll-top scroll-to-target" data-target="html">
+        <span class="ti-angle-up"></span>
+    </button>
+    <!--bottom to top button end-->
+
+    <div id="myModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div id="modalHeader" class="modal-header">
+                    <h5 id="messageTitle" class="modal-title">پیغام</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="messageBody"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="okbutton" type="button" class="btn btn-primary" data-dismiss="modal">باشه</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
+
+
+    <!--Popper js-->
+    <script src="~/Content/js/popper.min.js"></script>
+    <!--Bootstrap js-->
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <!--Magnific popup js-->
+    <script src="~/Content/js/jquery.magnific-popup.min.js"></script>
+    <!--jquery easing js-->
+    <script src="~/Content/js/jquery.easing.min.js"></script>
+    <!--jquery ytplayer js-->
+    <script src="~/Content/js/jquery.mb.YTPlayer.min.js"></script>
+    <!--Isotope filter js-->
+    <script src="~/Content/js/mixitup.min.js"></script>
+    <!--wow js-->
+    <script src="~/Content/js/wow.min.js"></script>
+    <!--owl carousel js-->
+    <script src="~/Content/js/owl.carousel.min.js"></script>
+    <!--countdown js-->
+    <script src="~/Content/js/jquery.countdown.min.js"></script>
+    <!--jquery easypiechart-->
+    <script src="~/Content/js/jquery.easy-pie-chart.js"></script>
+    <!--custom js-->
+    <script src="~/Content/js/scripts.js"></script>
+    <script src="~/Content/Script.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

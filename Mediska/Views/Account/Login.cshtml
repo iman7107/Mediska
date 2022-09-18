@@ -1,0 +1,133 @@
+﻿@model Mediska.Models.clsLoginModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LcXnQAhAAAAAHsJdddHoZkMmX7PrBr1dTPfaJyq"></script>
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6LcXnQAhAAAAAHsJdddHoZkMmX7PrBr1dTPfaJyq', { action: 'Login' }).then(function (token) {
+            $("#GoogleCaptchaToken").val(token);
+        });
+    });
+</script>
+
+
+<!--loader start-->
+<div id="preloader">
+    <div class="loader1">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+<!--loader end-->
+<!--body content wrap start-->
+<div class="main">
+
+    <!--hero section start-->
+    <section class="hero-section full-screen gray-light-bg">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-center">
+
+                <div class="col-12 col-md-7 col-lg-6 col-xl-8 d-none d-lg-block">
+                    <!-- Image -->
+                   <div class="bg-cover vh-100 ml-n3 gradient-overlay" style="background-image: url('../../Content/image/medical-15_s.jpg');
+">
+                        <div class="position-absolute login-signup-content">
+                            <div class="position-relative text-white col-md-12 col-lg-7">
+                                <h2 class="text-white">به مدیســکا خوش آمدید.</h2>
+                                <p> وبسایت فروش آنلاین نرم افزارهای پزشکی </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-6 col-xl-4">
+                    <div class="login-signup-wrap px-4 px-lg-5 my-5">
+                        <!-- Heading -->
+                        <h1 class="text-center mb-1">
+                            ورود
+                        </h1>
+                        <p class="text-center mb-5">
+                            
+                        </p>
+
+                        <!--login form-->
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "login-signup-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                <label class="pb-1">شماره موبایل</label>
+                                <div class="input-group input-group-merge">
+                                    <div class="input-icon">
+                                        <span class="ti-mobile"></span>
+                                    </div>
+                                    @Html.EditorFor(model => model.userMobile, new { htmlAttributes = new { @class = "form-control", placeholder = "موبایل خود را وارد کنید" } })
+                                </div>
+                                    @Html.ValidationMessageFor(model => model.userMobile, "", new { @class = "text-danger margin_right_20" })
+                            </div>
+                            <!-- Password -->
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="pb-1">کلمه عبور</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <a href="/Account/ForgetPassword" class="form-text small text-muted">
+                                            رمز عبورم را فراموش کرده ام
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="input-group input-group-merge">
+                                    <div class="input-icon">
+                                        <span class="ti-lock"></span>
+                                    </div>
+                                    @Html.EditorFor(model => model.userPassword, new { htmlAttributes = new { @class = "form-control", @type = "password", placeholder = "رمز ورود خود را وارد کنید" } })
+                                </div>
+                                    @Html.ValidationMessageFor(model => model.userPassword, "", new { @class = "text-danger margin_right_20" })
+                            </div>
+                            <div class="form-check d-flex align-items-center text-center">
+                                @Html.EditorFor(model => model.rememberMe, new { htmlAttributes = new { @class = "form-check-input mt-0 mr-3" } })
+                                <label class="form-check-label small" for="exampleCheck1">مرا به خاطر بسپار</label>
+                            </div>
+
+                            @Html.HiddenFor(model => model.ReturnUrl)
+                            @Html.HiddenFor(model => model.GoogleCaptchaToken)
+
+                            <!-- Submit -->
+                            <button class="btn btn-block secondary-solid-btn border-radius mt-4 mb-3">
+                                ورود
+                            </button>
+
+                            <a href="/Account/LoginOTP" class="btn btn-block secondary-solid-btn border-radius mt-4 mb-3">
+                                ورود با رمز یکبار مصرف
+                            </a>
+
+                            <!-- Link -->
+                            <p class="text-center">
+                                <small class="text-muted text-center">
+                                    حساب کاربری ندارید؟ <a class="btn btn-outline-danger margin_right_10" href="/Account/Register">ثبت نام کنید</a> 
+                                </small>
+                            </p>
+
+                        }
+                    </div>
+                </div>
+            </div> <!-- / .row -->
+        </div>
+    </section>
+    <!--hero section end-->
+
+</div>
+<!--body content wrap end-->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

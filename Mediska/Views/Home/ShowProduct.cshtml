@@ -1,0 +1,177 @@
+﻿@model Mediska.Models.cmplxProduct
+
+@{
+    ViewBag.Title = "ShowProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Mediska.Models
+@using Mediska.Models.Repository
+
+@{
+    repProduct RepP = new repProduct();
+    List<cmplxPackageSpec> AllfeaturesList = RepP.GetPackageFeatureByProductID(Model.prdxtraProductID, null).ToList();
+    List<cmplxPackagePicture> AllPackagePictureList = RepP.GetPackagePicture(Model.prdxtraProductID, null).ToList();
+    List<cmplxProductPicture> ProductPictureList = RepP.GetProductPicture(Model.prdxtraProductID).ToList();
+    List<cmplxPackage> packageList = RepP.GetProductPackages(Model.prdxtraProductID);
+}
+
+
+<!--body content wrap start-->
+<div class="main">
+
+    <!--header section start-->
+    <section class="hero-section ptb-100 gradient-overlay" style="background: url('img/header-bg-5.jpg') no-repeat center center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-7">
+                    <div class="page-header-content text-white text-center pt-sm-5 pt-md-5 pt-lg-0">
+                        <h1 class="text-white mb-0">@Model.prdxtraTitle</h1>
+                        <div class="custom-breadcrumb">
+                            <ol class="breadcrumb d-inline-block bg-transparent list-inline py-0">
+                                <li class="list-inline-item breadcrumb-item"><a href="#">خانه</a></li>
+                                <li class="list-inline-item breadcrumb-item"><a href="#">صفحات</a></li>
+                                <li class="list-inline-item breadcrumb-item active">جزئیات پروژه</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--header section end-->
+    <!--project details section start-->
+    <section class="project-details-section ptb-100">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-12 col-lg-8">
+                    <div class="img-wrap mb-md-4 mb-lg-0">
+                        <img src="~/Content/image/Products/@Model.prdxtraMainPhotoName" alt="پروژه" class="img-fluid rounded shadow-sm">
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <div class="project-details-sidebar">
+                        <ul class="project-info-list">
+                            <li class="d-flex align-items-center mb-3 p-4 rounded">
+                                <span class="ti-time icon-sm color-secondary d-block mr-3"></span>
+                                <div class="d-block">
+                                    <h5 class="mb-0">مدت زمان پشتیبانی رایگان</h5>
+                                    <p>@Model.prdxtraFreeBackupMonth ماه</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center mb-3 p-4 rounded">
+                                <span class="ti-time icon-sm color-secondary d-block mr-3"></span>
+                                <div class="d-block">
+                                    <h5 class="mb-0">پلتفرم</h5>
+                                    <p>@Model.prdxtraPlatform</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center mb-3 p-4 rounded">
+                                <span class="ti-link icon-sm color-secondary d-block mr-3"></span>
+                                <div class="d-block">
+                                    <h5 class="mb-0">کاتالوگ محصول</h5>
+                                    <a href="~/Content/catalog/@Model.prdxtraCatalogFileName">دانلود</a>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center mb-3 p-4 rounded">
+                                <span class="ti-user icon-sm color-secondary d-block mr-3"></span>
+                                <div class="d-block">
+                                    <h5 class="mb-0"></h5>
+                                    <p class="span_price">@Model.productPrice.ToString("N0")</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <a id="add_cart_@Model.PackageID" class="btn a_price" onclick="fnBuyProduct(this)" data-id="@Model.PackageID" data-pid="@Model.prdxtraProductID" data-packagecount="@Model.PackageCount"><span class="ti-shopping-cart"></span> خرید</a>
+                        <a id="remove_cart_@Model.PackageID" class="btn a_price_remove  display_none" onclick="fnRemoveFromCart(this)" data-id="@Model.PackageID" data-pid="@Model.prdxtraProductID" data-packagecount="@Model.PackageCount"><span class="ti-trash"></span> لغو خرید</a>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="margin_top_20">
+                @Model.prdxtraTitle
+            </h3>
+            @foreach (var pp in ProductPictureList)
+            {
+                <div class="text-center">
+                    <div>@Html.Raw(pp.prdpicBeforePicText)</div>
+                    <div><img class="img-fluid" src="~/Content/image/Products/@pp.prdpicPictureFileName" /></div>
+                    <div>@Html.Raw(pp.prdpicAfterPicText)</div>
+                </div>
+
+            }
+
+            <!--project details row start-->
+            @foreach (var pack in packageList)
+            {
+                var featuresList = AllfeaturesList.Where(i => i.pkgspecPackageID == pack.ID).ToList();
+                var packpictureList = AllPackagePictureList.Where(i => i.pkgpicPackageID == pack.ID).ToList();
+                <hr />
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <div class="project-details-content">
+                            <h5>پکیج @pack.packageName</h5>
+
+                            @foreach (var pp in packpictureList)
+                            {
+                                <div>
+                                    <div>@Html.Raw(pp.pkgpicBeforePicText)</div>
+                                    <div class="text-center"><img class="img-fluid" src="~/Content/image/Products/@pp.pkgpicPictureFileName" /></div>
+                                    <div>@Html.Raw(pp.pkgpicAfterPicText)</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    @foreach (var feature in featuresList)
+                    {
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="project-details-feature">
+                                <ul class="list-unstyled tech-feature-list">
+                                    <li class="py-1">
+                                        <span class="ti-check-box mr-2 color-secondary"></span>
+                                        @Html.Raw(feature.pkgspecDescription)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="text_center margin_top_20 margin_bottom_30 img_price">
+                    <span>قیمت پکیج @pack.packageName</span><span class="margin_right_20">@pack.packagePrice.ToString("N0")</span><span class="margin_right_20">تومان</span>
+                </div>
+            }
+            <!--project details row end-->
+
+        </div>
+    </section>
+    <!--project details section end-->
+    <!--call to action section start-->
+    <section class="call-to-action py-5 gray-light-bg">
+        <div class="container">
+            <div class="row justify-content-around align-items-center">
+                <div class="col-md-7">
+                    <div class="subscribe-content">
+                        <h3 class="mb-1">مشاوره آژانس  در زمینه تجارت شما</h3>
+                        <p>تجارت الکترونیکی کاملاً آزمایش شده و معماری مترقی را به سرعت درگیر کنید.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="action-btn text-lg-right text-sm-left">
+                        <a href="#" class="btn secondary-solid-btn">مشتری شوید</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--call to action section end-->
+
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="buyProductModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="buyModalContent" class="modal-content">
+        </div>
+    </div>
+</div>

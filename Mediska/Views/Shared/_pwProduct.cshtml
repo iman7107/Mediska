@@ -1,0 +1,23 @@
+﻿@model Mediska.Models.cmplxProduct
+<div style="border:2px solid #8c7dc1; border-radius:3px;" class="mix portfolio-item @Model.CategoryClassName" data-ref="mixitup-target">
+    <div class="portfolio-wrapper">
+        <a href="/Home/ShowProduct/@Model.prdxtraProductID">
+            <div class="content-overlay"></div>
+            <div style="height:375px; padding:0 5px; margin:0; display:flex; align-items:center;"><img class="img-fluid" src="~/Content/image/Products/@Model.prdxtraAvatarPhotoName" alt=""></div>
+            <div class="content-details fadeIn-bottom text-white">
+                <h5 class="text-white mb-1">اطلاعات بیشتر</h5>
+                <p>کلیک کنید</p>
+            </div>
+        </a>
+        <div class="text-center p-4 product_title">
+            <h5 class="mb-1">@Model.prdxtraTitle</h5>
+            <span class="product_desc">@Model.prdxtraShortDesc</span>
+        </div>
+        <div class="div_buy">
+            <a id="add_cart_@Model.PackageID" class="btn a_price" onclick="fnBuyProduct(this)" data-id="@Model.PackageID" data-pid="@Model.prdxtraProductID" data-packagecount="@Model.PackageCount">خرید</a>
+            <a id="remove_cart_@Model.PackageID" class="btn a_price_remove  display_none" onclick="fnRemoveFromCart(this)" data-id="@Model.PackageID" data-pid="@Model.prdxtraProductID" data-packagecount="@Model.PackageCount">لغو خرید</a>
+            <span class="span_price">@Model.productPrice.ToString("N0") <span class="span_tooman">تومان</span></span>
+        </div>
+    </div>
+</div>
+

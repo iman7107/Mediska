@@ -1,0 +1,146 @@
+﻿@using Mediska.Models.Repository
+@model Mediska.Models.cmplxProduct
+
+@{
+    repProduct repP = new repProduct();
+    var packageList = repP.GetProductPackages(Model.prdxtraProductID);
+    var FeatureList = repP.GetPackageFeatureByProductID(Model.prdxtraProductID, null);
+    var SumPrice = 0;
+    bool HasBasePackage = false;
+    bool HasOtherPackage = false;
+
+    List<int> cart = new List<int>();
+    if (Session["ShopCart"] != null)
+    {
+        cart = Session["ShopCart"] as List<int>;
+    }
+
+    var CartPackList = (from x in cart join y in packageList on x equals y.ID select y).ToList();
+    HasBasePackage = CartPackList.Where(i => i.packagePartitionIndex == 0).Any();
+    HasOtherPackage = CartPackList.Where(i => i.packagePartitionIndex > 0).Any();
+}
+<div class="modal-header">
+    <h4 class="modal-title">@Model.prdxtraTitle</h4>
+</div>
+<div class="modal-body">
+    <table class="table table-hover">
+        <thead>
+    
+            <tr class="style_bg" style="background-image: linear-gradient(to bottom right, #f376a8, #492e9a);">
+                <th>نام پکیج</th>
+                <th>قیمت پکیج</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pack in packageList)
+            {
+                <tr class="cursor_pointer data_row">
+                    <td data-id="@pack.ID" onclick="fnCollapseNextTR(this)">
+                        <button data-id="@pack.ID" style="float:right; color:#e80566" class="btn btn-link">
+                            <span id="btn_@pack.ID" class="fa fa-chevron-circle-down"></span>
+                        </button>
+                        @pack.packageName
+                    </td>
+                    <td data-id="@pack.ID" onclick="fnCollapseNextTR(this)"><span class="span_price font_15">@pack.packagePrice.ToString("N0") <span class="span_tooman font_12">تومان</span></span></td>
+                    <td class="" style="min-width: 180px; text-align: center;">
+                        @if (Session["ShopCart"] != null)
+                        {
+                            bool IsInCart = cart.Where(i => i == pack.ID).Any();
+                            if (IsInCart)
+                            {
+                                if (pack.packageProductID == Model.prdxtraProductID)
+                                {
+                                    SumPrice += Convert.ToInt32(pack.packagePrice);
+                                }
+
+                                if (pack.packagePartitionIndex == 0)
+                                {
+                                    if (HasOtherPackage)
+                                    {
+                                        <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add display_none button_disable" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add" data-productid=""><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                        <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove button_disable" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add display_none button_disable" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                        <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add display_none button_disable" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                    <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                                }
+                            }
+
+                            else // Not in Cart
+                            {
+                                if (pack.packagePartitionIndex == 0)
+                                {
+                                    <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                    <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove display_none" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                                }
+                                else
+                                {
+                                    if (HasBasePackage)
+                                    {
+                                        <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                        <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove display_none" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add button_disable" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                        <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove display_none" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (pack.packagePartitionIndex == 0)
+                            {
+                                <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove display_none" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                            }
+                            else
+                            {
+                                <a id="add_to_cart_@pack.ID" class="cart_td_a_button cart_a_add button_disable" onclick="fnAddToCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="add"><span class="ti-shopping-cart margin_left_5"></span>خرید</a>
+                                <a id="remove_from_cart_@pack.ID" class="cart_td_a_button cart_a_remove display_none" onclick="fnRemoveFromCart(this,'sum_cart_price', @Model.prdxtraProductID)" data-id="@pack.ID" data-partid="@pack.packagePartitionIndex" data-action="remove"><span class="ti-trash"></span> لغو خرید</a>
+                            }
+                        }
+                    </td>
+                </tr>
+
+                var MyFList = FeatureList.Where(i => i.pkgspecPackageID == pack.ID).ToList();
+                if (MyFList.Count > 0)
+                {
+                    <tr class="display_none" id="feature_tr_@pack.ID">
+                        <td colspan="3">
+                            <div class="project-details-feature">
+                                <ul class="list-unstyled tech-feature-list">
+                                    @foreach (var f in MyFList)
+                                    {
+                                        <li class="py-1">
+                                            <span class="ti-check-box mr-2 color-secondary"></span>
+                                            @Html.Raw(f.pkgspecDescription)
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            }
+            <tr class="tr_sum_price">
+                <td>جمع پکیج های این محصول</td>
+                <td><span id="sum_cart_price" class="span_price">@SumPrice.ToString("N0")<span class="span_tooman font_12"> تومان</span></span></td>
+                <td class="text_center"><a class="btn btn-success" href="/ShopCart/Index">تکمیل خرید</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+</div>

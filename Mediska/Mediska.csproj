@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C750610A-285F-4DB8-91D1-29DC6045D5D9}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mediska</RootNamespace>
+    <AssemblyName>Mediska</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44369</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Classes\clsSMS.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ShopCartController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\clsPublic.cs" />
+    <Compile Include="Models\cmplxCustomerInfoByID.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxPackage.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxPackagePicture.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxPackageSpec.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxProductPicture.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxSMSSetting.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repository\repSetting.cs" />
+    <Compile Include="Models\ViewModel.cs" />
+    <Compile Include="Models\cmplxCustomerInfoByMobile.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxProduct.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxProductGroup.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\Crypto.cs" />
+    <Compile Include="Models\MediskaModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MediskaModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MediskaModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MediskaModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MediskaModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repository\repProduct.cs" />
+    <Compile Include="Models\Repository\repUser.cs" />
+    <Compile Include="Models\ValidationAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\SMSSender\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\all.min.css" />
+    <Content Include="Content\css\animate.min.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\fontiran.css" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebblackfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebboldfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebextrablackfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebextraboldfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanweblightfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebmediumfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebregularfanum.svg" />
+    <Content Include="Content\css\font\IranYekan\svg\iranyekanwebthinfanum.svg" />
+    <Content Include="Content\css\jquery.mb.YTPlayer.min.css" />
+    <Content Include="Content\css\magnific-popup.css" />
+    <Content Include="Content\css\notify.min.css" />
+    <Content Include="Content\css\owl.carousel.min.css" />
+    <Content Include="Content\css\owl.theme.default.min.css" />
+    <Content Include="Content\css\owl.video.play.html" />
+    <Content Include="Content\css\responsive.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\themify-icons.css" />
+    <Content Include="Content\fonts\themify9f24.svg" />
+    <Content Include="Content\image\b1.png" />
+    <Content Include="Content\image\logo_40.jpg" />
+    <Content Include="Content\image\logo_40.png" />
+    <Content Include="Content\image\Products\3.jpg" />
+    <Content Include="Content\img\about-1.jpg" />
+    <Content Include="Content\img\about-us-img-bg.svg" />
+    <Content Include="Content\img\about-us-img.svg" />
+    <Content Include="Content\img\blog\1-w.jpg" />
+    <Content Include="Content\img\blog\1.jpg" />
+    <Content Include="Content\img\blog\2-w.jpg" />
+    <Content Include="Content\img\blog\2.jpg" />
+    <Content Include="Content\img\blog\3-w.jpg" />
+    <Content Include="Content\img\blog\3.jpg" />
+    <Content Include="Content\img\blog\4-w.jpg" />
+    <Content Include="Content\img\blog\4.jpg" />
+    <Content Include="Content\img\blog\5.jpg" />
+    <Content Include="Content\img\blog\6.jpg" />
+    <Content Include="Content\img\bullhorn.svg" />
+    <Content Include="Content\img\client-1.jpg" />
+    <Content Include="Content\img\client-2.jpg" />
+    <Content Include="Content\img\client-3.jpg" />
+    <Content Include="Content\img\client-4.jpg" />
+    <Content Include="Content\img\client-5.jpg" />
+    <Content Include="Content\img\client-bg.jpg" />
+    <Content Include="Content\img\clients-logo-01.png" />
+    <Content Include="Content\img\clients-logo-02.png" />
+    <Content Include="Content\img\clients-logo-03.png" />
+    <Content Include="Content\img\clients-logo-04.png" />
+    <Content Include="Content\img\clients-logo-05.png" />
+    <Content Include="Content\img\clients-logo-06.png" />
+    <Content Include="Content\img\clients-logo-07.png" />
+    <Content Include="Content\img\clients-logo-08.png" />
+    <Content Include="Content\img\consult.svg" />
+    <Content Include="Content\img\credit-card.svg" />
+    <Content Include="Content\img\cta-1-man.svg" />
+    <Content Include="Content\img\cta-1-mike.svg" />
+    <Content Include="Content\img\cta-2-circle-shape.png" />
+    <Content Include="Content\img\cta-2-girl-img.jpg" />
+    <Content Include="Content\img\cta-2-path-shape.png" />
+    <Content Include="Content\img\cta-2-shape.png" />
+    <Content Include="Content\img\cta-2-tringle-shape.png" />
+    <Content Include="Content\img\cta-bg.jpg" />
+    <Content Include="Content\img\ctg-bg-2.jpg" />
+    <Content Include="Content\img\favicon.png" />
+    <Content Include="Content\img\globe-bg.png" />
+    <Content Include="Content\img\header-bg-5.jpg" />
+    <Content Include="Content\img\hero-bg-1.jpg" />
+    <Content Include="Content\img\hero-bg-11.png" />
+    <Content Include="Content\img\hero-bg-2.jpg" />
+    <Content Include="Content\img\hero-bg-4.png" />
+    <Content Include="Content\img\hero-bg7.jpg" />
+    <Content Include="Content\img\hero-offer-img.svg" />
+    <Content Include="Content\img\images.jpg" />
+    <Content Include="Content\img\increase.svg" />
+    <Content Include="Content\img\interface.svg" />
+    <Content Include="Content\img\logo-color.png" />
+    <Content Include="Content\img\logo-white.png" />
+    <Content Include="Content\img\portfolios\1.jpg" />
+    <Content Include="Content\img\portfolios\2.jpg" />
+    <Content Include="Content\img\portfolios\3.jpg" />
+    <Content Include="Content\img\portfolios\4.jpg" />
+    <Content Include="Content\img\portfolios\5.jpg" />
+    <Content Include="Content\img\portfolios\6.jpg" />
+    <Content Include="Content\img\priching-img-1.png" />
+    <Content Include="Content\img\priching-img-2.png" />
+    <Content Include="Content\img\priching-img-3.png" />
+    <Content Include="Content\img\promo-box-shape-bottom.png" />
+    <Content Include="Content\img\promo-icon-bg.svg" />
+    <Content Include="Content\img\search-engine.svg" />
+    <Content Include="Content\img\service-bottom-shape.png" />
+    <Content Include="Content\img\slider-bg-1.svg" />
+    <Content Include="Content\img\slider-bg-2.svg" />
+    <Content Include="Content\img\slider-img-1.jpg" />
+    <Content Include="Content\img\slider-img-2.jpg" />
+    <Content Include="Content\img\slider-img-3.jpg" />
+    <Content Include="Content\img\slider-img-4.jpg" />
+    <Content Include="Content\img\slider-img-5.jpg" />
+    <Content Include="Content\img\t1-hero-img.svg" />
+    <Content Include="Content\img\t2-hero-img.svg" />
+    <Content Include="Content\img\t3-hero-img.svg" />
+    <Content Include="Content\img\t3-hero-shape.svg" />
+    <Content Include="Content\img\t5-hero-img.svg" />
+    <Content Include="Content\img\t5-hero-shape %282%29.svg" />
+    <Content Include="Content\img\t5-hero-shape.svg" />
+    <Content Include="Content\img\t6-hero-img1.svg" />
+    <Content Include="Content\img\t6-hero-shape.png" />
+    <Content Include="Content\img\tab-img.png" />
+    <Content Include="Content\img\team-2.jpg" />
+    <Content Include="Content\img\team-member-1.png" />
+    <Content Include="Content\img\team-member-2.png" />
+    <Content Include="Content\img\team-member-3.png" />
+    <Content Include="Content\img\team-member-4.png" />
+    <Content Include="Content\img\team-member-5.png" />
+    <Content Include="Content\img\team-member-6.png" />
+    <Content Include="Content\img\team-member-7.png" />
+    <Content Include="Content\img\team-member-8.png" />
+    <Content Include="Content\img\testimonial-arrow-bottom.png" />
+    <Content Include="Content\img\testimonial-arrow-top.png" />
+    <Content Include="Content\img\testimonial-bg.png" />
+    <Content Include="Content\img\why-choose-us.png" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\jquery-3.5.0.min.js" />
+    <Content Include="Content\js\jquery.countdown.min.js" />
+    <Content Include="Content\js\jquery.easing.min.js" />
+    <Content Include="Content\js\jquery.easy-pie-chart.js" />
+    <Content Include="Content\js\jquery.magnific-popup.min.js" />
+    <Content Include="Content\js\jquery.mb.YTPlayer.min.js" />
+    <Content Include="Content\js\mixitup.min.js" />
+    <Content Include="Content\js\notify.min.js" />
+    <Content Include="Content\js\owl.carousel.min.js" />
+    <Content Include="Content\js\popper.min.js" />
+    <Content Include="Content\js\scripts.js" />
+    <Content Include="Content\js\wow.min.js" />
+    <Content Include="Content\Script.js" />
+    <Content Include="Content\webfonts\fa-brands-400.svg" />
+    <Content Include="Content\webfonts\fa-regular-400.svg" />
+    <Content Include="Content\webfonts\fa-solid-900.svg" />
+    <Content Include="favicon.ico" />
+    <Content Include="Content\glyphicon\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Models\MediskaModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MediskaModel.Context.cs</LastGenOutput>
+      <DependentUpon>MediskaModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\MediskaModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MediskaModel.edmx</DependentUpon>
+      <LastGenOutput>MediskaModel.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="Models\MediskaModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MediskaModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\MediskaModel.edmx.diagram">
+      <DependentUpon>MediskaModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Content\css\font\IRANSansWeb%28FaNum%29.ttf" />
+    <Content Include="Content\fonts\themify9f24.eot" />
+    <Content Include="Content\fonts\themify9f24.ttf" />
+    <Content Include="Content\fonts\themify9f24.woff" />
+    <Content Include="Content\fonts\themifyd41d.eot" />
+    <Content Include="Content\img\blog\Thumbs.db" />
+    <Content Include="Content\img\portfolios\Thumbs.db" />
+    <Content Include="Content\img\Thumbs.db" />
+    <Content Include="Content\webfonts\fa-brands-400.eot" />
+    <Content Include="Content\webfonts\fa-brands-400.ttf" />
+    <Content Include="Content\webfonts\fa-brands-400.woff" />
+    <Content Include="Content\webfonts\fa-brands-400.woff2" />
+    <Content Include="Content\webfonts\fa-brands-400d41d.eot" />
+    <Content Include="Content\webfonts\fa-regular-400.eot" />
+    <Content Include="Content\webfonts\fa-regular-400.ttf" />
+    <Content Include="Content\webfonts\fa-regular-400.woff" />
+    <Content Include="Content\webfonts\fa-regular-400.woff2" />
+    <Content Include="Content\webfonts\fa-regular-400d41d.eot" />
+    <Content Include="Content\webfonts\fa-solid-900.eot" />
+    <Content Include="Content\webfonts\fa-solid-900.ttf" />
+    <Content Include="Content\webfonts\fa-solid-900.woff" />
+    <Content Include="Content\webfonts\fa-solid-900.woff2" />
+    <Content Include="Content\webfonts\fa-solid-900d41d.eot" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Web References\SMSSender\MessagesBL.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SMSSender\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Account\VerifySMSCode.cshtml" />
+    <Content Include="Views\Account\ForgetPassword.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\LoginOTP.cshtml" />
+    <Content Include="Views\Account\VerifyOTP.cshtml" />
+    <Content Include="Views\Shared\_pwProduct.cshtml" />
+    <Content Include="Views\Shared\_pwBuyPackage.cshtml" />
+    <Content Include="Views\ShopCart\Index.cshtml" />
+    <None Include="Web References\SMSSender\Send.disco" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <None Include="Web References\SMSSender\Send.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\catalog\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\glyphicon\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\glyphicon\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\glyphicon\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\glyphicon\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebblackfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebboldfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebextrablackfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebextraboldfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanweblightfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebmediumfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebregularfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\eot\iranyekanwebthinfanum.eot" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebblackfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebboldfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebextrablackfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebextraboldfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanweblightfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebmediumfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebregularfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\ttf\iranyekanwebthinfanum.ttf" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebblackfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebboldfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebextrablackfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebextraboldfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanweblightfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebmediumfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebregularfanum.woff" />
+    <Content Include="Content\css\font\IranYekan\woff\iranyekanwebthinfanum.woff" />
+    <None Include="packages.config" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Home\ShowProduct.cshtml" />
+    <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://api.payamak-panel.com/post/Send.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\SMSSender\</RelPath>
+      <UpdateFromURL>http://api.payamak-panel.com/post/Send.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Mediska_SMSSender_Send</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>62851</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44369/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>
