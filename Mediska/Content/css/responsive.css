@@ -83,6 +83,10 @@
     .footer-bottom .row> div[class*='col-']:first-child{
         margin-bottom: 0 !important;
     }
+
+    .portfolio-wrapper,.content_image {
+        padding: 0 53px;
+    }
 }
 
 /*Small devices (landscape phones, 576px and up)*/
@@ -120,7 +124,7 @@
     .portfolio-item, .gap{
         width: auto;
     }
-
+   
     /*testimonial with counter*/
     .counter-wrap{
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -152,7 +156,9 @@
     .footer-bottom .row> div[class*='col-']:first-child{
         margin-bottom: 0 !important;
     }
-
+    .portfolio-wrapper, .content_image {
+        padding: 0 53px;
+    }
 }
 
 /*Medium devices (tablets, 768px and up)*/
@@ -170,4 +176,5 @@
     .video-play-icon{
         display: none !important;
     }
+   
 }

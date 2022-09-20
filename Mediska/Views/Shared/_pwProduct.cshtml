@@ -3,13 +3,13 @@
     <div class="portfolio-wrapper">
         <a href="/Home/ShowProduct/@Model.prdxtraProductID">
             <div class="content-overlay"></div>
-            <div style="height:375px; padding:0 5px; margin:0; display:flex; align-items:center;"><img class="img-fluid" src="~/Content/image/Products/@Model.prdxtraAvatarPhotoName" alt=""></div>
+            <div class="content_image" style="height:375px; padding:0 5px; margin:0; display:flex; align-items:center;"><img class="img-fluid"  src="~/Content/image/Products/@Model.prdxtraAvatarPhotoName" alt=""></div>
             <div class="content-details fadeIn-bottom text-white">
                 <h5 class="text-white mb-1">اطلاعات بیشتر</h5>
                 <p>کلیک کنید</p>
             </div>
         </a>
-        <div class="text-center p-4 product_title">
+        <div class="text-center p-4 product_title" style="width:100%;">
             <h5 class="mb-1">@Model.prdxtraTitle</h5>
             <span class="product_desc">@Model.prdxtraShortDesc</span>
         </div>
