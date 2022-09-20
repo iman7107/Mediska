@@ -12,7 +12,18 @@ namespace Mediska.Controllers
     public class ShopCartController : Controller
     {
         repProduct RepP = new repProduct();
-        
+
+        #region Ajax
+        public JsonResult myDiscountList(string discountCode)
+        {
+            List<string> list = new List<string>();
+            list.Add("1");
+            list.Add("2");
+            list.Add("3");
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
         // GET: ShopCart
         public ActionResult Index()
         {

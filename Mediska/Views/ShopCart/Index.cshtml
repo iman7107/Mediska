@@ -46,9 +46,11 @@
                                 @product.prdxtraTitle
                             </button>
                             <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
+
+                            <input type="text" id="discountCode" class="form-control" style="margin-right:20px" placeholder="کد تخفیف" />
+
                         </div>
                     </div>
-
                     <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
                         <div class="card-body padding_right_30">
 
@@ -91,3 +93,22 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#discountCode").change(function () {
+                var val = $(this).val();
+                if (val !== "") {
+                    jQuery.getJSON("/ShopCart/myDiscountList", { discountCode: val }, function (data) {
+
+                        $.each(data, function (i) {
+                            alert(data[i]);
+                        });
+
+                    });
+                }
+            });
+        });
+    </script>
+    }
