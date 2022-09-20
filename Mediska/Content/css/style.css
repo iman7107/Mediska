@@ -2024,13 +2024,21 @@ button.filter-btn:focus {
 @media screen and (min-width: 541px) {
     .portfolio-item,
     .gap {
-        width: calc(100% / 3 - (((3 - 1) * 1rem) / 3));
+        width: calc(100% / 2 - (((2 - 1) * 1rem) / 1));
+        /*        width: calc(100% / 3 - (((3 - 1) * 1rem) / 3));*/
     }
 }
 
+/*@media screen and (min-width: 961px) {
+    .portfolio-item,
+    .gap {
+        width: calc(100% / 2 - (((2 - 1) * 1rem) / 1));*/
+        /*        width: calc(100% / 3 - (((3 - 1) * 1rem) / 3));*/
+    /*}
+}*/
 /* 4 Columns */
 
-@media screen and (min-width: 961px) {
+@media screen and (min-width: 990px) {
     .portfolio-item,
     .gap {
         width: calc(100% / 3 - (((3 - 1) * 1rem) / 3));
