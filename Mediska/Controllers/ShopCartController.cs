@@ -16,9 +16,27 @@ namespace Mediska.Controllers
         #region Ajax
         public JsonResult myDiscountList(string offCode)
         {
-            List<cmplxCheckOffCode> list = new repProduct().CheckOffCode(offCode);
+            try
+            {
+                List<cmplxCheckOffCode> list = RepP.CheckOffCode(offCode);
+                return Json(new { Status = "Success", Message = "", Data = list }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                string ErrorMessage = "";
+                if (ex.ToString().Contains("[TSA050]"))
+                    ErrorMessage = "این کد تخفیف وجود ندارد";
+                else if (ex.ToString().Contains("[TSA051]"))
+                    ErrorMessage = "این کد تخفیف فعال نمی باشد";
+                else if (ex.ToString().Contains("[TSA052]"))
+                    ErrorMessage = "زمان استفاده از این کد تخفیف به پایان رسیده است";
+                else if (ex.ToString().Contains("[TSA053]"))
+                    ErrorMessage = "این کد تخفیف قبلا استفاده شده است";
+                else
+                    ErrorMessage = "در بررسی کد تخفیف خطایی رخ داده است";
 
-            return Json(list, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = "Error", Message = ErrorMessage, Data = "" }, JsonRequestBehavior.AllowGet);
+            }
         }
         #endregion
 

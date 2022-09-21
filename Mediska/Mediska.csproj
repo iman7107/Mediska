@@ -171,9 +171,6 @@
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repository\repSetting.cs" />
-    <Compile Include="Models\spCheckOffCode_Result.cs">
-      <DependentUpon>MediskaModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Models\cmplxCustomerInfoByMobile.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
