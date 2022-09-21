@@ -19,5 +19,13 @@ namespace Mediska
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_Error()
+        {
+            Exception exception = Server.GetLastError();
+            var message = exception.Message;
+            Server.ClearError();
+            Response.Redirect("/Home/Error/?errorCode=-404");
+        }
     }
 }

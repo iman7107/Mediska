@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -112,6 +113,13 @@ namespace Mediska.Models.Repository
 
         }
 
+        //===Marimi
+        public List<cmplxCheckOffCode> CheckOffCode(string offCode)
+        {
 
+                var packagefeatures = Context.MDSKCheckOffCode(offCode).ToList();
+                return packagefeatures;
+
+        }
     }
 }

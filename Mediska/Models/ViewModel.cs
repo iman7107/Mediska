@@ -166,4 +166,7 @@ namespace Mediska.Models
         public Decimal Price { get; set; }
 
     }
+
+
+
 }

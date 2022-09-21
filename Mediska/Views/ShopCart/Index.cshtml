@@ -47,7 +47,7 @@
                             </button>
                             <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
 
-                            <input type="text" id="discountCode" class="form-control" style="margin-right:20px" placeholder="کد تخفیف" />
+                            <input type="text" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px" placeholder="کد تخفیف" />
 
                         </div>
                     </div>
@@ -59,9 +59,9 @@
                                 {
                                     <tr class="cursor_pointer data_row">
                                         <td data-id="@pack.ID" class="width_250">
-                                            @pack.packageName
+                                            [@pack.ID] @pack.packageName
                                         </td>
-                                        <td data-id="@pack.ID" class="width_150"><span class="font_15">@pack.packagePrice.ToString("N0") <span class="span_tooman font_12">تومان</span></span></td>
+                                        <td data-id="@pack.ID" class="width_150"><span class="font_15">@pack.packagePrice.ToString("N0") </span><span data-OffPrice="" class="font_15"></span><span class="span_tooman font_12">تومان</span></td>
                                         <td class="td_trash">
                                             @if (pack.packagePartitionIndex == 0)
                                             {
@@ -85,7 +85,7 @@
             <div class="container-full basketpage_cart_footer_div">
                 <div class="basketpage_cart_footer_inner_div">
                     <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
-                    <span class="basketpage_cart_footer_price_span">@TotalPrice.ToString("N0").Replace(",", "٬")</span>
+                    <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
                     <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
                 </div>
                 <a href="/ShopCart/Payment" class="btn btn-success">تایید و پرداخت</a>
@@ -97,18 +97,63 @@
 @section scripts{
     <script type="text/javascript">
         $(function () {
-            $("#discountCode").change(function () {
+            $(".offCode").change(function () {
+                var productID = $(this).attr("id").split('_')[1];
                 var val = $(this).val();
+                var totalOff = 0;
                 if (val !== "") {
-                    jQuery.getJSON("/ShopCart/myDiscountList", { discountCode: val }, function (data) {
+                    jQuery.getJSON("/ShopCart/myDiscountList", { offCode: val }, function (data) {
 
                         $.each(data, function (i) {
-                            alert(data[i]);
+                            var packageID = data[i].PackageID;
+                            $("#collapse_" + productID + " .table .data_row").each(function () {
+                                var elementID = $(this).find("td").eq(0).attr("data-id");
+
+                                if (elementID.toString() === packageID.toString()) {
+                                    $(this).find("td").eq(1).find("span").eq(0).css("color", "#b0aeae");
+                                    $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "line-through");
+                                    var finalPrice = parseInt(data[i].FinalPrice) / 10;
+                                    $(this).find("td").eq(1).find("span").eq(1).text(finalPrice);
+                                    $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice", data[i].OffPrice)
+                                    totalOff += parseInt(data[i].OffPrice);
+
+                                }
+                            });
                         });
 
+                        var totalPrice = $("#totalPrice").text().replace(/,/g, "");
+                        var result = parseInt(totalPrice) - parseInt(totalOff) / 10;
+                        $("#totalPrice").text(addComma(result.toString()));
+
                     });
+                } else {
+
+                    $("#collapse_" + productID + " .table .data_row").each(function () {
+
+                        $(this).find("td").eq(1).find("span").eq(0).css("color", "black");
+                        $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "none");
+                        var offPrice = $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice");
+                        $(this).find("td").eq(1).find("span").eq(1).text("");
+                        $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice", "");
+                        totalOff += parseInt(offPrice) / 10;
+
+                    });
+
+                    var totalPrice = $("#totalPrice").text().replace(/,/g, "");
+                    var result = parseInt(totalPrice) + parseInt(totalOff);
+                    $("#totalPrice").text(addComma(result.toString()));
+
                 }
             });
+
+            function addComma(str) {
+                var objRegex = new RegExp("(-?[0-9]+)([0-9]{3})");
+                while (objRegex.test(str)) {
+                    str = str.replace(objRegex, "$1,$2");
+                }
+                return str;
+            }
+
         });
     </script>
-    }
+}

@@ -14,12 +14,10 @@ namespace Mediska.Controllers
         repProduct RepP = new repProduct();
 
         #region Ajax
-        public JsonResult myDiscountList(string discountCode)
+        public JsonResult myDiscountList(string offCode)
         {
-            List<string> list = new List<string>();
-            list.Add("1");
-            list.Add("2");
-            list.Add("3");
+            List<cmplxCheckOffCode> list = new repProduct().CheckOffCode(offCode);
+
             return Json(list, JsonRequestBehavior.AllowGet);
         }
         #endregion
