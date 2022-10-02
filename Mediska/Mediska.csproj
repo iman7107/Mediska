@@ -162,6 +162,9 @@
     <Compile Include="Models\cmplxGetAreaList.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\cmplxGetCustomerGroup.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\cmplxGetUnConfirmPackage.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>

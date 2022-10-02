@@ -48,14 +48,23 @@ namespace Mediska.Controllers
 
         }
 
-        //public JsonResult myAreaList(string query)
-        //{
+        public JsonResult myCustomerGroupList()
+        {
 
-        //    List<clsSelect> list = bll.AreaList(query);
+            var list = bll.GetCustomerGroup();
 
-        //    return Json(list, JsonRequestBehavior.AllowGet);
+            return Json(list, JsonRequestBehavior.AllowGet);
 
-        //}
+        }
+
+        public JsonResult myCustomerList()
+        {
+
+            var list = new repUser().GetCustomerInfoByUserID(Session["CustomerID"] as int?);
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+
+        }
         #endregion
 
         // GET: ShopCart
@@ -211,12 +220,13 @@ namespace Mediska.Controllers
         }
         #endregion
 
-        public JsonResult InsertCustomer(Nullable<int> userID, string customerCompanyName, string customerManagerName, string customerManagerFamily, string customerManagerMobileNo, string customerMelliNo, Nullable<System.DateTime> customerBirthDate, Nullable<int> customerCustomerGroupID, Nullable<bool> customerManagerGender, Nullable<int> customerAreaID, string customerAddress)
+        public JsonResult InsertCustomer(Nullable<int> userID, string customerCompanyName, string customerManagerName, string customerManagerFamily, string customerManagerMobileNo, string customerMelliNo, string customerBirthDate, Nullable<int> customerCustomerGroupID, string customerManagerGender, Nullable<int> customerAreaID, string customerAddress)
         {
 
             try
             {
-                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, customerBirthDate, customerCustomerGroupID, customerManagerGender, customerAreaID, customerAddress);
+
+                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo,DateTime.Parse( customerBirthDate), customerCustomerGroupID, customerManagerGender == "1" , customerAreaID, customerAddress);
 
                 return Json(new { Status = "Success", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }

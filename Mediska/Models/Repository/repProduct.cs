@@ -117,16 +117,16 @@ namespace Mediska.Models.Repository
         public List<cmplxCheckOffCode> CheckOffCode(string offCode)
         {
 
-                var packagefeatures = Context.MDSKCheckOffCode(offCode).ToList();
-                return packagefeatures;
+                var result = Context.MDSKCheckOffCode(offCode).ToList();
+                return result;
 
         }
 
         public List<clsSelect> AreaList(string filter)
         {
 
-            var areaList = Context.MDSKGetAreaList(filter).Select(i=> new clsSelect { id = i.ID , text = i.areaName}).ToList();
-            return areaList;
+            var result = Context.MDSKGetAreaList(filter).Select(i=> new clsSelect { id = i.ID , text = i.areaName}).ToList();
+            return result;
 
         }
 
@@ -141,8 +141,8 @@ namespace Mediska.Models.Repository
         public List<cmplxGetUnConfirmPackage> UnConfirmPackage(int? userID)
         {
 
-            var list = Context.MDSKGetUnConfirmPackage(userID).ToList();
-            return list;
+            var result = Context.MDSKGetUnConfirmPackage(userID).ToList();
+            return result;
 
         }
 
@@ -152,6 +152,12 @@ namespace Mediska.Models.Repository
             var result = Context.MDSKInsertCustomer( userID,  customerCompanyName,  customerManagerName,  customerManagerFamily,  customerManagerMobileNo,  customerMelliNo, customerBirthDate, customerCustomerGroupID,  customerManagerGender,  customerAreaID,  customerAddress);
             return result;
 
+        }
+
+        public List<clsSelect> GetCustomerGroup()
+        {
+            var result = Context.MDSKGetCustomerGroup().Select(i => new clsSelect { id = i.ID, text = i.custgroupName }).ToList(); ;
+            return result;
         }
     }
 }

@@ -76,7 +76,7 @@
                             }
                             <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
                                 <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
-                                <select name="finalCartList[@c].CustomerID" class="form-control" style="margin-right:10px;margin-left:20px">
+                                <select id="customerList" name="finalCartList[@c].CustomerID" class="form-control" style="margin-right:10px;margin-left:20px">
                                     <option value="none" selected disabled>--انتخاب مرکز--</option>
                                     @foreach (var item in ViewBag.CustomerList)
                                     {
@@ -232,14 +232,16 @@
                             <label class="pb-1">
                                 گروه مشتری:
                             </label>
-                            @Html.TextBox("customerCustomerGroupID", null, new { @class = "form-control" })
+                            <select id="customerCustomerGroupID" name="customerCustomerGroupID">
+                            </select>
+
                         </div>
 
                         <div class="input-group input-group-sm">
                             <label class="pb-1">
                                 استان-شهر:
                             </label>
-                            <select id="provinceID" name="customerAreaID">
+                            <select id="customerAreaID" name="customerAreaID">
                             </select>
                         </div>
 
@@ -278,7 +280,15 @@
                 });
             $("#newCustomer").click(function () {
                 jQuery.getJSON("/ShopCart/myAreaList/", { query: "" }, function (data) {
-                    $("#provinceID").select2({
+                    $("#customerAreaID").select2({
+                        data: data,
+                        dir: 'rtl',
+                        width: '80%'
+                    });
+                });
+
+                jQuery.getJSON("/ShopCart/myCustomerGroupList/", { }, function (data) {
+                    $("#customerCustomerGroupID").select2({
                         data: data,
                         dir: 'rtl',
                         width: '80%'
@@ -294,7 +304,21 @@
 
             $("#btnInsertCustomer").click(function () {
                 $.post("/ShopCart/InsertCustomer", $("#insertCustomer").serialize(), function (data) {
-                    showAlert("خطا", data.Message, "error");
+                    if (data.Message !== "") {
+                        showAlert("خطا", data.Message, "error");
+                    } else {
+                        jQuery.getJSON("/ShopCart/myCustomerList/", {}, function (data) {
+                            $("#customerList").find("option").remove();
+                            $.each(data, function (i) {
+
+                                var option = "<option value='" + data[i].customerID + "'>[" + data[i].custgroupName + "]-[" + (data[i].customerAddress.length > 30 ? data[i].customerAddress.substring(0, 30) + "...." : data[i].customerAddress ) +"]</option>";
+                                $("#customerList").append(option);
+                            });
+
+                        });
+
+                        $('#customerModal').modal('toggle');
+                    }
                 });
             });
         });

@@ -424,5 +424,15 @@ namespace Mediska.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxGetAreaList>("MDSKGetAreaList", filterParameter);
         }
+    
+        public virtual int spMDSKGetCustomerGroup()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spMDSKGetCustomerGroup");
+        }
+    
+        public virtual ObjectResult<cmplxGetCustomerGroup> MDSKGetCustomerGroup()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxGetCustomerGroup>("MDSKGetCustomerGroup");
+        }
     }
 }

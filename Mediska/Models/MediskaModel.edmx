@@ -28,6 +28,7 @@
         <Function Name="spMDSKGetCustomerByUserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="int" Mode="In" />
         </Function>
+        <Function Name="spMDSKGetCustomerGroup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="spMDSKGetCustomerInfoByAuthGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GUID" Type="varchar" Mode="In" />
         </Function>
@@ -241,8 +242,10 @@
             <Parameter Name="CustomerAddress" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="MDSKGetAreaList" ReturnType="Collection(SupportModel.cmplxGetAreaList)">
-            <Parameter Name="Filter" Mode="In" Type="String" />
+          <Parameter Name="Filter" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="spMDSKGetCustomerGroup" />
+          <FunctionImport Name="MDSKGetCustomerGroup" ReturnType="Collection(SupportModel.cmplxGetCustomerGroup)" />
         </EntityContainer>
         <ComplexType Name="cmplxProduct">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -410,6 +413,10 @@
           <Property Type="Int32" Name="areaParentID" Nullable="true" />
           <Property Type="String" Name="areaFullTitle" Nullable="true" MaxLength="4000" />
           <Property Type="String" Name="TypeName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="cmplxGetCustomerGroup">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="custgroupName" Nullable="false" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -753,6 +760,16 @@
                 <ScalarProperty Name="areaParentID" ColumnName="areaParentID" />
                 <ScalarProperty Name="areaFullTitle" ColumnName="areaFullTitle" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spMDSKGetCustomerGroup" FunctionName="SupportModel.Store.spMDSKGetCustomerGroup">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerGroup" FunctionName="SupportModel.Store.spMDSKGetCustomerGroup">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxGetCustomerGroup">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="custgroupName" ColumnName="custgroupName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
