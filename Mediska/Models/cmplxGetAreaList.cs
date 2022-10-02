@@ -11,13 +11,13 @@ namespace Mediska.Models
 {
     using System;
     
-    public partial class spCheckOffCode_Result
+    public partial class cmplxGetAreaList
     {
-        public int PackageID { get; set; }
-        public string packageName { get; set; }
-        public decimal packagePrice { get; set; }
-        public float OffPercent { get; set; }
-        public Nullable<decimal> OffPrice { get; set; }
-        public Nullable<decimal> FinalPrice { get; set; }
+        public int ID { get; set; }
+        public string areaName { get; set; }
+        public int areaTypelook { get; set; }
+        public Nullable<int> areaParentID { get; set; }
+        public string areaFullTitle { get; set; }
+        public string TypeName { get; set; }
     }
 }

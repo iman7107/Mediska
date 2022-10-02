@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Mediska.Classes
 {
@@ -317,4 +319,8 @@ namespace Mediska.Classes
         }
     }
 
+    public class UtilityStatic
+    {
+        
+    }
 }

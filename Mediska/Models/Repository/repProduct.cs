@@ -121,5 +121,37 @@ namespace Mediska.Models.Repository
                 return packagefeatures;
 
         }
+
+        public List<clsSelect> AreaList(string filter)
+        {
+
+            var areaList = Context.MDSKGetAreaList(filter).Select(i=> new clsSelect { id = i.ID , text = i.areaName}).ToList();
+            return areaList;
+
+        }
+
+        public bool InsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
+        {
+
+
+                Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense);
+                return true;
+        }
+
+        public List<cmplxGetUnConfirmPackage> UnConfirmPackage(int? userID)
+        {
+
+            var list = Context.MDSKGetUnConfirmPackage(userID).ToList();
+            return list;
+
+        }
+
+        public int InsertCustomer(Nullable<int> userID, string customerCompanyName, string customerManagerName, string customerManagerFamily, string customerManagerMobileNo, string customerMelliNo, Nullable<System.DateTime> customerBirthDate, Nullable<int> customerCustomerGroupID, Nullable<bool> customerManagerGender, Nullable<int> customerAreaID, string customerAddress)
+        {
+
+            var result = Context.MDSKInsertCustomer( userID,  customerCompanyName,  customerManagerName,  customerManagerFamily,  customerManagerMobileNo,  customerMelliNo, customerBirthDate, customerCustomerGroupID,  customerManagerGender,  customerAreaID,  customerAddress);
+            return result;
+
+        }
     }
 }

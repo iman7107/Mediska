@@ -143,6 +143,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Classes\clsSMS.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ShopCartController.cs" />
     <Compile Include="Global.asax.cs">
@@ -152,7 +153,19 @@
     <Compile Include="Models\cmplxCheckOffCode.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\cmplxCustomerByUserID.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\cmplxCustomerInfoByID.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxGetAreaList.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxGetUnConfirmPackage.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cmplxInsertContractAndPackage.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\cmplxPackage.cs">
@@ -171,7 +184,10 @@
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repository\repSetting.cs" />
-    <Compile Include="Models\spCheckOffCode_Result.cs">
+    <Compile Include="Models\spMDSKGetAreaList_Result.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spMDSKGetCustomerByUserID_Result.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel.cs" />
@@ -418,6 +434,7 @@
     <Content Include="Views\Shared\_pwProduct.cshtml" />
     <Content Include="Views\Shared\_pwBuyPackage.cshtml" />
     <Content Include="Views\ShopCart\Index.cshtml" />
+    <Content Include="Views\ShopCart\CompeletCart.cshtml" />
     <None Include="Web References\SMSSender\Send.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

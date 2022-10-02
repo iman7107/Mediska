@@ -27,11 +27,16 @@ namespace Mediska.Models
         public string prdxtraCatalogFileName { get; set; }
         public string CategoryClassName { get; set; }
         public Nullable<bool> HasOff { get; set; }
-        public decimal productPrice { get; set; }
+        public Nullable<decimal> productPrice { get; set; }
         public string prdxtraPlatform { get; set; }
         public Nullable<int> prdxtraFreeBackupMonth { get; set; }
         public string packageName { get; set; }
         public Nullable<int> PackageCount { get; set; }
         public Nullable<int> PackageID { get; set; }
+        public string prdxtraLicenseAgreement { get; set; }
+        public Nullable<bool> prdxtraNeedOnlineLicense { get; set; }
+        public string prdxtraOnlineLicense1Title { get; set; }
+        public string prdxtraOnlineLicense2Title { get; set; }
+        public Nullable<decimal> packageRasmiPrice { get; set; }
     }
 }

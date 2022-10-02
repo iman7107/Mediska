@@ -16,8 +16,11 @@
         <div class="div_buy">
             <a id="add_cart_@Model.PackageID" class="btn a_price" onclick="fnBuyProduct(this)" data-id="@Model.PackageID" data-pid="@Model.prdxtraProductID" data-packagecount="@Model.PackageCount">خرید</a>
             <a id="remove_cart_@Model.PackageID" class="btn a_price_remove  display_none" onclick="fnRemoveFromCart(this)" data-id="@Model.PackageID" data-pid="@Model.prdxtraProductID" data-packagecount="@Model.PackageCount">لغو خرید</a>
-            <span class="span_price">@Model.productPrice.ToString("N0") <span class="span_tooman">تومان</span></span>
+            <span class="span_price">@(Model.productPrice?.ToString("N0")) <span class="span_tooman">تومان</span></span>
         </div>
     </div>
 </div>
+
+
+
 

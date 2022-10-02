@@ -19,6 +19,15 @@
           <Parameter Name="ID" Type="int" Mode="In" />
           <Parameter Name="Active" Type="bit" Mode="In" />
         </Function>
+        <Function Name="spMDSKConfirmContract" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ContractID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetAreaList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Filter" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKGetCustomerByUserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
         <Function Name="spMDSKGetCustomerInfoByAuthGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GUID" Type="varchar" Mode="In" />
         </Function>
@@ -59,6 +68,38 @@
           <Parameter Name="ProductID" Type="int" Mode="In" />
         </Function>
         <Function Name="spMDSKGetSMSSetting" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spMDSKGetUnConfirmPackage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spMDSKInsertContractAndPackage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ContractID" Type="int" Mode="In" />
+          <Parameter Name="CustomerID" Type="int" Mode="In" />
+          <Parameter Name="PackageIDs" Type="varchar" Mode="In" />
+          <Parameter Name="OffCode" Type="varchar" Mode="In" />
+          <Parameter Name="IsConfirm" Type="bit" Mode="In" />
+          <Parameter Name="OnlineLicense1" Type="nvarchar" Mode="In" />
+          <Parameter Name="OnlineLicense2" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerAcceptLicense" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="spMDSKInsertCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="customerCompanyName" Type="nvarchar" Mode="In" />
+          <Parameter Name="customerManagerName" Type="nvarchar" Mode="In" />
+          <Parameter Name="customerManagerFamily" Type="nvarchar" Mode="In" />
+          <Parameter Name="customerManagerMobileNo" Type="varchar" Mode="In" />
+          <Parameter Name="customerMelliNo" Type="varchar" Mode="In" />
+          <Parameter Name="customerBirthDate" Type="date" Mode="In" />
+          <Parameter Name="customerCustomerGroupID" Type="int" Mode="In" />
+          <Parameter Name="customerManagerGender" Type="bit" Mode="In" />
+          <Parameter Name="customerAreaID" Type="int" Mode="In" />
+          <Parameter Name="CustomerAddress" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="spMDSKInsertPayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerID" Type="int" Mode="In" />
+          <Parameter Name="payReference" Type="nvarchar" Mode="In" />
+          <Parameter Name="Price" Type="money" Mode="In" />
+          <Parameter Name="RegisterSMSSent" Type="bit" Mode="In" />
+        </Function>
         <Function Name="spMDSKRegisterUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MobileNo" Type="nvarchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
@@ -152,11 +193,55 @@
             <Parameter Name="ProductID" Mode="In" Type="Int32" />
             <Parameter Name="PackageID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="spCheckOffCode" ReturnType="Collection(SupportModel.spCheckOffCode_Result)">
-            <Parameter Name="OffCode" Mode="In" Type="String" />
+          <FunctionImport Name="spCheckOffCode" ReturnType="Collection(SupportModel.cmplxInsertContractAndPackage)">
+          <Parameter Name="OffCode" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="MDSKCheckOffCode" ReturnType="Collection(SupportModel.cmplxCheckOffCode)">
+          <Parameter Name="OffCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spMDSKGetCustomerByUserID" ReturnType="Collection(SupportModel.spMDSKGetCustomerByUserID_Result)">
+          <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetCustomerByUserID" ReturnType="Collection(SupportModel.cmplxCustomerByUserID)">
+          <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spMDSKInsertPayment">
+            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+            <Parameter Name="payReference" Mode="In" Type="String" />
+            <Parameter Name="Price" Mode="In" Type="Decimal" />
+            <Parameter Name="RegisterSMSSent" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="spMDSKInsertContractAndPackage">
+            <Parameter Name="ContractID" Mode="In" Type="Int32" />
+            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+            <Parameter Name="PackageIDs" Mode="In" Type="String" />
             <Parameter Name="OffCode" Mode="In" Type="String" />
+            <Parameter Name="IsConfirm" Mode="In" Type="Boolean" />
+            <Parameter Name="OnlineLicense1" Mode="In" Type="String" />
+            <Parameter Name="OnlineLicense2" Mode="In" Type="String" />
+            <Parameter Name="CustomerAcceptLicense" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="spMDSKConfirmContract">
+          <Parameter Name="ContractID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetUnConfirmPackage" ReturnType="Collection(SupportModel.cmplxGetUnConfirmPackage)">
+          <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKInsertCustomer">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="customerCompanyName" Mode="In" Type="String" />
+            <Parameter Name="customerManagerName" Mode="In" Type="String" />
+            <Parameter Name="customerManagerFamily" Mode="In" Type="String" />
+            <Parameter Name="customerManagerMobileNo" Mode="In" Type="String" />
+            <Parameter Name="customerMelliNo" Mode="In" Type="String" />
+            <Parameter Name="customerBirthDate" Mode="In" Type="DateTime" />
+            <Parameter Name="customerCustomerGroupID" Mode="In" Type="Int32" />
+            <Parameter Name="customerManagerGender" Mode="In" Type="Boolean" />
+            <Parameter Name="customerAreaID" Mode="In" Type="Int32" />
+            <Parameter Name="CustomerAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKGetAreaList" ReturnType="Collection(SupportModel.cmplxGetAreaList)">
+            <Parameter Name="Filter" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="cmplxProduct">
@@ -174,12 +259,17 @@
           <Property Type="String" Name="prdxtraCatalogFileName" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="CategoryClassName" Nullable="true" MaxLength="4000" />
           <Property Type="Boolean" Name="HasOff" Nullable="true" />
-          <Property Type="Decimal" Name="productPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="productPrice" Nullable="true" Precision="19" />
           <Property Type="String" Name="prdxtraPlatform" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="prdxtraFreeBackupMonth" Nullable="true" />
           <Property Type="String" Name="packageName" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="PackageCount" Nullable="true" />
           <Property Type="Int32" Name="PackageID" Nullable="true" />
+          <Property Type="String" Name="prdxtraLicenseAgreement" Nullable="true" />
+          <Property Type="Boolean" Name="prdxtraNeedOnlineLicense" Nullable="true" />
+          <Property Type="String" Name="prdxtraOnlineLicense1Title" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="prdxtraOnlineLicense2Title" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="packageRasmiPrice" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="cmplxProductGroup">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -254,7 +344,7 @@
           <Property Type="String" Name="pkgpicAfterPicText" Nullable="true" />
           <Property Type="Int32" Name="pkgpicOrder" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="spCheckOffCode_Result">
+        <ComplexType Name="cmplxInsertContractAndPackage">
           <Property Type="Int32" Name="PackageID" Nullable="false" />
           <Property Type="String" Name="packageName" Nullable="false" MaxLength="100" />
           <Property Type="Decimal" Name="packagePrice" Nullable="false" Precision="19" />
@@ -269,6 +359,57 @@
           <Property Type="Single" Name="OffPercent" Nullable="false" />
           <Property Type="Decimal" Name="OffPrice" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="FinalPrice" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="spMDSKGetCustomerByUserID_Result">
+          <Property Type="Int32" Name="customerID" Nullable="false" />
+          <Property Type="String" Name="customerManagerName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="customerManagerFamily" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="customerManagerMobileNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="customerMelliNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="customerAddress" Nullable="true" MaxLength="4000" />
+          <Property Type="DateTime" Name="customerBirthDate" Nullable="true" />
+          <Property Type="Int32" Name="customerCustomerGroupID" Nullable="false" />
+          <Property Type="String" Name="custgroupName" Nullable="false" MaxLength="200" />
+          <Property Type="Boolean" Name="customerManagerGender" Nullable="false" />
+          <Property Type="Int32" Name="customerAreaID" Nullable="false" />
+          <Property Type="String" Name="areaFullTitle" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="cmplxCustomerByUserID">
+          <Property Type="Int32" Name="customerID" Nullable="false" />
+          <Property Type="String" Name="customerManagerName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="customerManagerFamily" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="customerManagerMobileNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="customerMelliNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="customerAddress" Nullable="true" MaxLength="4000" />
+          <Property Type="DateTime" Name="customerBirthDate" Nullable="true" />
+          <Property Type="Int32" Name="customerCustomerGroupID" Nullable="false" />
+          <Property Type="String" Name="custgroupName" Nullable="false" MaxLength="200" />
+          <Property Type="Boolean" Name="customerManagerGender" Nullable="false" />
+          <Property Type="Int32" Name="customerAreaID" Nullable="false" />
+          <Property Type="String" Name="areaFullTitle" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="cmplxGetUnConfirmPackage">
+          <Property Type="Int32" Name="CustomerID" Nullable="false" />
+          <Property Type="Int32" Name="ContractID" Nullable="false" />
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="OffCode" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PackageID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spMDSKGetAreaList_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="areaName" Nullable="false" MaxLength="200" />
+          <Property Type="Int32" Name="areaTypelook" Nullable="false" />
+          <Property Type="Int32" Name="areaParentID" Nullable="true" />
+          <Property Type="String" Name="areaFullTitle" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="TypeName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="cmplxGetAreaList">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="areaName" Nullable="false" MaxLength="200" />
+          <Property Type="Int32" Name="areaTypelook" Nullable="false" />
+          <Property Type="Int32" Name="areaParentID" Nullable="true" />
+          <Property Type="String" Name="areaFullTitle" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="TypeName" Nullable="false" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -299,6 +440,11 @@
                 <ScalarProperty Name="packageName" ColumnName="packageName" />
                 <ScalarProperty Name="PackageCount" ColumnName="PackageCount" />
                 <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="prdxtraLicenseAgreement" ColumnName="prdxtraLicenseAgreement" />
+                <ScalarProperty Name="prdxtraNeedOnlineLicense" ColumnName="prdxtraNeedOnlineLicense" />
+                <ScalarProperty Name="prdxtraOnlineLicense1Title" ColumnName="prdxtraOnlineLicense1Title" />
+                <ScalarProperty Name="prdxtraOnlineLicense2Title" ColumnName="prdxtraOnlineLicense2Title" />
+                <ScalarProperty Name="packageRasmiPrice" ColumnName="packageRasmiPrice" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -525,7 +671,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spCheckOffCode" FunctionName="SupportModel.Store.spCheckOffCode">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SupportModel.spCheckOffCode_Result">
+              <ComplexTypeMapping TypeName="SupportModel.cmplxInsertContractAndPackage">
                 <ScalarProperty Name="PackageID" ColumnName="PackageID" />
                 <ScalarProperty Name="packageName" ColumnName="packageName" />
                 <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
@@ -544,6 +690,69 @@
                 <ScalarProperty Name="OffPercent" ColumnName="OffPercent" />
                 <ScalarProperty Name="OffPrice" ColumnName="OffPrice" />
                 <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spMDSKGetCustomerByUserID" FunctionName="SupportModel.Store.spMDSKGetCustomerByUserID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.spMDSKGetCustomerByUserID_Result">
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="customerManagerName" ColumnName="customerManagerName" />
+                <ScalarProperty Name="customerManagerFamily" ColumnName="customerManagerFamily" />
+                <ScalarProperty Name="customerManagerMobileNo" ColumnName="customerManagerMobileNo" />
+                <ScalarProperty Name="customerMelliNo" ColumnName="customerMelliNo" />
+                <ScalarProperty Name="customerAddress" ColumnName="customerAddress" />
+                <ScalarProperty Name="customerBirthDate" ColumnName="customerBirthDate" />
+                <ScalarProperty Name="customerCustomerGroupID" ColumnName="customerCustomerGroupID" />
+                <ScalarProperty Name="custgroupName" ColumnName="custgroupName" />
+                <ScalarProperty Name="customerManagerGender" ColumnName="customerManagerGender" />
+                <ScalarProperty Name="customerAreaID" ColumnName="customerAreaID" />
+                <ScalarProperty Name="areaFullTitle" ColumnName="areaFullTitle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKGetCustomerByUserID" FunctionName="SupportModel.Store.spMDSKGetCustomerByUserID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCustomerByUserID">
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="customerManagerName" ColumnName="customerManagerName" />
+                <ScalarProperty Name="customerManagerFamily" ColumnName="customerManagerFamily" />
+                <ScalarProperty Name="customerManagerMobileNo" ColumnName="customerManagerMobileNo" />
+                <ScalarProperty Name="customerMelliNo" ColumnName="customerMelliNo" />
+                <ScalarProperty Name="customerAddress" ColumnName="customerAddress" />
+                <ScalarProperty Name="customerBirthDate" ColumnName="customerBirthDate" />
+                <ScalarProperty Name="customerCustomerGroupID" ColumnName="customerCustomerGroupID" />
+                <ScalarProperty Name="custgroupName" ColumnName="custgroupName" />
+                <ScalarProperty Name="customerManagerGender" ColumnName="customerManagerGender" />
+                <ScalarProperty Name="customerAreaID" ColumnName="customerAreaID" />
+                <ScalarProperty Name="areaFullTitle" ColumnName="areaFullTitle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spMDSKInsertPayment" FunctionName="SupportModel.Store.spMDSKInsertPayment" />
+          <FunctionImportMapping FunctionImportName="spMDSKInsertContractAndPackage" FunctionName="SupportModel.Store.spMDSKInsertContractAndPackage" />
+          <FunctionImportMapping FunctionImportName="spMDSKConfirmContract" FunctionName="SupportModel.Store.spMDSKConfirmContract" />
+          <FunctionImportMapping FunctionImportName="MDSKGetUnConfirmPackage" FunctionName="SupportModel.Store.spMDSKGetUnConfirmPackage">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxGetUnConfirmPackage">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OffCode" ColumnName="OffCode" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKInsertCustomer" FunctionName="SupportModel.Store.spMDSKInsertCustomer" />
+          <FunctionImportMapping FunctionImportName="MDSKGetAreaList" FunctionName="SupportModel.Store.spMDSKGetAreaList">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxGetAreaList">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="areaName" ColumnName="areaName" />
+                <ScalarProperty Name="areaTypelook" ColumnName="areaTypelook" />
+                <ScalarProperty Name="areaParentID" ColumnName="areaParentID" />
+                <ScalarProperty Name="areaFullTitle" ColumnName="areaFullTitle" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

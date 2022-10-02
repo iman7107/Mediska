@@ -8,6 +8,7 @@
 @{
     repProduct RepP = new repProduct();
     decimal TotalPrice = 0;
+    int k = 0, d  = 0;
 
     List<cmplxProduct> ProductList = new List<cmplxProduct>();
     List<cmplxPackage> PackageList = new List<cmplxPackage>();
@@ -33,62 +34,71 @@
     </div>
     <div class="margin_top_20 margin_bottom_20">
         <div id="accordion">
-            @foreach (var product in ProductList)
-            {
-                var MyPackageList = PackageList.Where(i => i.packageProductID == product.prdxtraProductID).ToList();
-                var SumPrice = MyPackageList.Sum(i => i.packagePrice);
+            <form action="/ShopCart/CompeletCart" method="post" id="compeletCartForm">
+                @foreach (var product in ProductList)
+                {
+                    var MyPackageList = PackageList.Where(i => i.packageProductID == product.prdxtraProductID).ToList();
+                    var SumPrice = MyPackageList.Sum(i => i.packagePrice);
 
-                <div class="card">
-                    <div class="card-header" id="heading_@product.prdxtraProductID">
-                        <div class="display_flex">
-                            <a href="/Home/ShowProduct/@product.prdxtraProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
-                            <button class="btn btn-link btn_product_title" data-toggle="collapse" data-target="#collapse_@product.prdxtraProductID" aria-expanded="true" aria-controls="collapse_@product.prdxtraProductID">
-                                @product.prdxtraTitle
-                            </button>
-                            <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
+                    <div class="card">
+                        <div class="card-header" id="heading_@product.prdxtraProductID">
+                            <div class="display_flex">
+                                <a href="/Home/ShowProduct/@product.prdxtraProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
+                                <button class="btn btn-link btn_product_title" data-toggle="collapse" data-target="#collapse_@product.prdxtraProductID" aria-expanded="true" aria-controls="collapse_@product.prdxtraProductID">
+                                    @product.prdxtraTitle
+                                </button>
+                                <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
 
-                            <input type="text" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px" placeholder="کد تخفیف" />
+                                <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
+                                <input type="text" name="OffCodeList[@k].OffCode" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
 
+                                <span class="btn btn-info" onclick="offCode();" style="width:200px">اعمال تخفیف</span>
+                            </div>
                         </div>
-                    </div>
-                    <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
-                        <div class="card-body padding_right_30">
+                        <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
+                            <div class="card-body padding_right_30">
 
-                            <table class="table table-hover table_shop_cart">
-                                @foreach (var pack in MyPackageList)
-                                {
-                                    <tr class="cursor_pointer data_row">
-                                        <td data-id="@pack.ID" class="width_250">
-                                            [@pack.ID] @pack.packageName
-                                        </td>
-                                        <td data-id="@pack.ID" class="width_150"><span class="font_15">@pack.packagePrice.ToString("N0") </span><span data-OffPrice="" class="font_15"></span><span class="span_tooman font_12">تومان</span></td>
-                                        <td class="td_trash">
-                                            @if (pack.packagePartitionIndex == 0)
-                                            {
-                                                if (MyPackageList.Count == 1)
+                                <table class="table table-hover table_shop_cart">
+                                    @foreach (var pack in MyPackageList)
+                                    {
+                                        <tr class="cursor_pointer data_row">
+                                            <td data-id="@pack.ID" class="width_250">
+                                                [@pack.ID] @pack.packageName
+                                                <input type="hidden" name="OffCodeList[@k].CompeletCartDetails[@d].PackageID" value="@pack.ID" />
+
+                                                <input id="finalPrice_@pack.ID" type="hidden" name="OffCodeList[@k].CompeletCartDetails[@d].FinalPrice" value="" />
+                                            </td>
+                                            <td data-id="@pack.ID" class="width_150"><span class="font_15">@pack.packagePrice.ToString("N0") </span><span data-OffPrice="" class="font_15"></span><span class="span_tooman font_12">تومان</span></td>
+                                            <td class="td_trash">
+                                                @if (pack.packagePartitionIndex == 0)
+                                                {
+                                                    if (MyPackageList.Count == 1)
+                                                    {
+                                                        <a href="/ShopCart/RemovePackageFromCart/@pack.ID" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
+                                                    }
+                                                }
+                                                else
                                                 {
                                                     <a href="/ShopCart/RemovePackageFromCart/@pack.ID" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <a href="/ShopCart/RemovePackageFromCart/@pack.ID" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
+                                            </td>
+                                        </tr>
+                                        @(d++);
+                                    }
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                    @(k++);
+                }
+            </form>
             <div class="container-full basketpage_cart_footer_div">
                 <div class="basketpage_cart_footer_inner_div">
                     <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
                     <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
                     <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
                 </div>
-                <a href="/ShopCart/Payment" class="btn btn-success">تایید و پرداخت</a>
+                <a href="javascript:void(0)" id="compeletCart" class="btn btn-success">تکمیل خرید</a>
             </div>
         </div>
     </div>
@@ -96,64 +106,81 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(function () {
-            $(".offCode").change(function () {
-                var productID = $(this).attr("id").split('_')[1];
+
+        function addComma(str) {
+            var objRegex = new RegExp("(-?[0-9]+)([0-9]{3})");
+            while (objRegex.test(str)) {
+                str = str.replace(objRegex, "$1,$2");
+            }
+            return str;
+        }
+        function offCode() {
+            $(".offCode").each(function () {
                 var val = $(this).val();
-                var totalOff = 0;
+                var productID = $(this).attr("id").split('_')[1];
                 if (val !== "") {
+
                     jQuery.getJSON("/ShopCart/myDiscountList", { offCode: val }, function (data) {
+                        if (data.Status == "Error") {
+                            showAlert("خطا", data.Message, "error");
+                        }
+                        else {
+                            $.each(data.Data, function (i) {
+                                var packageID = data.Data[i].PackageID;
+                                $("#collapse_" + productID + " .table .data_row").each(function () {
+                                    var elementID = $(this).find("td").eq(0).attr("data-id");
 
-                        $.each(data, function (i) {
-                            var packageID = data[i].PackageID;
-                            $("#collapse_" + productID + " .table .data_row").each(function () {
-                                var elementID = $(this).find("td").eq(0).attr("data-id");
+                                    if (elementID.toString() === packageID.toString()) {
+                                        $(this).find("td").eq(1).find("span").eq(0).css("color", "#b0aeae");
+                                        $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "line-through");
+                                        var finalPrice = parseInt(data.Data[i].FinalPrice) / 10;
+                                        $("#finalPrice_" + elementID).val(finalPrice);
+                                        $(this).find("td").eq(1).find("span").eq(1).text(addComma(finalPrice.toString()));
+                                        $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice", data.Data[i].OffPrice)
+                                        //totalOff += parseInt(data[i].OffPrice);
 
-                                if (elementID.toString() === packageID.toString()) {
-                                    $(this).find("td").eq(1).find("span").eq(0).css("color", "#b0aeae");
-                                    $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "line-through");
-                                    var finalPrice = parseInt(data[i].FinalPrice) / 10;
-                                    $(this).find("td").eq(1).find("span").eq(1).text(finalPrice);
-                                    $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice", data[i].OffPrice)
-                                    totalOff += parseInt(data[i].OffPrice);
-
-                                }
+                                    }
+                                });
                             });
-                        });
-
-                        var totalPrice = $("#totalPrice").text().replace(/,/g, "");
-                        var result = parseInt(totalPrice) - parseInt(totalOff) / 10;
-                        $("#totalPrice").text(addComma(result.toString()));
+                        }
 
                     });
                 } else {
-
                     $("#collapse_" + productID + " .table .data_row").each(function () {
 
                         $(this).find("td").eq(1).find("span").eq(0).css("color", "black");
                         $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "none");
-                        var offPrice = $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice");
                         $(this).find("td").eq(1).find("span").eq(1).text("");
                         $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice", "");
-                        totalOff += parseInt(offPrice) / 10;
 
                     });
-
-                    var totalPrice = $("#totalPrice").text().replace(/,/g, "");
-                    var result = parseInt(totalPrice) + parseInt(totalOff);
-                    $("#totalPrice").text(addComma(result.toString()));
 
                 }
             });
 
-            function addComma(str) {
-                var objRegex = new RegExp("(-?[0-9]+)([0-9]{3})");
-                while (objRegex.test(str)) {
-                    str = str.replace(objRegex, "$1,$2");
-                }
-                return str;
-            }
+            setInterval(function () {
+                totalPrice();
+            }, 1000);
+        }
+        function totalPrice() {
+            var totalOff = 0;
+            $(".table .data_row").each(function () {
 
+                var offPrice = $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice")
+                if (offPrice !== undefined && offPrice !== "") {
+                    totalOff += parseInt( offPrice);
+                }
+
+            });
+            var totalPrice = '@TotalPrice';
+            var result = parseInt(totalPrice) - parseInt(totalOff) / 10;
+            $("#totalPrice").text(addComma(result.toString()));
+        }
+        $(function () {
+            $("#compeletCart").click(function () {
+                $("#compeletCartForm").submit();
+            });
         });
+
     </script>
 }

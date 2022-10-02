@@ -168,5 +168,28 @@ namespace Mediska.Models
     }
 
 
+    public class clsCompeletCart
+    {
+        public int ProductID { get; set; }
+        public string OffCode { get; set; }
+        public List<clsCompeletCartDetail> CompeletCartDetails { get; set; }
 
+    }
+    public class clsCompeletCartDetail
+    {
+        public decimal FinalPrice { get; set; }
+        public int PackageID { get; set; }
+    }
+
+    public class clsFinalCart
+    {
+        public int CustomerID { get; set; }
+        public int ProductID { get; set; }
+    }
+
+    public class clsSelect
+    {
+        public int id { get; set; }
+        public string   text{ get; set; }
+    }
 }
