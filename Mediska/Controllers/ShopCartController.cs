@@ -48,6 +48,10 @@ namespace Mediska.Controllers
 
         }
 
+        public string myGetProductLicenseAgreement(int? productID)
+        {
+            return  bll.GetProductLicenseAgreement(productID);
+        }
         public JsonResult myCustomerGroupList()
         {
 

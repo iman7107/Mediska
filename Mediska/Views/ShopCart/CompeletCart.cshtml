@@ -18,7 +18,17 @@
     {
         List<int> cart = Session["ShopCart"] as List<int>;
         offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-        TotalOff = offCodeList?.Select(i => i.CompeletCartDetails).Sum(j => j.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum()) ?? 0;
+        var compeletCartDetails = offCodeList?.Select(i => i.CompeletCartDetails);
+
+        if (compeletCartDetails != null)
+        {
+            foreach (var item in compeletCartDetails)
+            {
+                TotalOff += item?.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum() ?? 0;
+            }
+        }
+
+
         PackageList = RepP.GetPackagesByIDs(cart);
         var ProductIDs = PackageList.Select(i => i.packageProductID).Distinct().ToList();
         ProductList = RepP.GetProductsByIDs(ProductIDs);
@@ -32,18 +42,9 @@
         margin-bottom: 5px;
     }
 
-    li::before {
-        content: "•";
-        color: red;
-        display: inline-block;
-        width: 1em;
-        margin-left: -1em
-    }
-
     label {
         width: 20%;
     }
-
 </style>
 <div class="container">
     <div class="basketpage_buy_div">
@@ -76,7 +77,7 @@
                             }
                             <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
                                 <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
-                                <select id="customerList" name="finalCartList[@c].CustomerID" class="form-control" style="margin-right:10px;margin-left:20px">
+                                <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" class="form-control customerlist" style="margin-right:10px;margin-left:20px">
                                     <option value="none" selected disabled>--انتخاب مرکز--</option>
                                     @foreach (var item in ViewBag.CustomerList)
                                     {
@@ -85,7 +86,7 @@
                                 </select>
                             </form>
 
-                            <a id="newCustomer" data-toggle="modal" href="#customerModal" class="btn btn-sm btn-primary" style="margin-right:20px">مرکز جدید</a>
+                            <a id="newCustomer" data-toggle="modal" href="#customerModal" class="btn btn-primary" style="margin-right:20px">مرکز جدید</a>
 
                             @{
                                 c++;
@@ -128,40 +129,31 @@
     </div>
 </div>
 
+<div class="modal" id="licenseAgreement">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
 
-@foreach (var item in ProductList)
-{
-    <div class="modal licenseagreement"  >
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h4 class="modal-title">
-                        توافق نامه
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    @{
-                        
-                        var arr = item.prdxtraLicenseAgreement.Split('•');
-                        foreach (var items in arr)
-                        {
-                            <p style="text-align: justify;">@items</p>
-                        }
-                    }
-
-                </div>
-                <div class="modal-footer">
-                    <a href="#" id="mybtnInsertCustomer" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">
-                        موافق
-                    </a>
-                </div>
+                <h4 class="modal-title">
+                    توافق نامه
+                </h4>
             </div>
+            <div class="modal-body">
+                <p style="text-align: justify;" id="modalbody"></p>
             </div>
+            <div class="modal-footer">
+                <a href="#" id="btnCancel" class="btn btn-warning btncancel" data-dismiss="modal" aria-hidden="true">
+                    انصراف
+                </a>
+                <a href="#" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
+                    شرایط توافق نامه را میپذیرم
+                </a>
+            </div>
+        </div>
     </div>
-}
+</div>
 
- <div class="modal" id="customerModal">
+<div class="modal" id="customerModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -215,14 +207,14 @@
                             <label class="pb-1">
                                 تاریخ تولد:
                             </label>
-                            @Html.TextBox("customerBirthDate", null, new { @class = "form-control" })
+                            @Html.TextBox("customerBirthDate", null, new { @class = "form-control",@type= "datetime" })
                         </div>
 
                         <div class="input-group input-group-sm">
                             <label class="pb-1">
                                 جنسیت:
                             </label>
-                            <select class = "form-control" name="customerManagerGender">
+                            <select class="form-control" name="customerManagerGender">
                                 <option value="1">مرد</option>
                                 <option value="0">زن</option>
                             </select>
@@ -266,18 +258,73 @@
     </div>
 </div>
 @section scripts{
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @*<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/css/persian-datepicker.css" rel="stylesheet" />
+    @*<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
+    <script src="~/Content/js/select2.min.js"></script>
+    <script src="~/Content/js/persian-datepicker.js"></script>
     <script type="text/javascript">
 
+        $(document).ready(function () {
+            $("input[type=datetime]").datepicker({
+                dateFormat: "yy/mm/dd",
+                isRTL: true,
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: false
+            });
+        });
         $(function () {
 
+            $(".customerlist").change(function () {
 
-            $('.licenseagreement').modal(
-                {
-                    backdrop: 'static',
-                    keyboard: false
-                });
+                var productID = $(this).attr("data-ProductID");
+                var licenseAgreement = $(this).attr("data-LicenseAgreement");
+                var productTitle = $(this).attr("data-ProductTitle");
+
+                if (licenseAgreement !== "") {
+                    var items = [];
+                    items = licenseAgreement.split('•');
+                    var html = '';
+                    $.each(items, function (i) {
+                        html += '<p>' + items[i] + '</p>';
+                    });
+                    $("#modalbody").html(html);
+                    $('#licenseAgreement').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $('#licenseAgreement').find('.modal-title').text('توافق نامه ' + productTitle);
+                    $(".btncancel").attr("id", "btnCancel_" + productID);
+                }
+
+
+                //$.ajax({
+                //    type: "post",
+                //    url: "/ShopCart/myGetProductLicenseAgreement",
+                //    data: { productID: productID },
+                //    success: function (data) {
+                //        if (data !== "") {
+                //            var items = [];
+                //            items = data.split('•');
+                //            var html = '';
+                //            $.each(items, function (i) {
+                //                html += '<p>' + items[i] + '</p>';
+                //            });
+                //            $("#modalbody").html(html);
+                //            $('#licenseAgreement').modal({
+                //                    backdrop: 'static',
+                //                    keyboard: false
+                //                });
+                //        }
+
+                //    },
+                //    error: function (e) { return false; }
+                //});
+
+            });
+
             $("#newCustomer").click(function () {
                 jQuery.getJSON("/ShopCart/myAreaList/", { query: "" }, function (data) {
                     $("#customerAreaID").select2({
@@ -287,7 +334,7 @@
                     });
                 });
 
-                jQuery.getJSON("/ShopCart/myCustomerGroupList/", { }, function (data) {
+                jQuery.getJSON("/ShopCart/myCustomerGroupList/", {}, function (data) {
                     $("#customerCustomerGroupID").select2({
                         data: data,
                         dir: 'rtl',
@@ -311,7 +358,7 @@
                             $("#customerList").find("option").remove();
                             $.each(data, function (i) {
 
-                                var option = "<option value='" + data[i].customerID + "'>[" + data[i].custgroupName + "]-[" + (data[i].customerAddress.length > 30 ? data[i].customerAddress.substring(0, 30) + "...." : data[i].customerAddress ) +"]</option>";
+                                var option = "<option value='" + data[i].customerID + "'>[" + data[i].custgroupName + "]-[" + (data[i].customerAddress.length > 30 ? data[i].customerAddress.substring(0, 30) + "...." : data[i].customerAddress) + "]</option>";
                                 $("#customerList").append(option);
                             });
 
@@ -320,6 +367,11 @@
                         $('#customerModal').modal('toggle');
                     }
                 });
+            });
+
+            $(".btncancel").click(function () {
+                var id = $(this).attr("id").split('_')[1];
+                $('#customerID_' + id + ' option:first').prop('selected', true);
             });
         });
 

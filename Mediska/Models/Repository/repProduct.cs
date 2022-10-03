@@ -23,6 +23,12 @@ namespace Mediska.Models.Repository
             var Product = Context.MDSKGetProductList(id).DefaultIfEmpty(null).First();
             return Product;
         }
+
+        public string GetProductLicenseAgreement(int? id)
+        {
+            var licenseAgreement = Context.MDSKGetProductList(id).Select(i=>i.prdxtraLicenseAgreement).FirstOrDefault();
+            return licenseAgreement;
+        }
         //============================================================================================================================
         //============================================================================================================================
         public List<cmplxProductGroup> GetProductGroup()
