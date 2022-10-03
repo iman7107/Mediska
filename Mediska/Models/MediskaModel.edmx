@@ -5,9 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SupportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <Function Name="spCheckOffCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="OffCode" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="spMDSKChangePassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
@@ -18,6 +15,9 @@
         <Function Name="spMDSKChangeUserActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
           <Parameter Name="Active" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="spMDSKCheckOffCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OffCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="spMDSKConfirmContract" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ContractID" Type="int" Mode="In" />
@@ -194,7 +194,7 @@
             <Parameter Name="ProductID" Mode="In" Type="Int32" />
             <Parameter Name="PackageID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="spCheckOffCode" ReturnType="Collection(SupportModel.cmplxInsertContractAndPackage)">
+          <FunctionImport Name="spCheckOffCode">
           <Parameter Name="OffCode" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="MDSKCheckOffCode" ReturnType="Collection(SupportModel.cmplxCheckOffCode)">
@@ -246,6 +246,9 @@
           </FunctionImport>
           <FunctionImport Name="spMDSKGetCustomerGroup" />
           <FunctionImport Name="MDSKGetCustomerGroup" ReturnType="Collection(SupportModel.cmplxGetCustomerGroup)" />
+          <FunctionImport Name="spMDSKCheckOffCode" ReturnType="Collection(SupportModel.spMDSKCheckOffCode_Result)">
+            <Parameter Name="OffCode" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="cmplxProduct">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -347,14 +350,6 @@
           <Property Type="String" Name="pkgpicAfterPicText" Nullable="true" />
           <Property Type="Int32" Name="pkgpicOrder" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="cmplxInsertContractAndPackage">
-          <Property Type="Int32" Name="PackageID" Nullable="false" />
-          <Property Type="String" Name="packageName" Nullable="false" MaxLength="100" />
-          <Property Type="Decimal" Name="packagePrice" Nullable="false" Precision="19" />
-          <Property Type="Single" Name="OffPercent" Nullable="false" />
-          <Property Type="Decimal" Name="OffPrice" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="FinalPrice" Nullable="true" Precision="19" />
-        </ComplexType>
         <ComplexType Name="cmplxCheckOffCode">
           <Property Type="Int32" Name="PackageID" Nullable="false" />
           <Property Type="String" Name="packageName" Nullable="false" MaxLength="100" />
@@ -417,6 +412,14 @@
         <ComplexType Name="cmplxGetCustomerGroup">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="custgroupName" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="spMDSKCheckOffCode_Result">
+          <Property Type="Int32" Name="PackageID" Nullable="false" />
+          <Property Type="String" Name="packageName" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="packagePrice" Nullable="false" Precision="19" />
+          <Property Type="Single" Name="OffPercent" Nullable="false" />
+          <Property Type="Decimal" Name="OffPrice" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="FinalPrice" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -676,30 +679,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spCheckOffCode" FunctionName="SupportModel.Store.spCheckOffCode">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SupportModel.cmplxInsertContractAndPackage">
-                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-                <ScalarProperty Name="packageName" ColumnName="packageName" />
-                <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
-                <ScalarProperty Name="OffPercent" ColumnName="OffPercent" />
-                <ScalarProperty Name="OffPrice" ColumnName="OffPrice" />
-                <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="MDSKCheckOffCode" FunctionName="SupportModel.Store.spCheckOffCode">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SupportModel.cmplxCheckOffCode">
-                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-                <ScalarProperty Name="packageName" ColumnName="packageName" />
-                <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
-                <ScalarProperty Name="OffPercent" ColumnName="OffPercent" />
-                <ScalarProperty Name="OffPrice" ColumnName="OffPrice" />
-                <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+
           <FunctionImportMapping FunctionImportName="spMDSKGetCustomerByUserID" FunctionName="SupportModel.Store.spMDSKGetCustomerByUserID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SupportModel.spMDSKGetCustomerByUserID_Result">
@@ -770,6 +750,30 @@
               <ComplexTypeMapping TypeName="SupportModel.cmplxGetCustomerGroup">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="custgroupName" ColumnName="custgroupName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spMDSKCheckOffCode" FunctionName="SupportModel.Store.spMDSKCheckOffCode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.spMDSKCheckOffCode_Result">
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
+                <ScalarProperty Name="OffPercent" ColumnName="OffPercent" />
+                <ScalarProperty Name="OffPrice" ColumnName="OffPrice" />
+                <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKCheckOffCode" FunctionName="SupportModel.Store.spMDSKCheckOffCode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxCheckOffCode">
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="packagePrice" ColumnName="packagePrice" />
+                <ScalarProperty Name="OffPercent" ColumnName="OffPercent" />
+                <ScalarProperty Name="OffPrice" ColumnName="OffPrice" />
+                <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

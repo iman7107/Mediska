@@ -168,9 +168,6 @@
     <Compile Include="Models\cmplxGetUnConfirmPackage.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\cmplxInsertContractAndPackage.cs">
-      <DependentUpon>MediskaModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\cmplxPackage.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
@@ -187,6 +184,9 @@
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repository\repSetting.cs" />
+    <Compile Include="Models\spMDSKCheckOffCode_Result.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\spMDSKGetAreaList_Result.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>

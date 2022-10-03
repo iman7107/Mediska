@@ -255,13 +255,13 @@ namespace Mediska.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxPackagePicture>("MDSKGetPackagePictures", productIDParameter, packageIDParameter);
         }
     
-        public virtual ObjectResult<cmplxInsertContractAndPackage> spCheckOffCode(string offCode)
+        public virtual int spCheckOffCode(string offCode)
         {
             var offCodeParameter = offCode != null ?
                 new ObjectParameter("OffCode", offCode) :
                 new ObjectParameter("OffCode", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxInsertContractAndPackage>("spCheckOffCode", offCodeParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spCheckOffCode", offCodeParameter);
         }
     
         public virtual ObjectResult<cmplxCheckOffCode> MDSKCheckOffCode(string offCode)
@@ -433,6 +433,15 @@ namespace Mediska.Models
         public virtual ObjectResult<cmplxGetCustomerGroup> MDSKGetCustomerGroup()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxGetCustomerGroup>("MDSKGetCustomerGroup");
+        }
+    
+        public virtual ObjectResult<spMDSKCheckOffCode_Result> spMDSKCheckOffCode(string offCode)
+        {
+            var offCodeParameter = offCode != null ?
+                new ObjectParameter("OffCode", offCode) :
+                new ObjectParameter("OffCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spMDSKCheckOffCode_Result>("spMDSKCheckOffCode", offCodeParameter);
         }
     }
 }
