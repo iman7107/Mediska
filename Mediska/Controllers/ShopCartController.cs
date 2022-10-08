@@ -56,7 +56,7 @@ namespace Mediska.Controllers
 
         public string myGetProductLicenseAgreement(int? productID)
         {
-            return  bll.GetProductLicenseAgreement(productID);
+            return bll.GetProductLicenseAgreement(productID);
         }
         public JsonResult myCustomerGroupList()
         {
@@ -204,55 +204,36 @@ namespace Mediska.Controllers
                 return Json(new { Status = "Error", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }
 
+            TempData["FinalCartList"] = finalCartList;
 
-            try
+
+            System.Net.ServicePointManager.Expect100Continue = false;
+            com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
+
+            string authority;
+
+
+            string callbackUrl = "https://" + Request.Url.Authority + "/ShopCart/Verify/123";
+            int status = client.PaymentRequest("MerchantID", 1000, "description", "4linecode@gmail.com", "09125365099", callbackUrl, out authority);
+
+            if (status == 100)
             {
-                System.Net.ServicePointManager.Expect100Continue = false;
-                com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
+                ////For release mode
+                //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
 
-                string authority;
-
-
-                string callbackUrl = "https://" + Request.Url.Authority + "/ShopCart/Verify/";
-                int status = client.PaymentRequest("MerchantID", 1000, "description", "4linecode@gmail.com", "09125365099", callbackUrl, out authority);
-
-                if (status == 100)
-                {
-                    ////For release mode
-                    //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
-
-                    ////For test mode
-                    var url = "https://sandbox.zarinpal.com/pg/StartPay/" + authority;
-                    Response.Redirect(url);
-                    return null;
-                }
-                TempData["Message"] = GetMessage(status);
-                var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-                if (offCodeList != null)
-                {
-                    foreach (var item in offCodeList)
-                    {
-                        var customerID = finalCartList.Where(i => i.ProductID == item.ProductID).Select(i => i.CustomerID).FirstOrDefault();
-                        string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
-
-
-
-                        bll.InsertContractAndPackage(Session["ContractID"] as int?, customerID, packageIDs, item.OffCode, false, "0", string.Empty, true);
-
-                    }
-                }
-                return Json(new { Status = "Success", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
+                ////For test mode
+                var url = "https://sandbox.zarinpal.com/pg/StartPay/" + authority;
+                Response.Redirect(url);
+                return null;
             }
-            catch (Exception ex)
-            {
+            TempData["Message"] = GetMessage(status);
 
-                return myErrorMessage(ex);
-            }
+            return View("CompeletCart", new { finalCartList = TempData["FinalCartList"] });
 
         }
         #endregion
 
-        public ActionResult Verify(string Authority, string Status)
+        public ActionResult Verify(int id)
         {
             if (!string.IsNullOrEmpty(Request.QueryString["Status"]) && !string.IsNullOrEmpty(Request.QueryString["Authority"]))
             {
@@ -265,7 +246,20 @@ namespace Mediska.Controllers
                     int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId);
                     if (status == 100 || status == 101)
                     {
-                        ViewBag.RefId = "کد پیگیری: " + refId + " - کد سفارش: ";
+                        ViewBag.RefId = "کد پیگیری: " + refId + " - کد سفارش: " + id;
+                        var finalCartList = TempData["FinalCartList"] as List<clsFinalCart>;
+                        var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
+                        if (offCodeList != null)
+                        {
+                            foreach (var item in offCodeList)
+                            {
+                                var customerID = finalCartList.Where(i => i.ProductID == item.ProductID).Select(i => i.CustomerID).FirstOrDefault();
+                                string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
+
+                                bll.InsertContractAndPackage(Session["ContractID"] as int?, customerID, packageIDs, item.OffCode, false, "0", string.Empty, true);
+
+                            }
+                        }
                     }
                     else
                     {
@@ -333,7 +327,7 @@ namespace Mediska.Controllers
                 var birthDate = Utility.myConvertShamsiToMiladi(customerBirthDate);
 
 
-                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, birthDate, customerCustomerGroupID, customerManagerGender == "1" , customerAreaID, customerAddress);
+                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, birthDate, customerCustomerGroupID, customerManagerGender == "1", customerAreaID, customerAddress);
 
                 return Json(new { Status = "Success", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }
