@@ -1,9 +1,15 @@
-﻿using Mediska.Models;
+﻿using Mediska.Classes;
+using Mediska.Models;
 using Mediska.Models.Repository;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 
@@ -190,7 +196,8 @@ namespace Mediska.Controllers
             return View();
         }
 
-        public JsonResult FinalCart(List<clsFinalCart> finalCartList)
+        [HttpPost]
+        public ActionResult FinalCart(List<clsFinalCart> finalCartList)
         {
             if (Session["CustomerID"] == null)
             {
@@ -200,6 +207,26 @@ namespace Mediska.Controllers
 
             try
             {
+                System.Net.ServicePointManager.Expect100Continue = false;
+                com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
+
+                string authority;
+
+
+                string callbackUrl = "https://" + Request.Url.Authority + "/ShopCart/Verify/";
+                int status = client.PaymentRequest("MerchantID", 1000, "description", "4linecode@gmail.com", "09125365099", callbackUrl, out authority);
+
+                if (status == 100)
+                {
+                    ////For release mode
+                    //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
+
+                    ////For test mode
+                    var url = "https://sandbox.zarinpal.com/pg/StartPay/" + authority;
+                    Response.Redirect(url);
+                    return null;
+                }
+                TempData["Message"] = GetMessage(status);
                 var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
                 if (offCodeList != null)
                 {
@@ -207,6 +234,7 @@ namespace Mediska.Controllers
                     {
                         var customerID = finalCartList.Where(i => i.ProductID == item.ProductID).Select(i => i.CustomerID).FirstOrDefault();
                         string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
+
 
 
                         bll.InsertContractAndPackage(Session["ContractID"] as int?, customerID, packageIDs, item.OffCode, false, "0", string.Empty, true);
@@ -224,13 +252,88 @@ namespace Mediska.Controllers
         }
         #endregion
 
+        public ActionResult Verify(string Authority, string Status)
+        {
+            if (!string.IsNullOrEmpty(Request.QueryString["Status"]) && !string.IsNullOrEmpty(Request.QueryString["Authority"]))
+            {
+                if (Request.QueryString["Status"].Equals("OK"))
+                {
+                    int amount = 1000;
+                    long refId;
+                    ServicePointManager.Expect100Continue = false;
+                    com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
+                    int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId);
+                    if (status == 100 || status == 101)
+                    {
+                        ViewBag.RefId = "کد پیگیری: " + refId + " - کد سفارش: ";
+                    }
+                    else
+                    {
+                        ViewBag.Message = GetMessage(status);
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "کد مرجع: " + Request.QueryString["Authority"] + " - وضعیت:" + Request.QueryString["Status"];
+                }
+            }
+            else
+            {
+                ViewBag.Message = "ورودی نامعتبر است.";
+            }
+            return View();
+        }
+
+        public string GetMessage(int status)
+        {
+            switch (status)
+            {
+                case -1:
+                    return "اطلاعات ارسال شده  ناقص است.";
+                case -2:
+                    return "IP و یا مرچنت کد پذیرنده صحیح نیست.";
+                case -3:
+                    return "با توجه به محدودیت های شاپرک امکان پرداخت با رقم درخواست شده میسر نمی باشد.";
+                case -4:
+                    return "سطح تایید پذیرنده پایین تر از سطح نقره ای است.";
+                case -11:
+                    return "درخواست مورد نظر یافت نشد.";
+                case -12:
+                    return "امکان ویرایش درخواست میسر نمی باشد.";
+                case -21:
+                    return "هیچ نوع عملیات مالی برای این تراکنش یافت نشد.";
+                case -22:
+                    return "تراکنش ناموفق می باشد.";
+                case -33:
+                    return "رقم تراکنش با رقم پرداخت شده مطابقت ندارد.";
+                case -34:
+                    return "سقف تقسیم تراکنش از لحاظ تعداد یا رقم عبور نموده است.";
+                case -40:
+                    return "اجازه دسترسی به متد مربوطه وجود ندارد.";
+                case -41:
+                    return "اطلاعات ارسال شده مربوط به AdditionalData غیر معتبر می باشد.";
+                case -42:
+                    return "مدت زمان معتبر طول عمر شناسه پرداخت باید بین 30 دقیقه تا 45 روز می باشد.";
+                case -54:
+                    return "درخواست مورد نظر آرشیو شده است.";
+                case 100:
+                    return "عملیات با موفقیت انجام گردیده است.";
+                case 101:
+                    return "عملیات پرداخت موفق بوده و قبلاً PaymentVerification تراکنش انجام شده است.";
+                default:
+                    return "کد تعریف نشده.";
+            }
+        }
+
         public JsonResult InsertCustomer(Nullable<int> userID, string customerCompanyName, string customerManagerName, string customerManagerFamily, string customerManagerMobileNo, string customerMelliNo, string customerBirthDate, Nullable<int> customerCustomerGroupID, string customerManagerGender, Nullable<int> customerAreaID, string customerAddress)
         {
 
             try
             {
+                var birthDate = Utility.myConvertShamsiToMiladi(customerBirthDate);
 
-                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo,DateTime.Parse( customerBirthDate), customerCustomerGroupID, customerManagerGender == "1" , customerAreaID, customerAddress);
+
+                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, birthDate, customerCustomerGroupID, customerManagerGender == "1" , customerAreaID, customerAddress);
 
                 return Json(new { Status = "Success", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }

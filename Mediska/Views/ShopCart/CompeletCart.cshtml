@@ -106,7 +106,7 @@
                                             [@pack.ID] @pack.packageName
                                         </td>
                                         <td data-id="@pack.ID" class="width_150">
-                                            <span class="font_15" style="@(finalPrice > 0 ? Html.Raw("color:#b0aeae;text-decoration:line-through"):Html.Raw(""))">@pack.packagePrice.ToString("N0") </span><span class="font_15">@(finalPrice > 0 ? finalPrice.ToString("N0") : "")</span><span class="span_tooman font_12">تومان</span>
+                                            <span class="font_15" style="@(finalPrice > 0 ? Html.Raw("color:#b0aeae;text-decoration:line-through") : Html.Raw(""))">@pack.packagePrice.ToString("N0") </span><span class="font_15">@(finalPrice > 0 ? finalPrice.ToString("N0") : "")</span><span class="span_tooman font_12">تومان</span>
                                         </td>
                                         <td>
                                         </td>
@@ -116,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-            }
+                                }
             <div class="container-full basketpage_cart_footer_div">
                 <div class="basketpage_cart_footer_inner_div">
                     <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
@@ -157,97 +157,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    ×
-                </button>
                 <h4 class="modal-title">
                     مرکز جدید
                 </h4>
             </div>
-            <form action="/ShopCart/InsertCustomer" id="insertCustomer" method="post">
-                <div class="modal-body">
-                    <div class="form-group">
-
-                        <div class="input-group input-group-sm">
-                            <label class="lbl">
-                                نام مجموعه:
-                            </label>
-                            @Html.TextBox("customerCompanyName", null, new { @class = "form-control" })
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                نام مدیر:
-                            </label>
-                            @Html.TextBox("customerManagerName", null, new { @class = "form-control" })
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                نام خانوادگی:
-                            </label>
-                            @Html.TextBox("customerManagerFamily", null, new { @class = "form-control" })
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                موبایل:
-                            </label>
-                            @Html.TextBox("customerManagerMobileNo", null, new { @class = "form-control" })
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                کد ملی:
-                            </label>
-                            @Html.TextBox("customerMelliNo", null, new { @class = "form-control" })
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                تاریخ تولد:
-                            </label>
-                            @Html.TextBox("customerBirthDate", null, new { @class = "form-control",@type= "datetime" })
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                جنسیت:
-                            </label>
-                            <select class="form-control" name="customerManagerGender">
-                                <option value="1">مرد</option>
-                                <option value="0">زن</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                گروه مشتری:
-                            </label>
-                            <select id="customerCustomerGroupID" name="customerCustomerGroupID">
-                            </select>
-
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                استان-شهر:
-                            </label>
-                            <select id="customerAreaID" name="customerAreaID">
-                            </select>
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <label class="pb-1">
-                                آدرس:
-                            </label>
-                            @Html.TextArea("customerAddress", null, new { @class = "form-control", rows = "4" })
-                        </div>
-
-                    </div>
-
-                </div>
-            </form>
+            @{Html.RenderPartial("_CustomerCreate"); }
             <div class="modal-footer">
                 <a href="#" data-dismiss="modal" class="btn">بستن</a>
                 <a href="#" id="btnInsertCustomer" class="btn btn-primary">
@@ -258,23 +172,11 @@
     </div>
 </div>
 @section scripts{
-    @*<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />*@
-    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
-    <link href="~/Content/css/persian-datepicker.css" rel="stylesheet" />
-    @*<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
-    <script src="~/Content/js/select2.min.js"></script>
-    <script src="~/Content/js/persian-datepicker.js"></script>
+
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            $("input[type=datetime]").datepicker({
-                dateFormat: "yy/mm/dd",
-                isRTL: true,
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: false
-            });
-        });
+
+
         $(function () {
 
             $(".customerlist").change(function () {
@@ -344,30 +246,11 @@
             });
 
             $("#compeletCart").click(function () {
-                $.post("/ShopCart/FinalCart", $("#compeletCartForm").serialize(), function (data) {
+                $.post("/ShopCart/FinalCart", $("#compeletCartForm").submit(), function (data) {
                     showAlert("خطا", data.Message, "error");
                 });
             });
 
-            $("#btnInsertCustomer").click(function () {
-                $.post("/ShopCart/InsertCustomer", $("#insertCustomer").serialize(), function (data) {
-                    if (data.Message !== "") {
-                        showAlert("خطا", data.Message, "error");
-                    } else {
-                        jQuery.getJSON("/ShopCart/myCustomerList/", {}, function (data) {
-                            $("#customerList").find("option").remove();
-                            $.each(data, function (i) {
-
-                                var option = "<option value='" + data[i].customerID + "'>[" + data[i].custgroupName + "]-[" + (data[i].customerAddress.length > 30 ? data[i].customerAddress.substring(0, 30) + "...." : data[i].customerAddress) + "]</option>";
-                                $("#customerList").append(option);
-                            });
-
-                        });
-
-                        $('#customerModal').modal('toggle');
-                    }
-                });
-            });
 
             $(".btncancel").click(function () {
                 var id = $(this).attr("id").split('_')[1];

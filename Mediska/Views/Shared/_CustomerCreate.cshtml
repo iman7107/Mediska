@@ -1,0 +1,160 @@
+﻿@{
+    Layout = null;
+}
+<form action="/ShopCart/InsertCustomer" id="insertCustomer" method="post">
+    <div class="modal-body">
+        <div class="form-group">
+
+            <div class="input-group input-group-sm">
+                <label class="lbl">
+                    نام مجموعه:
+                </label>
+                @Html.TextBox("customerCompanyName", null, new { @class = "form-control" })
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    نام مدیر:
+                </label>
+                @Html.TextBox("customerManagerName", null, new { @class = "form-control" })
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    نام خانوادگی:
+                </label>
+                @Html.TextBox("customerManagerFamily", null, new { @class = "form-control" })
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    موبایل:
+                </label>
+                @Html.TextBox("customerManagerMobileNo", null, new { @class = "form-control" })
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    کد ملی:
+                </label>
+                @Html.TextBox("customerMelliNo", null, new { @class = "form-control" })
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    تاریخ تولد:
+                </label>
+                @Html.TextBox("customerBirthDate", null, new { @class = "form-control" })
+
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    جنسیت:
+                </label>
+                <select class="form-control" name="customerManagerGender" id="customerManagerGender">
+                    <option value="1">مرد</option>
+                    <option value="0">زن</option>
+                </select>
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    گروه مشتری:
+                </label>
+                <select id="customerCustomerGroupID" name="customerCustomerGroupID">
+                </select>
+
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    استان-شهر:
+                </label>
+                <select id="customerAreaID" name="customerAreaID">
+                </select>
+            </div>
+
+            <div class="input-group input-group-sm">
+                <label class="pb-1">
+                    آدرس:
+                </label>
+                @Html.TextArea("customerAddress", null, new { @class = "form-control", rows = "4" })
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+<link href="~/Content/persianDatepicker-default.css" rel="stylesheet" />
+<script src="~/Sctipts/persianDatepicker.min.js"></script>
+
+<link href="~/Content/css/select2.min.css" rel="stylesheet" />
+<script src="~/Content/js/select2.min.js"></script>
+
+<script src="~/Sctipts/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        
+        $("#insertCustomer").validate({
+            rules: {
+                customerCompanyName: { required: true },
+                customerManagerName: { required: true },
+                customerManagerFamily: { required: true },
+                customerManagerMobileNo: { required: true },
+                customerMelliNo: { required: true },
+                customerBirthDate: { required: true },
+                customerManagerGender: { required: true },
+                customerCustomerGroupID: { required: true },
+                customerAreaID: { required: true },
+                customerAddress: { required: true }
+            },
+            messages: {
+                customerCompanyName: "*",
+                customerManagerName: "*",
+                customerManagerFamily: "*",
+                customerManagerMobileNo: "*",
+                customerMelliNo: "*",
+                customerBirthDate: "*",
+                customerManagerGender: "*",
+                customerCustomerGroupID: "*",
+                customerAreaID: "*",
+                customerAddress: "*"
+            }
+        });
+
+
+        $("#customerBirthDate").persianDatepicker({
+            formatDate: "YYYY/0M/0D",
+            onSelect: function () {
+
+            }
+
+        });
+        $("#btnInsertCustomer").click(function () {
+
+            if ($("#insertCustomer").validate().form()) {
+                $.post("/ShopCart/InsertCustomer", $("#insertCustomer").serialize(), function (data) {
+                    if (data.Message !== "") {
+                        showAlert("خطا", data.Message, "error");
+                    } else {
+                        jQuery.getJSON("/ShopCart/myCustomerList/", {}, function (data) {
+                            $("#customerList").find("option").remove();
+                            $.each(data, function (i) {
+
+                                var option = "<option value='" + data[i].customerID + "'>[" + data[i].custgroupName + "]-[" + (data[i].customerAddress.length > 30 ? data[i].customerAddress.substring(0, 30) + "...." : data[i].customerAddress) + "]</option>";
+                                $("#customerList").append(option);
+                            });
+
+                        });
+
+                        $('#customerModal').modal('toggle');
+                    }
+                });
+            } else {
+                showAlert("خطا", "لطفا موارد ستاره دار تکمیل شود", "error");
+            }
+        });
+    });
+</script>

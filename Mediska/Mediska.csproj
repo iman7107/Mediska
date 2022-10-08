@@ -142,6 +142,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Classes\clsSMS.cs" />
+    <Compile Include="Classes\Utility.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -228,6 +229,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Web References\com.zarinpal.sandbox\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\SMSSender\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -253,7 +259,6 @@
     <Content Include="Content\css\owl.carousel.min.css" />
     <Content Include="Content\css\owl.theme.default.min.css" />
     <Content Include="Content\css\owl.video.play.html" />
-    <Content Include="Content\css\persian-datepicker.css" />
     <Content Include="Content\css\responsive.css" />
     <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\css\style.css" />
@@ -359,6 +364,8 @@
     <Content Include="Content\img\testimonial-arrow-top.png" />
     <Content Include="Content\img\testimonial-bg.png" />
     <Content Include="Content\img\why-choose-us.png" />
+    <Content Include="Sctipts\jquery.validate.js" />
+    <Content Include="Sctipts\jquery.validate.min.js" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\jquery-3.5.0.min.js" />
     <Content Include="Content\js\jquery.countdown.min.js" />
@@ -369,11 +376,11 @@
     <Content Include="Content\js\mixitup.min.js" />
     <Content Include="Content\js\notify.min.js" />
     <Content Include="Content\js\owl.carousel.min.js" />
-    <Content Include="Content\js\persian-datepicker.js" />
     <Content Include="Content\js\popper.min.js" />
     <Content Include="Content\js\scripts.js" />
     <Content Include="Content\js\select2.min.js" />
     <Content Include="Content\js\wow.min.js" />
+    <Content Include="Content\persianDatepicker-default.css" />
     <Content Include="Content\Script.js" />
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
@@ -426,13 +433,15 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Sctipts\persianDatepicker.js" />
+    <Content Include="Sctipts\persianDatepicker.min.js" />
     <Content Include="Web References\SMSSender\MessagesBL.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
-    <Content Include="Web References\SMSSender\Reference.map">
+    <None Include="Web References\SMSSender\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Views\Account\VerifySMSCode.cshtml" />
     <Content Include="Views\Account\ForgetPassword.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
@@ -442,6 +451,12 @@
     <Content Include="Views\Shared\_pwBuyPackage.cshtml" />
     <Content Include="Views\ShopCart\Index.cshtml" />
     <Content Include="Views\ShopCart\CompeletCart.cshtml" />
+    <Content Include="Views\Shared\_CustomerCreate.cshtml" />
+    <None Include="Web References\com.zarinpal.sandbox\PaymentGatewayImplementationService.wsdl" />
+    <None Include="Web References\com.zarinpal.sandbox\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Web References\SMSSender\Send.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -517,6 +532,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>Mediska_SMSSender_Send</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://sandbox.zarinpal.com/pg/services/WebGate/wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\com.zarinpal.sandbox\</RelPath>
+      <UpdateFromURL>https://sandbox.zarinpal.com/pg/services/WebGate/wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Mediska_com_zarinpal_sandbox_PaymentGatewayImplementationService</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <PropertyGroup>

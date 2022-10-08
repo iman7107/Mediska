@@ -319,8 +319,5 @@ namespace Mediska.Classes
         }
     }
 
-    public class UtilityStatic
-    {
-        
-    }
+
 }
