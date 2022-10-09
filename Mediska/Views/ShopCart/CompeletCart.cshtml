@@ -75,16 +75,19 @@
                             {
                                 <span class="span_price span_price_sum" style="margin-right:20px">کد تخفیف: @offCode</span>
                             }
-                            <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
-                                <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
-                                <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" class="form-control customerlist" style="margin-right:10px;margin-left:20px">
-                                    <option value="none" selected disabled>--انتخاب مرکز--</option>
-                                    @foreach (var item in ViewBag.CustomerList)
-                                    {
-                                        <option value="@item.customerID">[@item.custgroupName]-[@(item.customerAddress.Length > 30 ? item.customerAddress.Substring(0, 30) + "...." : item.customerAddress)]</option>
-                                    }
-                                </select>
-                            </form>
+                        <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
+                            <input type="hidden" id="OnlineLicense1" name="finalCartList[@c].OnlineLicense1" />
+                            <input type="hidden" id="OnlineLicense2" name="finalCartList[@c].OnlineLicense2" />
+
+                            <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
+                            <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" data-NeedOnlineLicense="@product.prdxtraNeedOnlineLicense" data-OnlineLicense1Title="@product.prdxtraOnlineLicense1Title" data-OnlineLicense2Title="@product.prdxtraOnlineLicense2Title" class="form-control customerlist" style="margin-right:10px;margin-left:20px">
+                                <option value="none" selected disabled>--انتخاب مرکز--</option>
+                                @foreach (var item in ViewBag.CustomerList)
+                                {
+                                    <option value="@item.customerID">[@item.custgroupName]-[@(item.customerAddress.Length > 30 ? item.customerAddress.Substring(0, 30) + "...." : item.customerAddress)]</option>
+                                }
+                            </select>
+                        </form>
 
                             <a id="newCustomer" data-toggle="modal" href="#customerModal" class="btn btn-primary" style="margin-right:20px">مرکز جدید</a>
 
@@ -116,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                                }
+            }
             <div class="container-full basketpage_cart_footer_div">
                 <div class="basketpage_cart_footer_inner_div">
                     <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
@@ -129,7 +132,7 @@
     </div>
 </div>
 
-<div class="modal" id="licenseAgreement">
+<div class="modal" id="licenseAgreement" data-NeedOnlineLicense="" data-OnlineLicense1Title="" data-OnlineLicense2Title="">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -147,6 +150,41 @@
                 </a>
                 <a href="#" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
                     شرایط توافق نامه را میپذیرم
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="onlineLicense">
+    <div class="modal-dialog modal-m" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">
+                    لایسنس آنلاین
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <label class="pb-1" id="onlineLicense1Title">
+
+                        </label>
+                        @Html.TextBox("OnlineLicense1Value", null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="input-group input-group-sm">
+                        <label class="pb-1" id="onlineLicense2Title">
+
+                        </label>
+                        @Html.TextBox("OnlineLicense2Value", null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="btnOnlineLicense" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
+                    تایید
                 </a>
             </div>
         </div>
@@ -175,8 +213,6 @@
 
     <script type="text/javascript">
 
-
-
         $(function () {
 
             $(".customerlist").change(function () {
@@ -184,7 +220,6 @@
                 var productID = $(this).attr("data-ProductID");
                 var licenseAgreement = $(this).attr("data-LicenseAgreement");
                 var productTitle = $(this).attr("data-ProductTitle");
-
                 if (licenseAgreement !== "") {
                     var items = [];
                     items = licenseAgreement.split('•');
@@ -199,32 +234,31 @@
                     });
                     $('#licenseAgreement').find('.modal-title').text('توافق نامه ' + productTitle);
                     $(".btncancel").attr("id", "btnCancel_" + productID);
+
+                    $('#licenseAgreement').attr("data-OnlineLicense1Title", $(this).attr("data-OnlineLicense1Title"));
+                    $('#licenseAgreement').attr("data-OnlineLicense2Title", $(this).attr("data-OnlineLicense2Title"));
+                    $('#licenseAgreement').attr("data-NeedOnlineLicense", $(this).attr("data-NeedOnlineLicense"));
                 }
 
+            });
 
-                //$.ajax({
-                //    type: "post",
-                //    url: "/ShopCart/myGetProductLicenseAgreement",
-                //    data: { productID: productID },
-                //    success: function (data) {
-                //        if (data !== "") {
-                //            var items = [];
-                //            items = data.split('•');
-                //            var html = '';
-                //            $.each(items, function (i) {
-                //                html += '<p>' + items[i] + '</p>';
-                //            });
-                //            $("#modalbody").html(html);
-                //            $('#licenseAgreement').modal({
-                //                    backdrop: 'static',
-                //                    keyboard: false
-                //                });
-                //        }
+            $('#licenseAgreement').on('hidden.bs.modal', function () {
+                var needOnlineLicense = $(this).attr("data-NeedOnlineLicense");
 
-                //    },
-                //    error: function (e) { return false; }
-                //});
+                var onlineLicense1Title = $(this).attr("data-OnlineLicense1Title");
+                $("#onlineLicense1Title").html(onlineLicense1Title);
 
+                var onlineLicense2Title = $(this).attr("data-OnlineLicense2Title");
+                $("#onlineLicense1Title").html(onlineLicense2Title);
+
+                $('#onlineLicense').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                if (needOnlineLicense === true || needOnlineLicense === "True") {
+
+
+                }
             });
 
             $("#newCustomer").click(function () {
@@ -251,10 +285,25 @@
                 });
             });
 
-
             $(".btncancel").click(function () {
                 var id = $(this).attr("id").split('_')[1];
                 $('#customerID_' + id + ' option:first').prop('selected', true);
+            });
+
+            $("#btnOnlineLicense").click(function (e) {
+
+                var onlineLicense1Value = $("#OnlineLicense1Value").val();
+                var onlineLicense2Value = $("#OnlineLicense2Value").val();
+
+                if (onlineLicense1Value === "" || onlineLicense2Value === "") {
+                    showAlert("خطا", "مقدار لایسنس را وارد کنید", "error");
+                    $("#OnlineLicense1Value").focus();
+                    e.stopPropagation();
+                    return;
+                }
+
+                $("#OnlineLicense1").val(onlineLicense1Value);
+                $("#OnlineLicense2").val(onlineLicense2Value);
             });
         });
 

@@ -185,6 +185,8 @@ namespace Mediska.Models
     {
         public int CustomerID { get; set; }
         public int ProductID { get; set; }
+        public string OnlineLicense1 { get; set; }
+        public string OnlineLicense2 { get; set; }
     }
 
     public class clsSelect

@@ -438,6 +438,7 @@
     <Content Include="Web References\SMSSender\MessagesBL.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
+    <Content Include="Views\ShopCart\Verify.cshtml" />
     <None Include="Web References\SMSSender\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

@@ -29,19 +29,7 @@ namespace Mediska.Controllers
             }
             catch (Exception ex)
             {
-                string ErrorMessage = "";
-                if (ex.ToString().Contains("[TSA050]"))
-                    ErrorMessage = "این کد تخفیف وجود ندارد";
-                else if (ex.ToString().Contains("[TSA051]"))
-                    ErrorMessage = "این کد تخفیف فعال نمی باشد";
-                else if (ex.ToString().Contains("[TSA052]"))
-                    ErrorMessage = "زمان استفاده از این کد تخفیف به پایان رسیده است";
-                else if (ex.ToString().Contains("[TSA053]"))
-                    ErrorMessage = "این کد تخفیف قبلا استفاده شده است";
-                else
-                    ErrorMessage = "در بررسی کد تخفیف خطایی رخ داده است";
-
-                return Json(new { Status = "Error", Message = ErrorMessage, Data = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = "Error", Message = myErrorMessage(ex), Data = "" }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -204,9 +192,6 @@ namespace Mediska.Controllers
                 return Json(new { Status = "Error", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }
 
-            TempData["FinalCartList"] = finalCartList;
-
-
             System.Net.ServicePointManager.Expect100Continue = false;
             com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
 
@@ -220,6 +205,20 @@ namespace Mediska.Controllers
             {
                 ////For release mode
                 //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
+
+                finalCartList = TempData["FinalCartList"] as List<clsFinalCart>;
+                var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
+                if (offCodeList != null)
+                {
+                    foreach (var item in offCodeList)
+                    {
+                        var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == item.ProductID);
+                        string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
+
+                        bll.InsertContractAndPackage(Session["ContractID"] as int?, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
+
+                    }
+                }
 
                 ////For test mode
                 var url = "https://sandbox.zarinpal.com/pg/StartPay/" + authority;
@@ -247,19 +246,7 @@ namespace Mediska.Controllers
                     if (status == 100 || status == 101)
                     {
                         ViewBag.RefId = "کد پیگیری: " + refId + " - کد سفارش: " + id;
-                        var finalCartList = TempData["FinalCartList"] as List<clsFinalCart>;
-                        var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-                        if (offCodeList != null)
-                        {
-                            foreach (var item in offCodeList)
-                            {
-                                var customerID = finalCartList.Where(i => i.ProductID == item.ProductID).Select(i => i.CustomerID).FirstOrDefault();
-                                string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
-
-                                bll.InsertContractAndPackage(Session["ContractID"] as int?, customerID, packageIDs, item.OffCode, false, "0", string.Empty, true);
-
-                            }
-                        }
+                        
                     }
                     else
                     {
