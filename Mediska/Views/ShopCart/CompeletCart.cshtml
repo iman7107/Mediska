@@ -141,8 +141,10 @@
                     توافق نامه
                 </h4>
             </div>
-            <div class="modal-body">
-                <p style="text-align: justify;" id="modalbody"></p>
+            <div class="modal-body" style="padding:30px">
+                <div style="padding: 10px; border: 4px double black">
+                    <p style="text-align: justify;" id="modalbody"></p>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" id="btnCancel" class="btn btn-warning btncancel" data-dismiss="modal" aria-hidden="true">
@@ -245,19 +247,17 @@
             $('#licenseAgreement').on('hidden.bs.modal', function () {
                 var needOnlineLicense = $(this).attr("data-NeedOnlineLicense");
 
-                var onlineLicense1Title = $(this).attr("data-OnlineLicense1Title");
-                $("#onlineLicense1Title").html(onlineLicense1Title);
-
-                var onlineLicense2Title = $(this).attr("data-OnlineLicense2Title");
-                $("#onlineLicense1Title").html(onlineLicense2Title);
-
-                $('#onlineLicense').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
                 if (needOnlineLicense === true || needOnlineLicense === "True") {
+                    var onlineLicense1Title = $(this).attr("data-OnlineLicense1Title");
+                    $("#onlineLicense1Title").html(onlineLicense1Title);
 
+                    var onlineLicense2Title = $(this).attr("data-OnlineLicense2Title");
+                    $("#onlineLicense1Title").html(onlineLicense2Title);
 
+                    $('#onlineLicense').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
                 }
             });
 
