@@ -14,6 +14,8 @@
     List<cmplxProduct> ProductList = new List<cmplxProduct>();
     List<cmplxPackage> PackageList = new List<cmplxPackage>();
     List<clsCompeletCart> offCodeList = new List<clsCompeletCart>();
+    List<cmplxGetUnConfirmPackage> unConfirmPackage = new List<cmplxGetUnConfirmPackage>();
+
     if (Session["ShopCart"] != null)
     {
         List<int> cart = Session["ShopCart"] as List<int>;
@@ -33,7 +35,7 @@
         var ProductIDs = PackageList.Select(i => i.packageProductID).Distinct().ToList();
         ProductList = RepP.GetProductsByIDs(ProductIDs);
         TotalPrice = PackageList.Sum(i => i.packagePrice);
-
+        unConfirmPackage = RepP.UnConfirmPackage(Session["CustomerID"] as int?);
         TotalPrice = TotalPrice - (TotalOff > 0 ? TotalPrice - TotalOff : 0);
     }
 }
@@ -54,6 +56,8 @@
             <span class="basketpage_cart_count">@PackageList.Count</span>
         }
     </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
     <div class="margin_top_20 margin_bottom_20">
         <div id="accordion">
             @foreach (var product in ProductList)
@@ -61,6 +65,7 @@
                 var MyPackageList = PackageList.Where(i => i.packageProductID == product.prdxtraProductID).ToList();
                 var SumPrice = MyPackageList.Sum(i => i.packagePrice);
                 var offCode = offCodeList?.Where(i => i.ProductID == product.ID).Select(i => i.OffCode).FirstOrDefault();
+                var contractID = unConfirmPackage?.Where(i => i.ProductID == product.ID).Select(i => i.ContractID).FirstOrDefault();
 
                 var offCodeDetail = offCodeList?.Where(i => i.ProductID == product.ID).Select(i => i.CompeletCartDetails).FirstOrDefault();
                 <div class="card">
@@ -75,25 +80,25 @@
                             {
                                 <span class="span_price span_price_sum" style="margin-right:20px">کد تخفیف: @offCode</span>
                             }
-                        <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
-                            <input type="hidden" id="OnlineLicense1" name="finalCartList[@c].OnlineLicense1" />
-                            <input type="hidden" id="OnlineLicense2" name="finalCartList[@c].OnlineLicense2" />
+                            <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
+                                <input type="hidden" id="OnlineLicense1" name="finalCartList[@c].OnlineLicense1" />
+                                <input type="hidden" id="OnlineLicense2" name="finalCartList[@c].OnlineLicense2" />
+                                <input type="hidden" id="ContractID" name="finalCartList[@c].ContractID" value="@contractID" />
 
-                            <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
-                            <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" data-NeedOnlineLicense="@product.prdxtraNeedOnlineLicense" data-OnlineLicense1Title="@product.prdxtraOnlineLicense1Title" data-OnlineLicense2Title="@product.prdxtraOnlineLicense2Title" class="form-control customerlist" style="margin-right:10px;margin-left:20px">
-                                <option value="none" selected disabled>--انتخاب مرکز--</option>
-                                @foreach (var item in ViewBag.CustomerList)
-                                {
-                                    <option value="@item.customerID">[@item.custgroupName]-[@(item.customerAddress.Length > 30 ? item.customerAddress.Substring(0, 30) + "...." : item.customerAddress)]</option>
-                                }
-                            </select>
-                        </form>
+
+                                <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
+                                <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" data-NeedOnlineLicense="@product.prdxtraNeedOnlineLicense" data-OnlineLicense1Title="@product.prdxtraOnlineLicense1Title" data-OnlineLicense2Title="@product.prdxtraOnlineLicense2Title" class="form-control customerlist" style="margin-right:10px;margin-left:20px">
+                                    <option value="none" selected disabled>--انتخاب مرکز--</option>
+                                    @foreach (var item in ViewBag.CustomerList)
+                                    {
+                                        <option value="@item.customerID">[@item.custgroupName]-[@(item.customerAddress.Length > 30 ? item.customerAddress.Substring(0, 30) + "...." : item.customerAddress)]</option>
+                                    }
+                                </select>
+                            </form>
 
                             <a id="btnNewCustomer_@product.prdxtraProductID" data-toggle="modal" href="#customerModal" class="btn btn-primary newCustomer" style="margin-right:20px">مرکز جدید</a>
 
-                            @{
-                                c++;
-                            }
+
                         </div>
                     </div>
                     <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
@@ -106,7 +111,7 @@
 
                                     <tr class="cursor_pointer data_row">
                                         <td data-id="@pack.ID" class="width_250">
-                                            [@pack.ID] @pack.packageName
+                                            @pack.packageName
                                         </td>
                                         <td data-id="@pack.ID" class="width_150">
                                             <span class="font_15" style="@(finalPrice > 0 ? Html.Raw("color:#b0aeae;text-decoration:line-through") : Html.Raw(""))">@pack.packagePrice.ToString("N0") </span><span class="font_15">@(finalPrice > 0 ? finalPrice.ToString("N0") : "")</span><span class="span_tooman font_12">تومان</span>
@@ -119,6 +124,8 @@
                         </div>
                     </div>
                 </div>
+
+                c++;
             }
             <div class="container-full basketpage_cart_footer_div">
                 <div class="basketpage_cart_footer_inner_div">
@@ -282,7 +289,7 @@
             });
 
             $(".newCustomer").click(function () {
-                
+
                 jQuery.getJSON("/ShopCart/myAreaList/", { query: "" }, function (data) {
                     $("#customerAreaID").select2({
                         data: data,
@@ -304,6 +311,19 @@
             });
 
             $("#compeletCart").click(function () {
+                var flag = false;
+                $(".customerlist").each(function () {
+
+                    if ($(this).val() === "none" || $(this).val() === null) {
+                        showAlert("خطا", "انتخاب مرکز الزامی است", "error");
+                        flag = true;
+                        return;
+                    }
+                });
+                if (flag) {
+                    return;
+                }
+
                 $.post("/ShopCart/FinalCart", $("#compeletCartForm").submit(), function (data) {
                     showAlert("خطا", data.Message, "error");
                 });

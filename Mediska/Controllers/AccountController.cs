@@ -90,6 +90,7 @@ namespace Mediska.Controllers
                         {
                             if (!U.custusrPasswordMustChange)
                             {
+                                //userID
                                 Session["CustomerID"] = U.ID;
                                 Session["CustomerFullName"] = U.custusrManagerName + " " + U.custusrManagerFamily;
                                 if (string.IsNullOrEmpty(user.ReturnUrl))

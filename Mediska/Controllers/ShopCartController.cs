@@ -10,6 +10,7 @@ using System.Net;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Web.Helpers;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 
 
@@ -156,29 +157,24 @@ namespace Mediska.Controllers
 
         #region CompeletCart
 
-        public ActionResult CompeletCart(List<clsCompeletCart> offCodeList)
+        public ActionResult CompeletCart(List<clsCompeletCart> offCodeList, string errorMessage = default)
         {
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                ModelState.AddModelError("", errorMessage);
+                ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["CustomerID"] as int?);
+                return View();
+            }
             if (Session["OffCodeList"] == null)
             {
                 Session["OffCodeList"] = offCodeList;
             }
 
             if (Session["CustomerID"] == null)
-            {
-
                 return RedirectToAction("Login", "Account", new { ReturnUrl = "/ShopCart/CompeletCart" });
-            }
-            else
-            {
-                var unConfirmPackage = bll.UnConfirmPackage(Session["CustomerID"] as int?);
-                if (unConfirmPackage != null)
-                {
-                    if (unConfirmPackage.Count > 0)
-                    {
-                        Session["ContractID"] = unConfirmPackage.Select(i => i.ContractID).FirstOrDefault();
-                    }
-                }
-            }
+
+
+
             ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["CustomerID"] as int?);
 
             return View();
@@ -215,14 +211,18 @@ namespace Mediska.Controllers
                         string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
                         try
                         {
-                            bll.InsertContractAndPackage(Session["ContractID"] as int?, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
+                            if (finalCart.CustomerID< 1)
+                                return RedirectToAction("CompeletCart", new { offCodeList = Session["OffCodeList"], errorMessage = "انتخاب مرکز الزامی است" });
+
+                            bll.InsertContractAndPackage(finalCart.ContractID, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
 
                         }
                         catch (Exception ex)
                         {
+
                             var errorCode = ex.HResult;
-                            var message = myErrorMessage(ex);   
-                            throw;
+                            var errorMessage = myErrorMessageString(ex);
+                            return RedirectToAction("CompeletCart", new { offCodeList = Session["OffCodeList"] , errorMessage = errorMessage });
                         }
 
                     }
