@@ -206,9 +206,8 @@ namespace Mediska.Controllers
                 ////For release mode
                 //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
 
-                finalCartList = TempData["FinalCartList"] as List<clsFinalCart>;
                 var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-                if (offCodeList != null)
+                if (offCodeList != null && finalCartList != null)
                 {
                     foreach (var item in offCodeList)
                     {
@@ -227,7 +226,7 @@ namespace Mediska.Controllers
             }
             TempData["Message"] = GetMessage(status);
 
-            return View("CompeletCart", new { finalCartList = TempData["FinalCartList"] });
+            return View("CompeletCart", new { offCodeList = Session["OffCodeList"] });
 
         }
         #endregion

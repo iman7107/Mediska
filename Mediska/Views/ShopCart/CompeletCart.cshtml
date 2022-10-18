@@ -89,7 +89,7 @@
                             </select>
                         </form>
 
-                            <a id="newCustomer" data-toggle="modal" href="#customerModal" class="btn btn-primary" style="margin-right:20px">مرکز جدید</a>
+                            <a id="btnNewCustomer_@product.prdxtraProductID" data-toggle="modal" href="#customerModal" class="btn btn-primary newCustomer" style="margin-right:20px">مرکز جدید</a>
 
                             @{
                                 c++;
@@ -193,7 +193,7 @@
     </div>
 </div>
 
-<div class="modal" id="customerModal">
+<div class="modal" id="customerModal" data-ProductID="">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -204,7 +204,7 @@
             @{Html.RenderPartial("_CustomerCreate"); }
             <div class="modal-footer">
                 <a href="#" data-dismiss="modal" class="btn">بستن</a>
-                <a href="#" id="btnInsertCustomer" class="btn btn-primary">
+                <a href="#" id="btnInsertCustomer" class="btn btn-primary" data-ProductID="">
                     ذخیره
                 </a>
             </div>
@@ -261,7 +261,28 @@
                 }
             });
 
-            $("#newCustomer").click(function () {
+            $('#customerModal').on('hidden.bs.modal', function () {
+
+
+                setTimeout(function () {
+                    var productID = $('#customerModal').attr("data-ProductID");
+
+                    var temp = 0;
+                    var currentValue, maxValue;
+                    $('#customerID_' + productID + ' option').each(function (i, v) {
+                        currentValue = v.value;
+                        if (currentValue !== "none") {
+                            maxValue = Math.max(temp, currentValue);
+                            temp = maxValue;
+
+                            $("#customerID_" + productID).val(maxValue);
+                        }
+                    });
+                }, 1000);
+            });
+
+            $(".newCustomer").click(function () {
+                
                 jQuery.getJSON("/ShopCart/myAreaList/", { query: "" }, function (data) {
                     $("#customerAreaID").select2({
                         data: data,
@@ -277,6 +298,9 @@
                         width: '80%'
                     });
                 });
+                var productID = $(this).attr("id").split('_')[1];
+                $("#btnInsertCustomer").attr("data-ProductID", productID)
+                $("#customerModal").attr("data-ProductID", productID)
             });
 
             $("#compeletCart").click(function () {

@@ -135,18 +135,21 @@
         $("#btnInsertCustomer").click(function () {
 
             if ($("#insertCustomer").validate().form()) {
+                var productID = $(this).attr("data-ProductID");
+
                 $.post("/ShopCart/InsertCustomer", $("#insertCustomer").serialize(), function (data) {
                     if (data.Message !== "") {
                         showAlert("خطا", data.Message, "error");
                     } else {
                         jQuery.getJSON("/ShopCart/myCustomerList/", {}, function (data) {
-                            $("#customerList").find("option").remove();
+
+                            $("#customerID_" + productID).find("option").remove();
+                            $("#customerID_" + productID).append('<option value="none" selected="" disabled="">--انتخاب مرکز--</option>');
                             $.each(data, function (i) {
 
                                 var option = "<option value='" + data[i].customerID + "'>[" + data[i].custgroupName + "]-[" + (data[i].customerAddress.length > 30 ? data[i].customerAddress.substring(0, 30) + "...." : data[i].customerAddress) + "]</option>";
-                                $("#customerList").append(option);
+                                $("#customerID_" + productID).append(option);
                             });
-
                         });
 
                         $('#customerModal').modal('toggle');
@@ -157,4 +160,5 @@
             }
         });
     });
+
 </script>

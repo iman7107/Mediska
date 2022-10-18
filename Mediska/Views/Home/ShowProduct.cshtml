@@ -77,7 +77,7 @@
                                 <span class="ti-user icon-sm color-secondary d-block mr-3"></span>
                                 <div class="d-block">
                                     <h5 class="mb-0"></h5>
-                                    <p class="span_price">@Model.productPrice.ToString("N0")</p>
+                                    <p class="span_price">@(Model.productPrice?.ToString("N0"))</p>
                                 </div>
                             </li>
                         </ul>
