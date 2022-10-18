@@ -213,8 +213,17 @@ namespace Mediska.Controllers
                     {
                         var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == item.ProductID);
                         string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
+                        try
+                        {
+                            bll.InsertContractAndPackage(Session["ContractID"] as int?, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
 
-                        bll.InsertContractAndPackage(Session["ContractID"] as int?, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            var errorCode = ex.HResult;
+                            var message = myErrorMessage(ex);   
+                            throw;
+                        }
 
                     }
                 }
