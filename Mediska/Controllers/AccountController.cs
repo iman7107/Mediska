@@ -82,7 +82,7 @@ namespace Mediska.Controllers
 
                 if (U != null)
                 {
-                    var s = Hash.ComputeHash(user.userPassword, Hash.enmHashAlgorithm.SHA256, null);
+                    _ = Hash.ComputeHash(user.userPassword, Hash.enmHashAlgorithm.SHA256, null);
                     bool IsCorrect = Hash.VerifyHash(user.userPassword, Hash.enmHashAlgorithm.SHA256, U.custusrPassword);
                     if (IsCorrect)
                     {
@@ -91,7 +91,7 @@ namespace Mediska.Controllers
                             if (!U.custusrPasswordMustChange)
                             {
                                 //userID
-                                Session["CustomerID"] = U.ID;
+                                Session["userID"] = U.ID;
                                 Session["CustomerFullName"] = U.custusrManagerName + " " + U.custusrManagerFamily;
                                 if (string.IsNullOrEmpty(user.ReturnUrl))
                                     return RedirectToAction("Index", "Home");
@@ -182,7 +182,7 @@ namespace Mediska.Controllers
 
         public ActionResult Logout()
         {
-            Session["CustomerID"] = null;
+            Session["userID"] = null;
             Session["CustomerFullName"] = null;
             return RedirectToAction("Index", "Home");
         }
@@ -192,7 +192,7 @@ namespace Mediska.Controllers
 
         public ActionResult Register(string ReturnUrl)
         {
-            if (Session["CustomerID"] != null)
+            if (Session["userID"] != null)
                 return RedirectToAction("Index", "Home");
 
             clsRegisterModel user = new clsRegisterModel();
@@ -207,7 +207,7 @@ namespace Mediska.Controllers
         [HttpPost]
         public async Task<ActionResult> Register(clsRegisterModel user)
         {
-            if (Session["CustomerID"] != null)
+            if (Session["userID"] != null)
                 return RedirectToAction("Index", "Home");
 
             var isCaptchaValid = await clsPublic.IsCaptchaValid(Request, user.GoogleCaptchaToken, "Register");
@@ -240,14 +240,14 @@ namespace Mediska.Controllers
                     var MyGUID = Guid.NewGuid().ToString().Replace("-", "");
 
                     RepU.UpdateUserAuthCode(RU.ID, RandomCode, MyGUID);
-                    var Sett = RepSet.GetSMSSetting();
+                    _ = RepSet.GetSMSSetting();
                     long RecID = 0;
                     byte Status = 0;
                     try
                     {
                         int Res = clsSMS.Send(RU.custusrMobileNo, "کد فعالسازی شما : " + RandomCode + Environment.NewLine + "وبسایت مدیسکا", ref RecID, ref Status);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         ViewBag.ErrorMessage = "ارسال کد فعالسازی موفقیت آمیز نبود";
                     }
@@ -303,7 +303,7 @@ namespace Mediska.Controllers
                         if (U.custusrAuthCode == Ecode || U.custusrAuthCode == gc.Code)
                         {
                             RepU.ActiveUser(U.ID, true);
-                            Session["CustomerID"] = U.ID;
+                            Session["userID"] = U.ID;
                             Session["CustomerFullName"] = U.custusrManagerName + " " + U.custusrManagerFamily;
                             ViewBag.SuccessMessage = "حساب کاربری شما با موفقیت فعال شد";
                             TempData["SuccessMessage"] = "حساب کاربری شما با موفقیت فعال شد";
@@ -349,14 +349,14 @@ namespace Mediska.Controllers
                     var RandomCode = clsPublic.GenerateRandomCode(6);
 
                     RepU.UpdateUserAuthCode(U.ID, RandomCode, guid);
-                    var Sett = RepSet.GetSMSSetting();
+                    _ = RepSet.GetSMSSetting();
                     long RecID = 0;
                     byte Status = 0;
                     try
                     {
                         int Res = clsSMS.Send(U.custusrMobileNo, "کد فعالسازی شما : " + RandomCode + Environment.NewLine + "وبسایت مدیسکا", ref RecID, ref Status);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return Json(new { Status = "Error", Message = "ارسال کد فعالسازی موفقیت آمیز نبود" });
                     }
@@ -418,7 +418,7 @@ namespace Mediska.Controllers
                         {
                             int Res = clsSMS.Send(U.custusrMobileNo, "رمز عبور جدید شما : " + NewPassword + Environment.NewLine + "باید بعد از ورود به سایت، رمز خود را تغییر دهید" + Environment.NewLine + "وبسایت مدیسکا", ref RecID, ref Status);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             ViewBag.ErrorMessage = "ارسال کد فعالسازی موفقیت آمیز نبود";
                             return View(mobileObj);
@@ -444,7 +444,7 @@ namespace Mediska.Controllers
         //============================================================================================================================
         public ActionResult ChangePassword(string guid)
         {
-            if (string.IsNullOrEmpty(guid) && Session["CustomerID"] == null)
+            if (string.IsNullOrEmpty(guid) && Session["userID"] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -456,12 +456,12 @@ namespace Mediska.Controllers
                 cp.HasSMSPassword = false;
             else
             {
-                if (Session["CustomerID"] == null)
+                if (Session["userID"] == null)
                     cp.HasSMSPassword = true;
                 else
                 {
                     cp.HasSMSPassword = false;
-                    cp.CustomerID = Convert.ToInt32(Session["CustomerID"]);
+                    cp.CustomerID = Convert.ToInt32(Session["userID"]);
                 }
             }
             return View(cp);
@@ -501,7 +501,7 @@ namespace Mediska.Controllers
             }
             else
             {
-                int CustomerID = Convert.ToInt32(Session["CustomerID"]);
+                int CustomerID = Convert.ToInt32(Session["userID"]);
                 U = RepU.GetCustomerInfoByID(CustomerID);
             }
 
@@ -524,7 +524,7 @@ namespace Mediska.Controllers
             var HashPass = Hash.ComputeHash(CP.NewPassword, Hash.enmHashAlgorithm.SHA256, null);
             result = RepU.ChangePassword(U.ID, HashPass, false, CP.Guid, 3);
 
-            Session["CustomerID"] = U.ID;
+            Session["userID"] = U.ID;
             Session["CustomerFullName"] = U.custusrManagerName + " " + U.custusrManagerFamily;
 
             if (result == true)
@@ -583,7 +583,7 @@ namespace Mediska.Controllers
                         {
                             int Res = clsSMS.Send(U.custusrMobileNo, "رمز یکبار مصرف شما : " + OTP + Environment.NewLine + "وبسایت مدیسکا", ref RecID, ref Status);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             ViewBag.ErrorMessage = "ارسال کد فعالسازی موفقیت آمیز نبود";
                             return View(mobileObj);
@@ -649,7 +649,7 @@ namespace Mediska.Controllers
                     var OTP_pass = U.custusrOTP;
                     if (OTP_pass == gc.Code)
                     {
-                        Session["CustomerID"] = U.ID;
+                        Session["userID"] = U.ID;
                         Session["CustomerFullName"] = U.custusrManagerName + " " + U.custusrManagerFamily;
                         return RedirectToAction("Index", "Home");
                     }
@@ -684,7 +684,7 @@ namespace Mediska.Controllers
                     {
                         int Res = clsSMS.Send(U.custusrMobileNo, "رمز یکبار مصرف شما : " + RandomCode + Environment.NewLine + "وبسایت مدیسکا", ref RecID, ref Status);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return Json(new { Status = "Error", Message = "ارسال رمز یکبار مصرف موفقیت آمیز نبود" });
                     }

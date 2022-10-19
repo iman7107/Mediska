@@ -59,7 +59,7 @@ namespace Mediska.Controllers
         public JsonResult myCustomerList()
         {
 
-            var list = new repUser().GetCustomerInfoByUserID(Session["CustomerID"] as int?);
+            var list = new repUser().GetCustomerInfoByUserID(Session["userID"] as int?);
 
             return Json(list, JsonRequestBehavior.AllowGet);
 
@@ -162,7 +162,7 @@ namespace Mediska.Controllers
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 ModelState.AddModelError("", errorMessage);
-                ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["CustomerID"] as int?);
+                ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["userID"] as int?);
                 return View();
             }
             if (Session["OffCodeList"] == null)
@@ -170,12 +170,10 @@ namespace Mediska.Controllers
                 Session["OffCodeList"] = offCodeList;
             }
 
-            if (Session["CustomerID"] == null)
+            if (Session["userID"] == null)
                 return RedirectToAction("Login", "Account", new { ReturnUrl = "/ShopCart/CompeletCart" });
 
-
-
-            ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["CustomerID"] as int?);
+            ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["userID"] as int?);
 
             return View();
         }
@@ -183,7 +181,7 @@ namespace Mediska.Controllers
         [HttpPost]
         public ActionResult FinalCart(List<clsFinalCart> finalCartList)
         {
-            if (Session["CustomerID"] == null)
+            if (Session["userID"] == null)
             {
                 return Json(new { Status = "Error", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }
@@ -322,7 +320,7 @@ namespace Mediska.Controllers
                 var birthDate = Utility.myConvertShamsiToMiladi(customerBirthDate);
 
 
-                bll.InsertCustomer(Session["CustomerID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, birthDate, customerCustomerGroupID, customerManagerGender == "1", customerAreaID, customerAddress);
+                bll.InsertCustomer(Session["userID"] as int?, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, birthDate, customerCustomerGroupID, customerManagerGender == "1", customerAreaID, customerAddress);
 
                 return Json(new { Status = "Success", Message = "", Data = "" }, JsonRequestBehavior.AllowGet);
             }

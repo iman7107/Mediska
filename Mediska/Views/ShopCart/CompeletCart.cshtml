@@ -35,7 +35,7 @@
         var ProductIDs = PackageList.Select(i => i.packageProductID).Distinct().ToList();
         ProductList = RepP.GetProductsByIDs(ProductIDs);
         TotalPrice = PackageList.Sum(i => i.packagePrice);
-        unConfirmPackage = RepP.UnConfirmPackage(Session["CustomerID"] as int?);
+        unConfirmPackage = RepP.UnConfirmPackage(Session["userID"] as int?);
         TotalPrice = TotalPrice - (TotalOff > 0 ? TotalPrice - TotalOff : 0);
     }
 }
@@ -270,10 +270,8 @@
 
             $('#customerModal').on('hidden.bs.modal', function () {
 
-
                 setTimeout(function () {
                     var productID = $('#customerModal').attr("data-ProductID");
-
                     var temp = 0;
                     var currentValue, maxValue;
                     $('#customerID_' + productID + ' option').each(function (i, v) {
@@ -285,6 +283,28 @@
                             $("#customerID_" + productID).val(maxValue);
                         }
                     });
+
+                    var licenseAgreement = $("#customerID_" + productID).attr("data-LicenseAgreement");
+                    var productTitle = $("#customerID_" + productID).attr("data-ProductTitle");
+                    if (licenseAgreement !== "") {
+                        var items = [];
+                        items = licenseAgreement.split('•');
+                        var html = '';
+                        $.each(items, function (i) {
+                            html += '<p>' + items[i] + '</p>';
+                        });
+                        $("#modalbody").html(html);
+                        $('#licenseAgreement').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        $('#licenseAgreement').find('.modal-title').text('توافق نامه ' + productTitle);
+                        $(".btncancel").attr("id", "btnCancel_" + productID);
+
+                        $('#licenseAgreement').attr("data-OnlineLicense1Title", $("#customerID_" + productID).attr("data-OnlineLicense1Title"));
+                        $('#licenseAgreement').attr("data-OnlineLicense2Title", $("#customerID_" + productID).attr("data-OnlineLicense2Title"));
+                        $('#licenseAgreement').attr("data-NeedOnlineLicense", $("#customerID_" + productID).attr("data-NeedOnlineLicense"));
+                    }
                 }, 1000);
             });
 

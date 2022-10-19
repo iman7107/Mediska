@@ -26,7 +26,7 @@ namespace Mediska.Models.Repository
 
         public string GetProductLicenseAgreement(int? id)
         {
-            var licenseAgreement = Context.MDSKGetProductList(id).Select(i=>i.prdxtraLicenseAgreement).FirstOrDefault();
+            var licenseAgreement = Context.MDSKGetProductList(id).Select(i => i.prdxtraLicenseAgreement).FirstOrDefault();
             return licenseAgreement;
         }
         //============================================================================================================================
@@ -41,7 +41,7 @@ namespace Mediska.Models.Repository
         //============================================================================================================================
         public List<cmplxPackage> GetProductPackages(int? productId)
         {
-            var PackageProduct= Context.MDSKGetProductPackages(productId).ToList();
+            var PackageProduct = Context.MDSKGetProductPackages(productId).ToList();
             return PackageProduct;
         }
 
@@ -52,15 +52,15 @@ namespace Mediska.Models.Repository
             string str = "";
             try
             {
-            if(packageIDs!=null)
-            {
-                foreach (var ID in packageIDs)
+                if (packageIDs != null)
                 {
-                    str += ID.ToString() + ";";
+                    foreach (var ID in packageIDs)
+                    {
+                        str += ID.ToString() + ";";
+                    }
                 }
-            }
-            var PackageList = Context.MDSKGetPackageListByIDs(str).ToList();
-            return PackageList;
+                var PackageList = Context.MDSKGetPackageListByIDs(str).ToList();
+                return PackageList;
 
             }
             catch (Exception)
@@ -97,7 +97,7 @@ namespace Mediska.Models.Repository
         //============================================================================================================================
         public List<cmplxPackageSpec> GetPackageFeatureByProductID(int? productID, int? packageID)
         {
-            var packagefeatures=Context.MDSKGetPackageSpecByProductID(productID, packageID).ToList();
+            var packagefeatures = Context.MDSKGetPackageSpecByProductID(productID, packageID).ToList();
             return packagefeatures;
 
         }
@@ -123,15 +123,15 @@ namespace Mediska.Models.Repository
         public List<cmplxCheckOffCode> CheckOffCode(string offCode)
         {
 
-                var result = Context.MDSKCheckOffCode(offCode).ToList();
-                return result;
+            var result = Context.MDSKCheckOffCode(offCode).ToList();
+            return result;
 
         }
 
         public List<clsSelect> AreaList(string filter)
         {
 
-            var result = Context.MDSKGetAreaList(filter).Select(i=> new clsSelect { id = i.ID , text = i.areaName}).ToList();
+            var result = Context.MDSKGetAreaList(filter).Select(i => new clsSelect { id = i.ID, text = i.areaFullTitle }).ToList();
             return result;
 
         }
@@ -139,9 +139,8 @@ namespace Mediska.Models.Repository
         public bool InsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
         {
 
-
-                Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense);
-                return true;
+            Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense);
+            return true;
         }
 
         public List<cmplxGetUnConfirmPackage> UnConfirmPackage(int? userID)
@@ -155,7 +154,7 @@ namespace Mediska.Models.Repository
         public int InsertCustomer(Nullable<int> userID, string customerCompanyName, string customerManagerName, string customerManagerFamily, string customerManagerMobileNo, string customerMelliNo, Nullable<System.DateTime> customerBirthDate, Nullable<int> customerCustomerGroupID, Nullable<bool> customerManagerGender, Nullable<int> customerAreaID, string customerAddress)
         {
 
-            var result = Context.MDSKInsertCustomer( userID,  customerCompanyName,  customerManagerName,  customerManagerFamily,  customerManagerMobileNo,  customerMelliNo, customerBirthDate, customerCustomerGroupID,  customerManagerGender,  customerAreaID,  customerAddress);
+            var result = Context.MDSKInsertCustomer(userID, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, customerBirthDate, customerCustomerGroupID, customerManagerGender, customerAreaID, customerAddress);
             return result;
 
         }
