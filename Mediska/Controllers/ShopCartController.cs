@@ -30,7 +30,7 @@ namespace Mediska.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Status = "Error", Message = myErrorMessage(ex), Data = "" }, JsonRequestBehavior.AllowGet);
+                return myErrorMessage(ex);
             }
         }
 
@@ -146,15 +146,27 @@ namespace Mediska.Controllers
         //============================================================================================================================
         //============================================================================================================================
         //============================================================================================================================
-        public ActionResult RemovePackageFromCart(int id)
+        //public ActionResult RemovePackageFromCart(int id)
+        //{
+        //    List<int> cart = Session["ShopCart"] as List<int>;
+        //    int index = cart.FindIndex(p => p == id);
+        //    cart.RemoveAt(index);
+        //    Session["ShopCart"] = cart;
+        //    return RedirectToAction("Index");
+        //}
+
+        public ActionResult RemovePackageFromCart(int id, string offCodes)
         {
             List<int> cart = Session["ShopCart"] as List<int>;
             int index = cart.FindIndex(p => p == id);
-            cart.RemoveAt(index);
+            if (index > -1)
+            {
+                cart.RemoveAt(index);
+            }
+            Session["offCodes"] = offCodes;
             Session["ShopCart"] = cart;
             return RedirectToAction("Index");
         }
-
         #region CompeletCart
 
         public ActionResult CompeletCart(List<clsCompeletCart> offCodeList, string errorMessage = default)
@@ -169,6 +181,7 @@ namespace Mediska.Controllers
             {
                 Session["OffCodeList"] = offCodeList;
             }
+
 
             if (Session["userID"] == null)
                 return RedirectToAction("Login", "Account", new { ReturnUrl = "/ShopCart/CompeletCart" });
@@ -201,8 +214,10 @@ namespace Mediska.Controllers
                 //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
 
                 var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
+                
                 if (offCodeList != null && finalCartList != null)
                 {
+                    Session["FinalCart"] = finalCartList;
                     foreach (var item in offCodeList)
                     {
                         var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == item.ProductID);
@@ -212,7 +227,9 @@ namespace Mediska.Controllers
                             if (finalCart.CustomerID< 1)
                                 return RedirectToAction("CompeletCart", new { offCodeList = Session["OffCodeList"], errorMessage = "انتخاب مرکز الزامی است" });
 
-                            bll.InsertContractAndPackage(finalCart.ContractID, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
+                            bll.CheckIsCustomerPackagesValid(finalCart.CustomerID, packageIDs+";", item.OffCode);
+
+                            //var contractID = bll.InsertContractAndPackage(finalCart.ContractID == 0 ? null : finalCart.ContractID, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
 
                         }
                         catch (Exception ex)
@@ -248,10 +265,33 @@ namespace Mediska.Controllers
                     long refId;
                     ServicePointManager.Expect100Continue = false;
                     com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
-                    int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId);
+                    int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId); 
+                    var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
+                    var finalCartList = Session["FinalCart"] as List<clsFinalCart>;
+
+                    var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == offCodeList.Select(j=>j.ProductID).FirstOrDefault());
+                    var offCode = offCodeList.Select(i => i.OffCode).FirstOrDefault();
+                    var compeletCartDetails = offCodeList.Select(i => i.CompeletCartDetails).FirstOrDefault();
                     if (status == 100 || status == 101)
                     {
-                        ViewBag.RefId = "کد پیگیری: " + refId + " - کد سفارش: " + id;
+                        try
+                        {
+                            string packageIDs = string.Join(";", compeletCartDetails.Select(j => j.PackageID));
+                            var finalPrice = compeletCartDetails.Select(e => e.FinalPrice).DefaultIfEmpty(0).Sum();
+
+                            var contractID = bll.InsertContractAndPackage(finalCart.ContractID == 0 ? null : finalCart.ContractID, finalCart.CustomerID, packageIDs, offCode, true
+                                , finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
+
+                            bll.MDSKInsertPayment(finalCart.CustomerID, refId.ToString(), finalPrice, false);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            var result = ex.HResult;
+                            throw;
+                        }
+
+                        ViewBag.RefId = "کد پیگیری: " + refId ;
                         
                     }
                     else

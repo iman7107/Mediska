@@ -16,6 +16,11 @@
           <Parameter Name="ID" Type="int" Mode="In" />
           <Parameter Name="Active" Type="bit" Mode="In" />
         </Function>
+        <Function Name="spMDSKCheckIsCustomerPackagesValid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerID" Type="int" Mode="In" />
+          <Parameter Name="PackageIDs" Type="varchar" Mode="In" />
+          <Parameter Name="OffCode" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="spMDSKCheckOffCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OffCode" Type="varchar" Mode="In" />
         </Function>
@@ -206,12 +211,6 @@
           <FunctionImport Name="MDSKGetCustomerByUserID" ReturnType="Collection(SupportModel.cmplxCustomerByUserID)">
           <Parameter Name="UserID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="spMDSKInsertPayment">
-            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
-            <Parameter Name="payReference" Mode="In" Type="String" />
-            <Parameter Name="Price" Mode="In" Type="Decimal" />
-            <Parameter Name="RegisterSMSSent" Mode="In" Type="Boolean" />
-          </FunctionImport>
           <FunctionImport Name="spMDSKInsertContractAndPackage">
             <Parameter Name="ContractID" Mode="In" Type="Int32" />
             <Parameter Name="CustomerID" Mode="In" Type="Int32" />
@@ -247,6 +246,17 @@
           <FunctionImport Name="spMDSKGetCustomerGroup" />
           <FunctionImport Name="MDSKGetCustomerGroup" ReturnType="Collection(SupportModel.cmplxGetCustomerGroup)" />
           <FunctionImport Name="spMDSKCheckOffCode" ReturnType="Collection(SupportModel.spMDSKCheckOffCode_Result)">
+          <Parameter Name="OffCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKInsertPayment">
+            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+            <Parameter Name="payReference" Mode="In" Type="String" />
+            <Parameter Name="Price" Mode="In" Type="Decimal" />
+            <Parameter Name="RegisterSMSSent" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="MDSKCheckIsCustomerPackagesValid">
+            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+            <Parameter Name="PackageIDs" Mode="In" Type="String" />
             <Parameter Name="OffCode" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -716,7 +726,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spMDSKInsertPayment" FunctionName="SupportModel.Store.spMDSKInsertPayment" />
           <FunctionImportMapping FunctionImportName="spMDSKInsertContractAndPackage" FunctionName="SupportModel.Store.spMDSKInsertContractAndPackage" />
           <FunctionImportMapping FunctionImportName="spMDSKConfirmContract" FunctionName="SupportModel.Store.spMDSKConfirmContract" />
           <FunctionImportMapping FunctionImportName="MDSKGetUnConfirmPackage" FunctionName="SupportModel.Store.spMDSKGetUnConfirmPackage">
@@ -777,6 +786,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MDSKInsertPayment" FunctionName="SupportModel.Store.spMDSKInsertPayment" />
+          <FunctionImportMapping FunctionImportName="MDSKCheckIsCustomerPackagesValid" FunctionName="SupportModel.Store.spMDSKCheckIsCustomerPackagesValid" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

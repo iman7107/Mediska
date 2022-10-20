@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Web;
 
 
@@ -136,27 +138,38 @@ namespace Mediska.Models.Repository
 
         }
 
-        public bool InsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
+        public int InsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
         {
 
-            Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense);
-            return true;
+            return Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense);
         }
 
+        public int CheckIsCustomerPackagesValid(Nullable<int> customerID, string packageIDs, string offCode)
+        {
+
+            return Context.MDSKCheckIsCustomerPackagesValid(customerID, packageIDs, offCode);
+        }
         public List<cmplxGetUnConfirmPackage> UnConfirmPackage(int? userID)
         {
 
             var result = Context.MDSKGetUnConfirmPackage(userID).ToList();
+
             return result;
 
+        }
+        public int MDSKInsertPayment(Nullable<int> customerID, string payReference, Nullable<decimal> price, Nullable<bool> registerSMSSent)
+        {
+
+            var result =  Context.MDSKInsertPayment(customerID, payReference, price, registerSMSSent);
+            return result;
         }
 
         public int InsertCustomer(Nullable<int> userID, string customerCompanyName, string customerManagerName, string customerManagerFamily, string customerManagerMobileNo, string customerMelliNo, Nullable<System.DateTime> customerBirthDate, Nullable<int> customerCustomerGroupID, Nullable<bool> customerManagerGender, Nullable<int> customerAreaID, string customerAddress)
         {
 
             var result = Context.MDSKInsertCustomer(userID, customerCompanyName, customerManagerName, customerManagerFamily, customerManagerMobileNo, customerMelliNo, customerBirthDate, customerCustomerGroupID, customerManagerGender, customerAreaID, customerAddress);
-            return result;
 
+            return result;
         }
 
         public List<clsSelect> GetCustomerGroup()

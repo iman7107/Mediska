@@ -127,14 +127,27 @@
 
                 c++;
             }
-            <div class="container-full basketpage_cart_footer_div">
-                <div class="basketpage_cart_footer_inner_div">
-                    <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
-                    <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
-                    <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-                </div>
-                <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+        <div class="container-full basketpage_cart_footer_div">
+
+            <div class="col-4 basketpage_cart_footer_inner_div">
+                <span class="basketpage_cart_footer_sum_span">مبلغ بدون تخفیف :</span>
+                <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
+                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
             </div>
+
+            <div class="col-3 basketpage_cart_footer_inner_div">
+                <span class="basketpage_cart_footer_sum_span">مبلغ تخفیف :</span>
+                <span class="basketpage_cart_footer_price_span" id="totalPriceOff"></span>
+                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+            </div>
+
+            <div class="basketpage_cart_footer_inner_div">
+                <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
+                <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
+                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+            </div>
+            <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+        </div>
         </div>
     </div>
 </div>
@@ -157,7 +170,7 @@
                 <a href="#" id="btnCancel" class="btn btn-warning btncancel" data-dismiss="modal" aria-hidden="true">
                     انصراف
                 </a>
-                <a href="#" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
+                <a href="#" class="btn btn-success" id="btnOK" data-dismiss="modal" aria-hidden="true">
                     شرایط توافق نامه را میپذیرم
                 </a>
             </div>
@@ -210,7 +223,7 @@
             </div>
             @{Html.RenderPartial("_CustomerCreate"); }
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn">بستن</a>
+                <a href="#" id="btnCustomerModalClose" data-dismiss="modal" class="btn">بستن</a>
                 <a href="#" id="btnInsertCustomer" class="btn btn-primary" data-ProductID="">
                     ذخیره
                 </a>
@@ -223,69 +236,12 @@
     <script type="text/javascript">
 
         $(function () {
-
+            var btnCancelClick = true;
             $(".customerlist").change(function () {
 
                 var productID = $(this).attr("data-ProductID");
-                var licenseAgreement = $(this).attr("data-LicenseAgreement");
-                var productTitle = $(this).attr("data-ProductTitle");
-                if (licenseAgreement !== "") {
-                    var items = [];
-                    items = licenseAgreement.split('•');
-                    var html = '';
-                    $.each(items, function (i) {
-                        html += '<p>' + items[i] + '</p>';
-                    });
-                    $("#modalbody").html(html);
-                    $('#licenseAgreement').modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-                    $('#licenseAgreement').find('.modal-title').text('توافق نامه ' + productTitle);
-                    $(".btncancel").attr("id", "btnCancel_" + productID);
-
-                    $('#licenseAgreement').attr("data-OnlineLicense1Title", $(this).attr("data-OnlineLicense1Title"));
-                    $('#licenseAgreement').attr("data-OnlineLicense2Title", $(this).attr("data-OnlineLicense2Title"));
-                    $('#licenseAgreement').attr("data-NeedOnlineLicense", $(this).attr("data-NeedOnlineLicense"));
-                }
-
-            });
-
-            $('#licenseAgreement').on('hidden.bs.modal', function () {
-                var needOnlineLicense = $(this).attr("data-NeedOnlineLicense");
-
-                if (needOnlineLicense === true || needOnlineLicense === "True") {
-                    var onlineLicense1Title = $(this).attr("data-OnlineLicense1Title");
-                    $("#onlineLicense1Title").html(onlineLicense1Title);
-
-                    var onlineLicense2Title = $(this).attr("data-OnlineLicense2Title");
-                    $("#onlineLicense1Title").html(onlineLicense2Title);
-
-                    $('#onlineLicense').modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-                }
-            });
-
-            $('#customerModal').on('hidden.bs.modal', function () {
-
-                setTimeout(function () {
-                    var productID = $('#customerModal').attr("data-ProductID");
-                    var temp = 0;
-                    var currentValue, maxValue;
-                    $('#customerID_' + productID + ' option').each(function (i, v) {
-                        currentValue = v.value;
-                        if (currentValue !== "none") {
-                            maxValue = Math.max(temp, currentValue);
-                            temp = maxValue;
-
-                            $("#customerID_" + productID).val(maxValue);
-                        }
-                    });
-
-                    var licenseAgreement = $("#customerID_" + productID).attr("data-LicenseAgreement");
-                    var productTitle = $("#customerID_" + productID).attr("data-ProductTitle");
+                    var licenseAgreement = $(this).attr("data-LicenseAgreement");
+                    var productTitle = $(this).attr("data-ProductTitle");
                     if (licenseAgreement !== "") {
                         var items = [];
                         items = licenseAgreement.split('•');
@@ -301,11 +257,72 @@
                         $('#licenseAgreement').find('.modal-title').text('توافق نامه ' + productTitle);
                         $(".btncancel").attr("id", "btnCancel_" + productID);
 
-                        $('#licenseAgreement').attr("data-OnlineLicense1Title", $("#customerID_" + productID).attr("data-OnlineLicense1Title"));
-                        $('#licenseAgreement').attr("data-OnlineLicense2Title", $("#customerID_" + productID).attr("data-OnlineLicense2Title"));
-                        $('#licenseAgreement').attr("data-NeedOnlineLicense", $("#customerID_" + productID).attr("data-NeedOnlineLicense"));
+                        $('#licenseAgreement').attr("data-OnlineLicense1Title", $(this).attr("data-OnlineLicense1Title"));
+                        $('#licenseAgreement').attr("data-OnlineLicense2Title", $(this).attr("data-OnlineLicense2Title"));
+                        $('#licenseAgreement').attr("data-NeedOnlineLicense", $(this).attr("data-NeedOnlineLicense"));
                     }
-                }, 1000);
+
+
+            });
+
+            $('#licenseAgreement').on('hidden.bs.modal', function () {
+                var needOnlineLicense = $(this).attr("data-NeedOnlineLicense");
+
+                if (btnCancelClick) {
+                    if (needOnlineLicense === true || needOnlineLicense === "True") {
+                        var onlineLicense1Title = $(this).attr("data-OnlineLicense1Title");
+                        $("#onlineLicense1Title").html(onlineLicense1Title);
+
+                        var onlineLicense2Title = $(this).attr("data-OnlineLicense2Title");
+                        $("#onlineLicense2Title").html(onlineLicense2Title);
+
+                        $('#onlineLicense').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                    }
+                }
+            });
+
+            $('#customerModal').on('hidden.bs.modal', function () {
+                if (btnCancelClick) {
+                    setTimeout(function () {
+                        var productID = $('#customerModal').attr("data-ProductID");
+                        var temp = 0;
+                        var currentValue, maxValue;
+                        $('#customerID_' + productID + ' option').each(function (i, v) {
+                            currentValue = v.value;
+                            if (currentValue !== "none") {
+                                maxValue = Math.max(temp, currentValue);
+                                temp = maxValue;
+
+                                $("#customerID_" + productID).val(maxValue);
+                            }
+                        });
+
+                        var licenseAgreement = $("#customerID_" + productID).attr("data-LicenseAgreement");
+                        var productTitle = $("#customerID_" + productID).attr("data-ProductTitle");
+                        if (licenseAgreement !== "") {
+                            var items = [];
+                            items = licenseAgreement.split('•');
+                            var html = '';
+                            $.each(items, function (i) {
+                                html += '<p>' + items[i] + '</p>';
+                            });
+                            $("#modalbody").html(html);
+                            $('#licenseAgreement').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            });
+                            $('#licenseAgreement').find('.modal-title').text('توافق نامه ' + productTitle);
+                            $(".btncancel").attr("id", "btnCancel_" + productID);
+
+                            $('#licenseAgreement').attr("data-OnlineLicense1Title", $("#customerID_" + productID).attr("data-OnlineLicense1Title"));
+                            $('#licenseAgreement').attr("data-OnlineLicense2Title", $("#customerID_" + productID).attr("data-OnlineLicense2Title"));
+                            $('#licenseAgreement').attr("data-NeedOnlineLicense", $("#customerID_" + productID).attr("data-NeedOnlineLicense"));
+                        }
+                    }, 1000);
+                }
             });
 
             $(".newCustomer").click(function () {
@@ -326,8 +343,8 @@
                     });
                 });
                 var productID = $(this).attr("id").split('_')[1];
-                $("#btnInsertCustomer").attr("data-ProductID", productID)
-                $("#customerModal").attr("data-ProductID", productID)
+                $("#btnInsertCustomer").attr("data-ProductID", productID);
+                $("#customerModal").attr("data-ProductID", productID);
             });
 
             $("#compeletCart").click(function () {
@@ -352,6 +369,7 @@
             $(".btncancel").click(function () {
                 var id = $(this).attr("id").split('_')[1];
                 $('#customerID_' + id + ' option:first').prop('selected', true);
+                btnCancelClick = false;
             });
 
             $("#btnOnlineLicense").click(function (e) {
@@ -368,6 +386,45 @@
 
                 $("#OnlineLicense1").val(onlineLicense1Value);
                 $("#OnlineLicense2").val(onlineLicense2Value);
+            });
+
+            $("#btnOK , #btnInsertCustomer").click(function () {
+                btnCancelClick = true;
+            });
+
+            $("#btnCustomerModalClose").click(function () {
+                btnCancelClick = false;
+            });
+            $(".customerlist").each(function () {
+                var id = $(this).attr("id").split('_')[1];
+
+                if ($("#customerID_" + id + " option").length === 1) {
+
+                    jQuery.getJSON("/ShopCart/myAreaList/", { query: "" }, function (data) {
+                        $("#customerAreaID").select2({
+                            data: data,
+                            dir: 'rtl',
+                            width: '80%'
+                        });
+                    });
+
+                    jQuery.getJSON("/ShopCart/myCustomerGroupList/", {}, function (data) {
+                        $("#customerCustomerGroupID").select2({
+                            data: data,
+                            dir: 'rtl',
+                            width: '80%'
+                        });
+                    });
+                    var productID = $(this).attr("id").split('_')[1];
+                    $("#btnInsertCustomer").attr("data-ProductID", productID);
+                    $("#customerModal").attr("data-ProductID", productID);
+
+                    $("#customerModal").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });;
+                }
+
             });
         });
 

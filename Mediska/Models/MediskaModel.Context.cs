@@ -291,27 +291,6 @@ namespace Mediska.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxCustomerByUserID>("MDSKGetCustomerByUserID", userIDParameter);
         }
     
-        public virtual int spMDSKInsertPayment(Nullable<int> customerID, string payReference, Nullable<decimal> price, Nullable<bool> registerSMSSent)
-        {
-            var customerIDParameter = customerID.HasValue ?
-                new ObjectParameter("CustomerID", customerID) :
-                new ObjectParameter("CustomerID", typeof(int));
-    
-            var payReferenceParameter = payReference != null ?
-                new ObjectParameter("payReference", payReference) :
-                new ObjectParameter("payReference", typeof(string));
-    
-            var priceParameter = price.HasValue ?
-                new ObjectParameter("Price", price) :
-                new ObjectParameter("Price", typeof(decimal));
-    
-            var registerSMSSentParameter = registerSMSSent.HasValue ?
-                new ObjectParameter("RegisterSMSSent", registerSMSSent) :
-                new ObjectParameter("RegisterSMSSent", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spMDSKInsertPayment", customerIDParameter, payReferenceParameter, priceParameter, registerSMSSentParameter);
-        }
-    
         public virtual int spMDSKInsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
         {
             var contractIDParameter = contractID.HasValue ?
@@ -442,6 +421,44 @@ namespace Mediska.Models
                 new ObjectParameter("OffCode", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spMDSKCheckOffCode_Result>("spMDSKCheckOffCode", offCodeParameter);
+        }
+    
+        public virtual int MDSKInsertPayment(Nullable<int> customerID, string payReference, Nullable<decimal> price, Nullable<bool> registerSMSSent)
+        {
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("CustomerID", customerID) :
+                new ObjectParameter("CustomerID", typeof(int));
+    
+            var payReferenceParameter = payReference != null ?
+                new ObjectParameter("payReference", payReference) :
+                new ObjectParameter("payReference", typeof(string));
+    
+            var priceParameter = price.HasValue ?
+                new ObjectParameter("Price", price) :
+                new ObjectParameter("Price", typeof(decimal));
+    
+            var registerSMSSentParameter = registerSMSSent.HasValue ?
+                new ObjectParameter("RegisterSMSSent", registerSMSSent) :
+                new ObjectParameter("RegisterSMSSent", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MDSKInsertPayment", customerIDParameter, payReferenceParameter, priceParameter, registerSMSSentParameter);
+        }
+    
+        public virtual int MDSKCheckIsCustomerPackagesValid(Nullable<int> customerID, string packageIDs, string offCode)
+        {
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("CustomerID", customerID) :
+                new ObjectParameter("CustomerID", typeof(int));
+    
+            var packageIDsParameter = packageIDs != null ?
+                new ObjectParameter("PackageIDs", packageIDs) :
+                new ObjectParameter("PackageIDs", typeof(string));
+    
+            var offCodeParameter = offCode != null ?
+                new ObjectParameter("OffCode", offCode) :
+                new ObjectParameter("OffCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MDSKCheckIsCustomerPackagesValid", customerIDParameter, packageIDsParameter, offCodeParameter);
         }
     }
 }

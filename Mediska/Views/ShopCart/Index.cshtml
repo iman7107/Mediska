@@ -51,20 +51,20 @@
                                 <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
 
                                 <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
-                                <input type="text" name="OffCodeList[@k].OffCode" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
+                                <input type="text" name="OffCodeList[@k].OffCode" id="offCode_@product.prdxtraProductID" class="form-control offCode"  style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
 
-                                <span class="btn btn-info" onclick="offCode();" style="width:200px">اعمال تخفیف</span>
+                                <span id="btnOff_@product.prdxtraProductID" class="btn btn-info" onclick="offCode($(this).attr('id'));" data-IsClick="" style="width:200px">اعمال تخفیف</span>
                             </div>
                         </div>
                         <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
                             <div class="card-body padding_right_30">
 
-                                <table class="table table-hover table_shop_cart">
+                                <table class="table table-hover table_shop_cart" id="table_@product.prdxtraProductID">
                                     @foreach (var pack in MyPackageList)
                                     {
-                                        <tr class="cursor_pointer data_row">
+                                        <tr class="cursor_pointer data_row" id="packageID_@pack.ID" data-ProductID="@product.prdxtraProductID">
                                             <td data-id="@pack.ID" class="width_250">
-                                                [@pack.ID] @pack.packageName
+                                                @pack.packageName
                                                 <input type="hidden" name="OffCodeList[@k].CompeletCartDetails[@d].PackageID" value="@pack.ID" />
 
                                                 <input id="finalPrice_@pack.ID" type="hidden" name="OffCodeList[@k].CompeletCartDetails[@d].FinalPrice" value="" />
@@ -75,12 +75,12 @@
                                                 {
                                                     if (MyPackageList.Count == 1)
                                                     {
-                                                        <a href="/ShopCart/RemovePackageFromCart/@pack.ID" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
+                                                        <a href="#" class="remove_shopcart" data-PackageID="@pack.ID" onclick="myDeletePackage($(this).attr('data-PackageID'))"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    <a href="/ShopCart/RemovePackageFromCart/@pack.ID" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
+                                                    <a href="#" data-PackageID="@pack.ID" onclick="myDeletePackage($(this).attr('data-PackageID'))" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
                                                 }
                                             </td>
                                         </tr>
@@ -93,13 +93,30 @@
                     @(k++);
                 }
             </form>
-            <div class="container-full basketpage_cart_footer_div">
-                <div class="basketpage_cart_footer_inner_div">
-                    <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
-                    <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
-                    <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-                </div>
-                <a href="javascript:void(0)" id="compeletCart" class="btn btn-success">تکمیل خرید</a>
+            <div class="row container-full basketpage_cart_footer_div">
+
+                    <div class="col-4 basketpage_cart_footer_inner_div">
+                        <span class="basketpage_cart_footer_sum_span">مبلغ بدون تخفیف :</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
+                        <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                    </div>
+
+                    <div class="col-3 basketpage_cart_footer_inner_div">
+                        <span class="basketpage_cart_footer_sum_span">مبلغ تخفیف :</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPriceOff"></span>
+                        <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                    </div>
+
+                    <div class="col-4 basketpage_cart_footer_inner_div">
+                        <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
+                        <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                    </div>
+                    <div class="col-1">
+                        <a href="#" id="compeletCart" class="btn btn-success">تکمیل خرید</a>
+                    </div>
+
+
             </div>
         </div>
     </div>
@@ -108,7 +125,24 @@
 @section scripts{
 
     <script type="text/javascript">
+        function myDeletePackage(id) {
+            //var productID = $("#packageID_" + id).attr("data-ProductID");
+            //alert(productID);
+            //$("#packageID_" + id).remove();
+            //alert($("#table_" + productID + " tbody tr").length);
 
+            var offCodes = [];
+            $(".offCode").each(function () {
+                var val = $(this).val();
+                if (val !== "") {
+                    var codeID = $(this).attr("id");
+                    var result = val + ";" + codeID;
+                    offCodes.push(result);
+                }
+            });
+
+            window.location = "/ShopCart/RemovePackageFromCart/?id=" + id + "&offCodes=" + offCodes;
+        }
         function addComma(str) {
             var objRegex = new RegExp("(-?[0-9]+)([0-9]{3})");
             while (objRegex.test(str)) {
@@ -116,10 +150,14 @@
             }
             return str;
         }
-        function offCode() {
+        function offCode(id) {
+
+            $("#" + id).attr("data-IsClick", "1");
+
             $(".offCode").each(function () {
                 var val = $(this).val();
                 var productID = $(this).attr("id").split('_')[1];
+
                 if (val !== "") {
 
                     jQuery.getJSON("/ShopCart/myDiscountList", { offCode: val }, function (data) {
@@ -127,6 +165,7 @@
                             showAlert("خطا", data.Message, "error");
                         }
                         else {
+
                             $.each(data.Data, function (i) {
                                 var packageID = data.Data[i].PackageID;
                                 $("#collapse_" + productID + " .table .data_row").each(function () {
@@ -175,12 +214,69 @@
 
             });
             var totalPrice = '@TotalPrice';
+            
             var result = parseInt(totalPrice) - parseInt(totalOff) / 10;
+            $("#totalPriceOff").text(addComma((parseInt(totalOff) / 10).toString()));
             $("#totalPrice").text(addComma(result.toString()));
         }
         $(function () {
+            var offCodes = '@Session["offCodes"]';
+
+            if (offCodes !== "") {
+                var t = offCodes.split(',');
+
+                for (var i = 0; i < t.length; i++) {
+                    var val = t[i].split(';')[0];
+                    var id = t[i].split(';')[1];
+                    $("#" + id).val(val);
+                }
+
+                $(".offCode").each(function () {
+                    var val = $(this).val();
+
+                    var productID = $(this).attr("id").split('_')[1];
+
+                    if (val !== "") {
+
+                        jQuery.getJSON("/ShopCart/myDiscountList", { offCode: val }, function (data) {
+                            if (data.Status != "Error") {
+                                $.each(data.Data, function (i) {
+                                    var packageID = data.Data[i].PackageID;
+
+                                    $("#collapse_" + productID + " .table .data_row").each(function () {
+                                        var elementID = $(this).find("td").eq(0).attr("data-id");
+
+                                        if (elementID.toString() === packageID.toString()) {
+                                            $(this).find("td").eq(1).find("span").eq(0).css("color", "#b0aeae");
+                                            $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "line-through");
+                                            var finalPrice = parseInt(data.Data[i].FinalPrice) / 10;
+                                            $("#finalPrice_" + elementID).val(finalPrice);
+                                            $(this).find("td").eq(1).find("span").eq(1).text(addComma(finalPrice.toString()));
+                                            $(this).find("td").eq(1).find("span").eq(1).attr("data-OffPrice", data.Data[i].OffPrice)
+                                            //totalOff += parseInt(data[i].OffPrice);
+
+                                        }
+                                    });
+                                });                            }
+                            
+                        });
+
+                        setInterval(function () {
+                            totalPrice();
+                        }, 1000);
+                    }
+                });
+
+            }
             $("#compeletCart").click(function () {
                 $("#compeletCartForm").submit();
+            });
+
+            $(".offCode").change(function () {
+                if ($(this).val() !== "") {
+                    var productID = $(this).attr("id").split('_')[1];
+                    $("#btnOff_" + productID).attr("data-IsClick", "");
+                }
             });
         });
 
