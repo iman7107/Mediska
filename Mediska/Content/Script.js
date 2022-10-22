@@ -86,7 +86,6 @@ $(document).ready(function () {
 //===================================================================================================================
 //===================================================================================================================
 function fnBuyProduct(btn) {
-   
     var packageID = $(btn).data('id');
     var productID = $(btn).data('pid');
     var packageCount = $(btn).data('packagecount');
@@ -185,6 +184,11 @@ function fnAddToCart(obj, sumElement, productID) {
     }).done(function (result) {
         if (result === -1) {
             //showAlert('خطا')
+            return;
+        }
+
+        if (result === -2 || result === "-2") {
+            showAlert("خطا",'با عرض پوزش، در حال حاضر امکان خرید فقط یک محصول به همراه پکیج های آن امکان پذیر میباشد',"error");
             return;
         }
         fnShowSumCartPrice(sumElement, productID);

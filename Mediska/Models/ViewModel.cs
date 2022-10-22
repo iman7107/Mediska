@@ -177,7 +177,7 @@ namespace Mediska.Models
     }
     public class clsCompeletCartDetail
     {
-        public decimal FinalPrice { get; set; }
+        public decimal? FinalPrice { get; set; }
         public int PackageID { get; set; }
     }
 

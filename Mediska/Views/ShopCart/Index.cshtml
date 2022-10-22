@@ -51,7 +51,7 @@
                                 <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
 
                                 <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
-                                <input type="text" name="OffCodeList[@k].OffCode" id="offCode_@product.prdxtraProductID" class="form-control offCode"  style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
+                                <input type="text" name="OffCodeList[@k].OffCode" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
 
                                 <span id="btnOff_@product.prdxtraProductID" class="btn btn-info" onclick="offCode($(this).attr('id'));" data-IsClick="" style="width:200px">اعمال تخفیف</span>
                             </div>
@@ -84,37 +84,44 @@
                                                 }
                                             </td>
                                         </tr>
-                                        @(d++);
+
+                                        d++;
                                     }
                                 </table>
+
                             </div>
                         </div>
                     </div>
-                    @(k++);
+                    k++;
                 }
             </form>
             <div class="row container-full basketpage_cart_footer_div">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-3 basketpage_cart_footer_inner_div">
+                            <span class="basketpage_cart_footer_sum_span" style="float:right">مبلغ کل :</span>
+                            <span class="basketpage_cart_footer_price_span" style="font-size: 15px;font:bold" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
+                            <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                        </div>
 
-                    <div class="col-4 basketpage_cart_footer_inner_div">
-                        <span class="basketpage_cart_footer_sum_span">مبلغ بدون تخفیف :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
-                        <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-                    </div>
+                        <div class="col-3 basketpage_cart_footer_inner_div">
+                            <span class="basketpage_cart_footer_sum_span" style="float:right">مبلغ تخفیف :</span>
+                            <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font-size: 15px"></span>
+                            <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                        </div>
 
-                    <div class="col-3 basketpage_cart_footer_inner_div">
-                        <span class="basketpage_cart_footer_sum_span">مبلغ تخفیف :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPriceOff"></span>
-                        <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                        <div class="col-3 basketpage_cart_footer_inner_div">
+                            <span class="basketpage_cart_footer_sum_span" style="float:right">قابل پرداخت :</span>
+                            <span class="basketpage_cart_footer_price_span" id="totalPrice" style="font-size: 15px;">@TotalPrice.ToString("N0")</span>
+                            <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                        </div>
+                        <div class="col-3">
+                            <a href="#" id="compeletCart" class="btn btn-success">تکمیل خرید</a>
+                        </div>
                     </div>
-
-                    <div class="col-4 basketpage_cart_footer_inner_div">
-                        <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
-                        <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-                    </div>
-                    <div class="col-1">
-                        <a href="#" id="compeletCart" class="btn btn-success">تکمیل خرید</a>
-                    </div>
+                    
+                </div>
+                   
 
 
             </div>
@@ -268,8 +275,9 @@
                 });
 
             }
-            $("#compeletCart").click(function () {
-                $("#compeletCartForm").submit();
+            $("#compeletCart").click(function (e) {
+                e.stopPropagation();
+                //$("#compeletCartForm").submit();
             });
 
             $(".offCode").change(function () {

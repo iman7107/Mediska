@@ -138,10 +138,10 @@ namespace Mediska.Models.Repository
 
         }
 
-        public int InsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
+        public int InsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense, Nullable<decimal> payPrice, string payReference)
         {
 
-            return Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense);
+            return Context.spMDSKInsertContractAndPackage(contractID, customerID, packageIDs, offCode, isConfirm, onlineLicense1, onlineLicense2, customerAcceptLicense, payPrice, payReference);
         }
 
         public int CheckIsCustomerPackagesValid(Nullable<int> customerID, string packageIDs, string offCode)

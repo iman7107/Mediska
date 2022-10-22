@@ -86,6 +86,8 @@
           <Parameter Name="OnlineLicense1" Type="nvarchar" Mode="In" />
           <Parameter Name="OnlineLicense2" Type="nvarchar" Mode="In" />
           <Parameter Name="CustomerAcceptLicense" Type="bit" Mode="In" />
+          <Parameter Name="PayPrice" Type="money" Mode="In" />
+          <Parameter Name="PayReference" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="spMDSKInsertCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="int" Mode="In" />
@@ -220,6 +222,8 @@
             <Parameter Name="OnlineLicense1" Mode="In" Type="String" />
             <Parameter Name="OnlineLicense2" Mode="In" Type="String" />
             <Parameter Name="CustomerAcceptLicense" Mode="In" Type="Boolean" />
+            <Parameter Name="PayPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="PayReference" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spMDSKConfirmContract">
           <Parameter Name="ContractID" Mode="In" Type="Int32" />

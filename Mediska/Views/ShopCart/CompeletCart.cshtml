@@ -7,8 +7,9 @@
 
 @{
     repProduct RepP = new repProduct();
-    decimal TotalPrice = 0;
-    decimal TotalOff = 0;
+    decimal? totalProduct = 0;
+    decimal? TotalPrice = 0;
+    decimal? TotalOff = 0;
     int c = 0;
 
     List<cmplxProduct> ProductList = new List<cmplxProduct>();
@@ -20,23 +21,19 @@
     {
         List<int> cart = Session["ShopCart"] as List<int>;
         offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-        var compeletCartDetails = offCodeList?.Select(i => i.CompeletCartDetails);
+        var compeletCartDetails = offCodeList?.Select(i => i.CompeletCartDetails).FirstOrDefault();
 
         if (compeletCartDetails != null)
         {
-            foreach (var item in compeletCartDetails)
-            {
-                TotalOff += item?.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum() ?? 0;
-            }
+            TotalOff = compeletCartDetails.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum();
         }
-
 
         PackageList = RepP.GetPackagesByIDs(cart);
         var ProductIDs = PackageList.Select(i => i.packageProductID).Distinct().ToList();
         ProductList = RepP.GetProductsByIDs(ProductIDs);
-        TotalPrice = PackageList.Sum(i => i.packagePrice);
+        totalProduct = PackageList.Sum(i => i.packagePrice);
         unConfirmPackage = RepP.UnConfirmPackage(Session["userID"] as int?);
-        TotalPrice = TotalPrice - (TotalOff > 0 ? TotalPrice - TotalOff : 0);
+        TotalPrice = totalProduct - (TotalOff / 10);
     }
 }
 <style>
@@ -46,6 +43,18 @@
 
     label {
         width: 20%;
+    }
+    @@media (min-width: 320px) and (max-width: 991px) {
+        .TFCode {
+            display: none;
+        }
+
+        .TFPrice {
+            display: none;
+        }
+        .TGlIST{
+            width:170PX;
+        }
     }
 </style>
 <div class="container">
@@ -71,14 +80,15 @@
                 <div class="card">
                     <div class="card-header" id="heading_@product.prdxtraProductID">
                         <div class="display_flex">
+                            
                             <a href="/Home/ShowProduct/@product.prdxtraProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
                             <button class="btn btn-link btn_product_title" data-toggle="collapse" data-target="#collapse_@product.prdxtraProductID" aria-expanded="true" aria-controls="collapse_@product.prdxtraProductID">
                                 @product.prdxtraTitle
                             </button>
-                            <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
+                            <span class="span_price span_price_sum TFPrice">@SumPrice.ToString("N0") تومان</span>
                             @if (!string.IsNullOrEmpty(offCode))
                             {
-                                <span class="span_price span_price_sum" style="margin-right:20px">کد تخفیف: @offCode</span>
+                                <span class="span_price span_price_sum TFCode" style="margin-right:20px">کد تخفیف: @offCode</span>
                             }
                             <form action="/ShopCart/FinalCart" id="compeletCartForm" method="post">
                                 <input type="hidden" id="OnlineLicense1" name="finalCartList[@c].OnlineLicense1" />
@@ -87,7 +97,7 @@
 
 
                                 <input type="hidden" name="finalCartList[@c].ProductID" value="@product.prdxtraProductID" />
-                                <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" data-NeedOnlineLicense="@product.prdxtraNeedOnlineLicense" data-OnlineLicense1Title="@product.prdxtraOnlineLicense1Title" data-OnlineLicense2Title="@product.prdxtraOnlineLicense2Title" class="form-control customerlist" style="margin-right:10px;margin-left:20px">
+                                <select id="customerID_@product.prdxtraProductID" name="finalCartList[@c].CustomerID" data-ProductID="@product.prdxtraProductID" data-ProductTitle="@product.prdxtraTitle" data-LicenseAgreement="@product.prdxtraLicenseAgreement" data-NeedOnlineLicense="@product.prdxtraNeedOnlineLicense" data-OnlineLicense1Title="@product.prdxtraOnlineLicense1Title" data-OnlineLicense2Title="@product.prdxtraOnlineLicense2Title" class="form-control customerlist TGlIST" style="margin-right:10px;margin-left:20px">
                                     <option value="none" selected disabled>--انتخاب مرکز--</option>
                                     @foreach (var item in ViewBag.CustomerList)
                                     {
@@ -114,7 +124,7 @@
                                             @pack.packageName
                                         </td>
                                         <td data-id="@pack.ID" class="width_150">
-                                            <span class="font_15" style="@(finalPrice > 0 ? Html.Raw("color:#b0aeae;text-decoration:line-through") : Html.Raw(""))">@pack.packagePrice.ToString("N0") </span><span class="font_15">@(finalPrice > 0 ? finalPrice.ToString("N0") : "")</span><span class="span_tooman font_12">تومان</span>
+                                            <span class="font_15" style="@(finalPrice > 0 ? Html.Raw("color:#b0aeae;text-decoration:line-through") : Html.Raw(""))">@pack.packagePrice.ToString("N0") </span><span class="font_15">@(finalPrice > 0 ? (finalPrice/10).ToString("N0") : "")</span><span class="span_tooman font_12">تومان</span>
                                         </td>
                                         <td>
                                         </td>
@@ -128,25 +138,31 @@
                 c++;
             }
         <div class="container-full basketpage_cart_footer_div">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-3 basketpage_cart_footer_inner_div">
+                        <span class="basketpage_cart_footer_sum_span"style="font-size:13px;float:right">مبلغ کل :</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff" style="font-size:15px">@(totalProduct?.ToString("N0"))</span>
+                        <span class="basketpage_cart_footer_tooman_span"style="font-size:11px"> تومـان</span>
+                    </div>
 
-            <div class="col-4 basketpage_cart_footer_inner_div">
-                <span class="basketpage_cart_footer_sum_span">مبلغ بدون تخفیف :</span>
-                <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
-                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-            </div>
+                    <div class="col-3 basketpage_cart_footer_inner_div">
+                        <span class="basketpage_cart_footer_sum_span" style="font-size: 13px; float: right;">مبلغ تخفیف :</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font-size:15px">@((TotalPrice ?? 0 - TotalOff ?? 0).ToString("N0"))</span>
+                        <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
+                    </div>
 
-            <div class="col-3 basketpage_cart_footer_inner_div">
-                <span class="basketpage_cart_footer_sum_span">مبلغ تخفیف :</span>
-                <span class="basketpage_cart_footer_price_span" id="totalPriceOff"></span>
-                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-            </div>
-
-            <div class="basketpage_cart_footer_inner_div">
-                <span class="basketpage_cart_footer_sum_span">قابل پرداخت :</span>
-                <span class="basketpage_cart_footer_price_span" id="totalPrice">@TotalPrice.ToString("N0")</span>
-                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
-            </div>
-            <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+                    <div class="col-3 basketpage_cart_footer_inner_div">
+                        <span class="basketpage_cart_footer_sum_span"style="font-size:13px; float: right">قابل پرداخت :</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPrice"style="font-size:15px">@(TotalOff?.ToString("N0"))</span>
+                        <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
+                    </div>
+                    <div class="col-3">
+                        <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+                    </div>
+                </div>
+                </div>
+            
         </div>
         </div>
     </div>

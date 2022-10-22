@@ -291,7 +291,7 @@ namespace Mediska.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxCustomerByUserID>("MDSKGetCustomerByUserID", userIDParameter);
         }
     
-        public virtual int spMDSKInsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense)
+        public virtual int spMDSKInsertContractAndPackage(Nullable<int> contractID, Nullable<int> customerID, string packageIDs, string offCode, Nullable<bool> isConfirm, string onlineLicense1, string onlineLicense2, Nullable<bool> customerAcceptLicense, Nullable<decimal> payPrice, string payReference)
         {
             var contractIDParameter = contractID.HasValue ?
                 new ObjectParameter("ContractID", contractID) :
@@ -325,7 +325,15 @@ namespace Mediska.Models
                 new ObjectParameter("CustomerAcceptLicense", customerAcceptLicense) :
                 new ObjectParameter("CustomerAcceptLicense", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spMDSKInsertContractAndPackage", contractIDParameter, customerIDParameter, packageIDsParameter, offCodeParameter, isConfirmParameter, onlineLicense1Parameter, onlineLicense2Parameter, customerAcceptLicenseParameter);
+            var payPriceParameter = payPrice.HasValue ?
+                new ObjectParameter("PayPrice", payPrice) :
+                new ObjectParameter("PayPrice", typeof(decimal));
+    
+            var payReferenceParameter = payReference != null ?
+                new ObjectParameter("PayReference", payReference) :
+                new ObjectParameter("PayReference", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spMDSKInsertContractAndPackage", contractIDParameter, customerIDParameter, packageIDsParameter, offCodeParameter, isConfirmParameter, onlineLicense1Parameter, onlineLicense2Parameter, customerAcceptLicenseParameter, payPriceParameter, payReferenceParameter);
         }
     
         public virtual int spMDSKConfirmContract(Nullable<int> contractID)
