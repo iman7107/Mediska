@@ -51,7 +51,7 @@
                                 <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
 
                                 <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
-                                <input type="text" name="OffCodeList[@k].OffCode" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
+                                <input type="text" name="OffCodeList[@k].OffCode" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
 
                                 <span id="btnOff_@product.prdxtraProductID" class="btn btn-info" onclick="offCode($(this).attr('id'));" data-IsClick="" style="width:200px">اعمال تخفیف</span>
                             </div>
@@ -132,6 +132,14 @@
 @section scripts{
 
     <script type="text/javascript">
+
+        function myCheckOffCode(event) {
+           
+            if (event.which == 13) {
+                event.preventDefault();
+            }
+            
+        }
         function myDeletePackage(id) {
             //var productID = $("#packageID_" + id).attr("data-ProductID");
             //alert(productID);
@@ -277,13 +285,21 @@
             }
             $("#compeletCart").click(function (e) {
                 e.stopPropagation();
-                //$("#compeletCartForm").submit();
+                $("#compeletCartForm").submit();
             });
 
             $(".offCode").change(function () {
                 if ($(this).val() !== "") {
                     var productID = $(this).attr("id").split('_')[1];
                     $("#btnOff_" + productID).attr("data-IsClick", "");
+                }
+            });
+
+            $(".offCode").on('keypress', function (e) {
+                if (e.which == 13) {
+                    var productID = $(this).attr("id").split('_')[1];
+                    $("#btnOff_" + productID).attr("data-IsClick", "");
+                    offCode(productID);
                 }
             });
         });
