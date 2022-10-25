@@ -49,6 +49,9 @@
         <Function Name="spMDSKGetCustomerInfoByOTPGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GUID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="spMDSKGetMyContracts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
         <Function Name="spMDSKGetPackageListByIDs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IDs" Type="varchar" Mode="In" />
         </Function>
@@ -263,6 +266,9 @@
             <Parameter Name="PackageIDs" Mode="In" Type="String" />
             <Parameter Name="OffCode" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="MDSKGetMyContracts" ReturnType="Collection(SupportModel.cmplxGetMyContracts)">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="cmplxProduct">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -434,6 +440,33 @@
           <Property Type="Single" Name="OffPercent" Nullable="false" />
           <Property Type="Decimal" Name="OffPrice" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="FinalPrice" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="cmplxGetMyContracts">
+          <Property Type="Int32" Name="CustomerID" Nullable="false" />
+          <Property Type="Int32" Name="ContractID" Nullable="false" />
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="OffCode" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PackageID" Nullable="false" />
+          <Property Type="String" Name="customerCompanyName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="ManagerFullName" Nullable="false" MaxLength="201" />
+          <Property Type="String" Name="prdxtraTitle" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="prdxtraAvatarPhotoName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="prdxtraMainPhotoName" Nullable="false" MaxLength="100" />
+          <Property Type="Boolean" Name="prdxtraNeedOnlineLicense" Nullable="true" />
+          <Property Type="String" Name="prdxtraOnlineLicense1Title" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="prdxtraOnlineLicense2Title" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="contractPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="contractOffPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="contractFinalPrice" Nullable="false" Precision="19" />
+          <Property Type="String" Name="contractOnlineLicense1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="contractOnlineLicense2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="contractHardLockID" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="contractDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="packageName" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="conpackPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="conpackOffPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="conpackFinalPrice" Nullable="false" Precision="19" />
+          <Property Type="Boolean" Name="contractCustomerAcceptLicense" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -792,6 +825,37 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="MDSKInsertPayment" FunctionName="SupportModel.Store.spMDSKInsertPayment" />
           <FunctionImportMapping FunctionImportName="MDSKCheckIsCustomerPackagesValid" FunctionName="SupportModel.Store.spMDSKCheckIsCustomerPackagesValid" />
+          <FunctionImportMapping FunctionImportName="MDSKGetMyContracts" FunctionName="SupportModel.Store.spMDSKGetMyContracts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupportModel.cmplxGetMyContracts">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OffCode" ColumnName="OffCode" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="customerCompanyName" ColumnName="customerCompanyName" />
+                <ScalarProperty Name="ManagerFullName" ColumnName="ManagerFullName" />
+                <ScalarProperty Name="prdxtraTitle" ColumnName="prdxtraTitle" />
+                <ScalarProperty Name="prdxtraAvatarPhotoName" ColumnName="prdxtraAvatarPhotoName" />
+                <ScalarProperty Name="prdxtraMainPhotoName" ColumnName="prdxtraMainPhotoName" />
+                <ScalarProperty Name="prdxtraNeedOnlineLicense" ColumnName="prdxtraNeedOnlineLicense" />
+                <ScalarProperty Name="prdxtraOnlineLicense1Title" ColumnName="prdxtraOnlineLicense1Title" />
+                <ScalarProperty Name="prdxtraOnlineLicense2Title" ColumnName="prdxtraOnlineLicense2Title" />
+                <ScalarProperty Name="contractPrice" ColumnName="contractPrice" />
+                <ScalarProperty Name="contractOffPrice" ColumnName="contractOffPrice" />
+                <ScalarProperty Name="contractFinalPrice" ColumnName="contractFinalPrice" />
+                <ScalarProperty Name="contractOnlineLicense1" ColumnName="contractOnlineLicense1" />
+                <ScalarProperty Name="contractOnlineLicense2" ColumnName="contractOnlineLicense2" />
+                <ScalarProperty Name="contractHardLockID" ColumnName="contractHardLockID" />
+                <ScalarProperty Name="contractDate" ColumnName="contractDate" />
+                <ScalarProperty Name="packageName" ColumnName="packageName" />
+                <ScalarProperty Name="conpackPrice" ColumnName="conpackPrice" />
+                <ScalarProperty Name="conpackOffPrice" ColumnName="conpackOffPrice" />
+                <ScalarProperty Name="conpackFinalPrice" ColumnName="conpackFinalPrice" />
+                <ScalarProperty Name="contractCustomerAcceptLicense" ColumnName="contractCustomerAcceptLicense" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -468,5 +468,14 @@ namespace Mediska.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MDSKCheckIsCustomerPackagesValid", customerIDParameter, packageIDsParameter, offCodeParameter);
         }
+    
+        public virtual ObjectResult<cmplxGetMyContracts> MDSKGetMyContracts(Nullable<int> userID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<cmplxGetMyContracts>("MDSKGetMyContracts", userIDParameter);
+        }
     }
 }

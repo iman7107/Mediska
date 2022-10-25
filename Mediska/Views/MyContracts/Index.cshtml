@@ -1,0 +1,123 @@
+﻿@model IEnumerable<cmplxGetMyContracts>
+
+@using Mediska.Models;
+@using Mediska.Models.Repository;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container">
+    <div class="basketpage_buy_div">
+        سبد خرید
+    </div>
+    <div class="margin_top_20 margin_bottom_20">
+        <div id="accordion">
+
+                @foreach (var product in Model.GroupBy(i=> new { i.ProductID }).Select(i=>new cmplxGetMyContracts
+                {
+                    ProductID = i.Key.ProductID,
+                    prdxtraTitle = i.Select(j=>j.prdxtraTitle).FirstOrDefault() ,
+                    OffCode = i.Select(j=>j.OffCode).FirstOrDefault(),
+                    prdxtraAvatarPhotoName = i.Select(j => j.prdxtraAvatarPhotoName).FirstOrDefault(),
+                    contractFinalPrice = i.Select(j => j.contractFinalPrice).FirstOrDefault(),
+                    customerCompanyName = i.Select(j => j.customerCompanyName).FirstOrDefault(),
+                    ManagerFullName = i.Select(j => j.ManagerFullName).FirstOrDefault(),
+
+                }).ToList())
+                {
+
+                    <div class="card">
+                        <div class="card-header" id="heading_@product.ProductID">
+                            <div class="display_flex">
+                                <div class="container">
+                                    <div class="row align-items-lg-center">
+                                        <div class="col-lg">
+                                            <a href="/Home/ShowProduct/@product.ProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
+                                        </div>
+
+                                        <div class="col-lg">
+                                            <a href="/Home/ShowProduct/@product.ProductID"><span class="span_price span_price_sum">@product.prdxtraTitle</span></a>
+                                            
+                                        </div>
+
+                                        <div class="col-lg">
+                                            <span class="span_price span_price_sum">@product.contractFinalPrice.ToString("N0") تومان</span>
+                                        </div>
+
+                                        <div class="col-lg">
+                                            <span class="span_price span_price_sum">تاریخ: @product.contractDate</span>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(product.OffCode))
+                                        {
+                                            <div class="col-lg">
+                                                <span class="span_price span_price_sum">کد تخفیف: @product.OffCode</span>
+                                            </div>
+                                        }
+                                        <div class="col-lg">
+                                            <span class="span_price span_price_sum">مرکز: @product.customerCompanyName</span>
+                                        </div>
+                                        <div class="col-lg">
+                                            <span class="span_price span_price_sum">مدیریت: @product.ManagerFullName</span>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(product.prdxtraOnlineLicense1Title))
+                                        {
+                                            <div class="col-lg">
+                                                <span class="span_price span_price_sum">@product.prdxtraOnlineLicense1Title: @product.contractOnlineLicense1</span>
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(product.prdxtraOnlineLicense2Title))
+                                        {
+                                            <div class="col-lg">
+                                                <span class="span_price span_price_sum">@product.prdxtraOnlineLicense2Title: @product.contractOnlineLicense2</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="collapse_@product.ProductID" class="collapse show" aria-labelledby="heading_@product.ProductID" data-parent="#accordion">
+                            <div class="card-body padding_right_30">
+
+                                <table class="table table-hover table_shop_cart" id="table_@product.ProductID">
+                                    @foreach (var pack in Model.Where(i=>i.ProductID == product.ProductID).ToList())
+                                    {
+                                        <tr class="cursor_pointer data_row" id="packageID_@pack.PackageID" data-ProductID="@product.ProductID">
+                                            <td data-id="@pack.PackageID" class="width_250">
+                                                @pack.packageName
+                                            </td>
+                                            <td data-id="@pack.PackageID" class="width_150">
+                                                @if (pack.conpackOffPrice > 0)
+                                                {
+                                                    <span class="font_15" style="color:#b0aeae;text-decoration:line-through">@((pack.conpackPrice/10).ToString("N0"))</span>
+                                                    <br />
+                                                }
+                                                <span class="font_15">@((pack.conpackFinalPrice/10).ToString("N0"))</span><span class="span_tooman font_12">تومان</span>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+
+        });
+
+    </script>
+}

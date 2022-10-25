@@ -146,6 +146,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MyContractsController.cs" />
     <Compile Include="Controllers\ShopCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -166,6 +167,9 @@
     <Compile Include="Models\cmplxGetCustomerGroup.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\cmplxGetMyContracts.cs">
+      <DependentUpon>MediskaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\cmplxGetUnConfirmPackage.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
@@ -184,6 +188,7 @@
     <Compile Include="Models\cmplxSMSSetting.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Repository\repMyOrders.cs" />
     <Compile Include="Models\Repository\repSetting.cs" />
     <Compile Include="Models\spMDSKCheckOffCode_Result.cs">
       <DependentUpon>MediskaModel.tt</DependentUpon>
@@ -439,6 +444,7 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
     <Content Include="Views\ShopCart\Verify.cshtml" />
+    <Content Include="Views\MyContracts\Index.cshtml" />
     <None Include="Web References\SMSSender\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
