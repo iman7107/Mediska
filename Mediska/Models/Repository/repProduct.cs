@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Web;
+using System.Web.Http.Results;
 
 
 namespace Mediska.Models.Repository
@@ -124,9 +125,17 @@ namespace Mediska.Models.Repository
         //===Marimi
         public List<cmplxCheckOffCode> CheckOffCode(string offCode)
         {
-
-            var result = Context.MDSKCheckOffCode(offCode).ToList();
-            return result;
+            
+            try
+            {
+                var result = Context.MDSKCheckOffCode(offCode).ToList();
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
+                throw;
+            }
 
         }
 

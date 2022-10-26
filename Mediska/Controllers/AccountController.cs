@@ -71,12 +71,12 @@ namespace Mediska.Controllers
             }
             else
             {
-                var isCaptchaValid = await clsPublic.IsCaptchaValid(Request, user.GoogleCaptchaToken, "Login");
-                if (!isCaptchaValid)
-                {
-                    ModelState.AddModelError("GoogleCaptcha", "گزینه امنیتی تایید نشده است");
-                    return View(user);
-                }
+                //var isCaptchaValid = await clsPublic.IsCaptchaValid(Request, user.GoogleCaptchaToken, "Login");
+                //if (!isCaptchaValid)
+                //{
+                //    ModelState.AddModelError("GoogleCaptcha", "گزینه امنیتی تایید نشده است");
+                //    return View(user);
+                //}
 
                 var U = RepU.GetCustomerInfoByMobile(user.userMobile);
 

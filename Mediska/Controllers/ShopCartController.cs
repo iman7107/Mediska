@@ -69,6 +69,9 @@ namespace Mediska.Controllers
         // GET: ShopCart
         public ActionResult Index()
         {
+            if (Session["ShopCart"] == null)
+                return RedirectToAction("Index", "Home");
+
             Session["OffCodeList"] = null;
             return View();
         }
@@ -184,44 +187,55 @@ namespace Mediska.Controllers
 
         public ActionResult CompeletCart(List<clsCompeletCart> offCodeList, string errorMessage = default)
         {
+
+            ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["userID"] as int?);
+
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 ModelState.AddModelError("", errorMessage);
-                ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["userID"] as int?);
                 return View();
             }
-            if (Session["OffCodeList"] == null || offCodeList!=null && offCodeList.Count > 0)
+
+            if (Session["OffCodeList"] == null)
             {
-
-                List<cmplxCheckOffCode> list = bll.CheckOffCode(offCodeList.Select(i=>i.OffCode).FirstOrDefault());
-                List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
-                List<clsCompeletCartDetail> compeletCartDetailList= new List<clsCompeletCartDetail>();
-                var offCode = offCodeList.FirstOrDefault();
-                clsCompeletCart compeletCart = new clsCompeletCart()
+                if (offCodeList != null && offCodeList.Count > 0)
                 {
-                    OffCode = offCode.OffCode,
-                    ProductID = offCode.ProductID
-                };
-                foreach (var item in offCode.CompeletCartDetails)
-                {
-                    var finalPrice = list.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault();
-                    clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
+                    try
                     {
-                        FinalPrice = finalPrice,
-                        PackageID = item.PackageID
-                    };
-                    compeletCartDetailList.Add(compeletCartDetail); 
-                }
-                compeletCart.CompeletCartDetails = compeletCartDetailList;
-                offCodeListResult.Add(compeletCart);
-                Session["OffCodeList"] = offCodeListResult;
-            }
+                        List<cmplxCheckOffCode> list = bll.CheckOffCode(offCodeList.Select(i => i.OffCode).FirstOrDefault());
 
+                        List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
+                        List<clsCompeletCartDetail> compeletCartDetailList = new List<clsCompeletCartDetail>();
+                        var offCode = offCodeList.FirstOrDefault();
+                        clsCompeletCart compeletCart = new clsCompeletCart()
+                        {
+                            OffCode = offCode.OffCode,
+                            ProductID = offCode.ProductID
+                        };
+                        foreach (var item in offCode.CompeletCartDetails)
+                        {
+                            var finalPrice = list.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault();
+                            clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
+                            {
+                                FinalPrice = finalPrice,
+                                PackageID = item.PackageID
+                            };
+                            compeletCartDetailList.Add(compeletCartDetail);
+                        }
+                        compeletCart.CompeletCartDetails = compeletCartDetailList;
+                        offCodeListResult.Add(compeletCart);
+                        Session["OffCodeList"] = offCodeListResult;
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", myErrorMessageString(ex));
+                    }
+
+                }
+            }
 
             if (Session["userID"] == null)
                 return RedirectToAction("Login", "Account", new { ReturnUrl = "/ShopCart/CompeletCart" });
-
-            ViewBag.CustomerList = new repUser().GetCustomerInfoByUserID(Session["userID"] as int?);
 
             return View();
         }
@@ -249,7 +263,7 @@ namespace Mediska.Controllers
                 //Response.Redirect("https://zarinpal.com/pg/StartPay/" + authority);
 
                 var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-                
+
                 if (offCodeList != null && finalCartList != null)
                 {
                     Session["FinalCart"] = finalCartList;
@@ -259,10 +273,10 @@ namespace Mediska.Controllers
                         string packageIDs = string.Join(";", item.CompeletCartDetails.Select(j => j.PackageID));
                         try
                         {
-                            if (finalCart.CustomerID< 1)
+                            if (finalCart.CustomerID < 1)
                                 return RedirectToAction("CompeletCart", new { offCodeList = Session["OffCodeList"], errorMessage = "انتخاب مرکز الزامی است" });
 
-                            bll.CheckIsCustomerPackagesValid(finalCart.CustomerID, packageIDs+";", item.OffCode);
+                            bll.CheckIsCustomerPackagesValid(finalCart.CustomerID, packageIDs + ";", item.OffCode);
 
                             //var contractID = bll.InsertContractAndPackage(finalCart.ContractID == 0 ? null : finalCart.ContractID, finalCart.CustomerID, packageIDs, item.OffCode, false, finalCart.OnlineLicense1, finalCart.OnlineLicense2, true);
 
@@ -272,7 +286,7 @@ namespace Mediska.Controllers
 
                             var errorCode = ex.HResult;
                             var errorMessage = myErrorMessageString(ex);
-                            return RedirectToAction("CompeletCart", new { offCodeList = Session["OffCodeList"] , errorMessage = errorMessage });
+                            return RedirectToAction("CompeletCart", new { offCodeList = Session["OffCodeList"], errorMessage = errorMessage });
                         }
 
                     }
@@ -300,11 +314,11 @@ namespace Mediska.Controllers
                     long refId;
                     ServicePointManager.Expect100Continue = false;
                     com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
-                    int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId); 
+                    int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId);
                     var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
                     var finalCartList = Session["FinalCart"] as List<clsFinalCart>;
 
-                    var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == offCodeList.Select(j=>j.ProductID).FirstOrDefault());
+                    var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == offCodeList.Select(j => j.ProductID).FirstOrDefault());
                     var offCode = offCodeList.Select(i => i.OffCode).FirstOrDefault();
                     var compeletCartDetails = offCodeList.Select(i => i.CompeletCartDetails).FirstOrDefault();
                     if (status == 100 || status == 101)
@@ -326,8 +340,8 @@ namespace Mediska.Controllers
                             throw;
                         }
 
-                        ViewBag.RefId = "کد پیگیری: " + refId ;
-                        
+                        ViewBag.RefId = "کد پیگیری: " + refId;
+
                     }
                     else
                     {
