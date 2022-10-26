@@ -35,6 +35,7 @@ namespace Mediska.Models
             }
             catch (Exception ex)
             {
+                var result = ex.HResult;
                 return false;
             }
 

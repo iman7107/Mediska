@@ -60,7 +60,7 @@ namespace Mediska.Controllers
         //============================================================================================================================
         //============================================================================================================================
         [HttpPost]
-        public async Task<ActionResult> Login(clsLoginModel user)
+        public ActionResult Login(clsLoginModel user)
         {
             user.userMobile = clsPublic.GetEnglishNumber(user.userMobile);
             user.userPassword = clsPublic.GetEnglishNumber(user.userPassword);
