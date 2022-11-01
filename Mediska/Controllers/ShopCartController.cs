@@ -214,7 +214,7 @@ namespace Mediska.Controllers
                         };
                         foreach (var item in offCode.CompeletCartDetails)
                         {
-                            var finalPrice = list.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault();
+                            var finalPrice = list?.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault();
                             clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
                             {
                                 FinalPrice = finalPrice,
