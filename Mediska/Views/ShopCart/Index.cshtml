@@ -23,7 +23,34 @@
 
     }
 }
+<style>
+   
 
+    @@media (min-width: 320px) and (max-width: 991px) {
+        .TFCode {
+            margin-right: -12px;
+            margin-left: 4px;
+            width: 90px;
+        }
+
+        .TFPrice {
+            display: none;
+        }
+
+        .TGlIST {
+            width: 170PX;
+        }
+        .basketpage_cart_footer_sum_span {
+            font-size: 8px;
+        }
+        .basketpage_cart_footer_price_span {
+            font-size: 8px;
+        }
+        .basketpage_cart_footer_tooman_span {
+            font-size: 8px;
+        }
+    }
+</style>
 
 <div class="container">
     <div class="basketpage_buy_div">
@@ -45,18 +72,20 @@
                     <div class="card">
                         <div class="card-header" id="heading_@product.prdxtraProductID">
                             <div class="display_flex">
+
                                 <a href="/Home/ShowProduct/@product.prdxtraProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
-                                <button class="btn btn-link btn_product_title" data-toggle="collapse" data-target="#collapse_@product.prdxtraProductID" aria-expanded="true" aria-controls="collapse_@product.prdxtraProductID">
+                                <button class="btn btn-link btn_product_title" data-toggle="collapse" data-target="#collapse_@product.prdxtraProductID" aria-expanded="true" aria-controls="collapse_@product.prdxtraProductID" style="margin-right: -4px;">
                                     @product.prdxtraTitle
                                 </button>
-                                <span class="span_price span_price_sum">@SumPrice.ToString("N0") تومان</span>
-
+                                <span class="span_price span_price_sum TFPrice">@SumPrice.ToString("N0") تومان</span>
                                 <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
-                                <input type="text" name="OffCodeList[@k].OffCode" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" class="form-control offCode" style="margin-right:20px;margin-left:20px" placeholder="کد تخفیف" />
+                                <input type="text" name="OffCodeList[@k].OffCode" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" class="form-control offCode TFCode" placeholder="کد تخفیف" />
 
-                                <span id="btnOff_@product.prdxtraProductID" class="btn btn-info" onclick="offCode($(this).attr('id'));" data-IsClick="" style="width:200px">اعمال تخفیف</span>
+                                <span id="btnOff_@product.prdxtraProductID" class="btn btn-info " onclick="offCode($(this).attr('id'));" data-IsClick="" style="width:200px">اعمال تخفیف</span>
+
                             </div>
                         </div>
+                        
                         <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
                             <div class="card-body padding_right_30">
 
@@ -84,6 +113,7 @@
                                                     <a href="#" data-PackageID="@pack.ID" onclick="myDeletePackage($(this).attr('data-PackageID'))" class="remove_shopcart"><i class="fa fa-trash-alt font_20" title="حذف از سبد خرید"></i></a>
                                                 }
                                             </td>
+
                                         </tr>
 
                                         d++;
@@ -92,10 +122,12 @@
 
                             </div>
                         </div>
+                        
                     </div>
                     k++;
                 }
             </form>
+          
             <div class="row container-full basketpage_cart_footer_div">
                 <div class="col-12">
                     <div class="row">
