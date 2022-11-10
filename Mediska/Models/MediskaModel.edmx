@@ -405,6 +405,7 @@
           <Property Type="Boolean" Name="customerManagerGender" Nullable="false" />
           <Property Type="Int32" Name="customerAreaID" Nullable="false" />
           <Property Type="String" Name="areaFullTitle" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="customerCompanyName" Nullable="false" MaxLength="200" />
         </ComplexType>
         <ComplexType Name="cmplxGetUnConfirmPackage">
           <Property Type="Int32" Name="CustomerID" Nullable="false" />
@@ -760,6 +761,7 @@
                 <ScalarProperty Name="customerManagerGender" ColumnName="customerManagerGender" />
                 <ScalarProperty Name="customerAreaID" ColumnName="customerAreaID" />
                 <ScalarProperty Name="areaFullTitle" ColumnName="areaFullTitle" />
+                <ScalarProperty Name="customerCompanyName" ColumnName="customerCompanyName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

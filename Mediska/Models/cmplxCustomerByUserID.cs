@@ -25,5 +25,6 @@ namespace Mediska.Models
         public bool customerManagerGender { get; set; }
         public int customerAreaID { get; set; }
         public string areaFullTitle { get; set; }
+        public string customerCompanyName { get; set; }
     }
 }

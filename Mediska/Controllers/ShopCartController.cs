@@ -300,7 +300,6 @@ namespace Mediska.Controllers
             TempData["Message"] = GetMessage(status);
 
             return View("CompeletCart", new { offCodeList = Session["OffCodeList"] });
-
         }
         #endregion
 

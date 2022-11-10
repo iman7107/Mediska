@@ -142,7 +142,7 @@
                                     <option value="none" selected disabled>--انتخاب مرکز--</option>
                                     @foreach (var item in ViewBag.CustomerList)
                                     {
-                                        <option value="@item.customerID">[@item.custgroupName]-[@(item.customerAddress.Length > 30 ? item.customerAddress.Substring(0, 30) + "...." : item.customerAddress)]</option>
+                                        <option value="@item.customerID">@item.customerCompanyName (@(item.customerAddress.Length > 30 ? item.customerAddress.Substring(0, 30) + "...." : item.customerAddress))</option>
                                     }
                                 </select>
                             </form>
