@@ -12,6 +12,7 @@ using System.Reflection.Emit;
 using System.Web.Helpers;
 using System.Web.Http.Results;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 
 
 namespace Mediska.Controllers
@@ -200,31 +201,40 @@ namespace Mediska.Controllers
             {
                 if (offCodeList != null && offCodeList.Count > 0)
                 {
+
                     try
                     {
-                        List<cmplxCheckOffCode> list = bll.CheckOffCode(offCodeList.Select(i => i.OffCode).FirstOrDefault());
+                        if (offCodeList.Count > 0)
+                        {
+                            var offCodeCheckList = offCodeList.Where(i => i.OffCode != null).ToList();
+                            List<cmplxCheckOffCode> list = null;
+                            if (offCodeCheckList != null && offCodeCheckList.Count > 0)
+                                list = bll.CheckOffCode(offCodeList.Select(i => i.OffCode).FirstOrDefault());
 
-                        List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
-                        List<clsCompeletCartDetail> compeletCartDetailList = new List<clsCompeletCartDetail>();
-                        var offCode = offCodeList.FirstOrDefault();
-                        clsCompeletCart compeletCart = new clsCompeletCart()
-                        {
-                            OffCode = offCode.OffCode,
-                            ProductID = offCode.ProductID
-                        };
-                        foreach (var item in offCode.CompeletCartDetails)
-                        {
-                            var finalPrice = list?.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault();
-                            clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
+                            List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
+                            List<clsCompeletCartDetail> compeletCartDetailList = new List<clsCompeletCartDetail>();
+                            var offCode = offCodeList.FirstOrDefault();
+                            clsCompeletCart compeletCart = new clsCompeletCart()
                             {
-                                FinalPrice = finalPrice,
-                                PackageID = item.PackageID
+                                OffCode = offCode.OffCode,
+                                ProductID = offCode.ProductID
                             };
-                            compeletCartDetailList.Add(compeletCartDetail);
+
+                            foreach (var item in offCode.CompeletCartDetails)
+                            {
+                                var finalPrice = list?.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault() ?? bll.GetPackagesByIDs(offCode.CompeletCartDetails.Select(i => i.PackageID).ToList()).Where(i=>i.ID == item.PackageID).Select(i=>i.packagePrice).FirstOrDefault();
+
+                                clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
+                                {
+                                    FinalPrice = finalPrice,
+                                    PackageID = item.PackageID
+                                };
+                                compeletCartDetailList.Add(compeletCartDetail);
+                            }
+                            compeletCart.CompeletCartDetails = compeletCartDetailList;
+                            offCodeListResult.Add(compeletCart);
+                            Session["OffCodeList"] = offCodeListResult;
                         }
-                        compeletCart.CompeletCartDetails = compeletCartDetailList;
-                        offCodeListResult.Add(compeletCart);
-                        Session["OffCodeList"] = offCodeListResult;
                     }
                     catch (Exception ex)
                     {
@@ -264,9 +274,11 @@ namespace Mediska.Controllers
 
                 var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
 
+                if (finalCartList != null)
+                    Session["FinalCart"] = finalCartList;
+
                 if (offCodeList != null && finalCartList != null)
                 {
-                    Session["FinalCart"] = finalCartList;
                     foreach (var item in offCodeList)
                     {
                         var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == item.ProductID);
@@ -314,16 +326,16 @@ namespace Mediska.Controllers
                     ServicePointManager.Expect100Continue = false;
                     com.zarinpal.sandbox.PaymentGatewayImplementationService client = new com.zarinpal.sandbox.PaymentGatewayImplementationService();
                     int status = client.PaymentVerification("MerchantID", Request.QueryString["Authority"], amount, out refId);
-                    var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
-                    var finalCartList = Session["FinalCart"] as List<clsFinalCart>;
-
-                    var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == offCodeList.Select(j => j.ProductID).FirstOrDefault());
-                    var offCode = offCodeList.Select(i => i.OffCode).FirstOrDefault();
-                    var compeletCartDetails = offCodeList.Select(i => i.CompeletCartDetails).FirstOrDefault();
                     if (status == 100 || status == 101)
                     {
                         try
                         {
+                            var offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
+                            var finalCartList = Session["FinalCart"] as List<clsFinalCart>;
+
+                            var finalCart = finalCartList.FirstOrDefault(i => i.ProductID == offCodeList?.Select(j => j.ProductID).FirstOrDefault());
+                            var offCode = offCodeList.Select(i => i.OffCode).FirstOrDefault();
+                            var compeletCartDetails = offCodeList?.Select(i => i.CompeletCartDetails).FirstOrDefault();
                             string packageIDs = string.Join(";", compeletCartDetails.Select(j => j.PackageID));
                             var finalPrice = compeletCartDetails.Select(e => e.FinalPrice).DefaultIfEmpty(0).Sum();
 
@@ -335,11 +347,15 @@ namespace Mediska.Controllers
                         }
                         catch (Exception ex)
                         {
-                            var result = ex.HResult;
-                            throw;
+                            ModelState.AddModelError("", myErrorMessageString(ex));
+                            return View();
                         }
 
                         ViewBag.RefId = "کد پیگیری: " + refId;
+                        Session["offCodes"] = null;
+                        Session["ShopCart"] = null;
+                        Session["FinalCart"] = null;
+                        Session["OffCodeList"] = null;
 
                     }
                     else

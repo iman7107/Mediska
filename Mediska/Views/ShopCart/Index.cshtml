@@ -216,22 +216,27 @@
 
             $(".offCode").each(function () {
                 var val = $(this).val();
+                var elementID = $(this).attr("id");
                 var productID = $(this).attr("id").split('_')[1];
 
                 if (val !== "") {
 
                     jQuery.getJSON("/ShopCart/myDiscountList", { offCode: val }, function (data) {
+
                         if (data.Status == "Error") {
                             showAlert("خطا", data.Message, "error");
+                            $("#" + elementID).val("");
+                            $("#" + elementID).focus();
                         }
                         else {
-
+                            var flag = false;
                             $.each(data.Data, function (i) {
                                 var packageID = data.Data[i].PackageID;
                                 $("#collapse_" + productID + " .table .data_row").each(function () {
                                     var elementID = $(this).find("td").eq(0).attr("data-id");
 
                                     if (elementID.toString() === packageID.toString()) {
+                                        flag = true;
                                         $(this).find("td").eq(1).find("span").eq(0).css("color", "#b0aeae");
                                         $(this).find("td").eq(1).find("span").eq(0).css("text-decoration", "line-through");
                                         var finalPrice = parseInt(data.Data[i].FinalPrice) / 10;
@@ -243,6 +248,9 @@
                                     }
                                 });
                             });
+                            if (!flag) {
+                                showAlert("خطا", "کد تخفیف مربوط به پکیج های انتخاب شده نمیباشد", "error");
+                            }
                         }
 
                     });
@@ -262,6 +270,8 @@
             setInterval(function () {
                 totalPrice();
             }, 1000);
+
+
         }
         function totalPrice() {
             var totalOff = 0;

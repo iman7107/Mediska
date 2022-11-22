@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var customerID = Session["userID"] as int? ?? 0;
 }
 
 <style>
@@ -109,94 +110,101 @@
     <div class="margin_top_20 margin_bottom_20">
         <div id="accordion">
 
-            @foreach (var product in Model.GroupBy(i => new { i.ProductID, i.CustomerID }).Select(i => new cmplxGetMyContracts
+            @*.GroupBy(i => new { i.c.ProductID, i.CustomerID }).Select(i => new cmplxGetMyContracts
+        {
+        ProductID = i.Key.ProductID,
+        prdxtraTitle = i.Select(j => j.prdxtraTitle).FirstOrDefault(),
+        OffCode = i.Select(j => j.OffCode).FirstOrDefault(),
+        prdxtraAvatarPhotoName = i.Select(j => j.prdxtraAvatarPhotoName).FirstOrDefault(),
+        contractFinalPrice = i.Select(j => j.contractFinalPrice).FirstOrDefault(),
+        customerCompanyName = i.Select(j => j.customerCompanyName).FirstOrDefault(),
+        ManagerFullName = i.Select(j => j.ManagerFullName).FirstOrDefault(),
+
+        }).ToList()*@
+
+            @foreach (var product in Model.GroupBy(i => i.ContractID).Select(i => new cmplxGetMyContracts
             {
-                ProductID = i.Key.ProductID,
-                prdxtraTitle = i.Select(j => j.prdxtraTitle).FirstOrDefault(),
-                OffCode = i.Select(j => j.OffCode).FirstOrDefault(),
-                prdxtraAvatarPhotoName = i.Select(j => j.prdxtraAvatarPhotoName).FirstOrDefault(),
-                contractFinalPrice = i.Select(j => j.contractFinalPrice).FirstOrDefault(),
-                customerCompanyName = i.Select(j => j.customerCompanyName).FirstOrDefault(),
-                ManagerFullName = i.Select(j => j.ManagerFullName).FirstOrDefault(),
+            ProductID = i.Select(j => j.ProductID).FirstOrDefault(),
+            prdxtraTitle = i.Select(j => j.prdxtraTitle).FirstOrDefault(),
+            OffCode = i.Select(j => j.OffCode).FirstOrDefault(),
+            prdxtraAvatarPhotoName = i.Select(j => j.prdxtraAvatarPhotoName).FirstOrDefault(),
+            contractFinalPrice = i.Select(j => j.contractFinalPrice).FirstOrDefault(),
+            customerCompanyName = i.Select(j => j.customerCompanyName).FirstOrDefault(),
+            ManagerFullName = i.Select(j => j.ManagerFullName).FirstOrDefault(),
 
             }).ToList())
             {
 
-                <div class="card">
-                    <div class="card-header" id="heading_@product.ProductID">
-                        <div class="display_flex">
-                            <div class="container">
-                                <div class="row align-items-lg-center">
-
-                                  
-                                        <a href="/Home/ShowProduct/@product.ProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
-                                  
-
-                                 
-                                        <a href="/Home/ShowProduct/@product.ProductID"><span class="span_price span_price_sum TFTITLE">@product.prdxtraTitle</span></a>
+            <div class="card">
+                <div class="card-header" id="heading_@product.ProductID">
+                    <div class="display_flex">
+                        <div class="container">
+                            <div class="row align-items-lg-center">
 
 
-                                        <span class="span_price span_price_sum TFPrice" style="MARGIN-RIGHT: 20PX;">@product.contractFinalPrice.ToString("N0") تومان</span>
-                                  
+                                <a href="/Home/ShowProduct/@product.ProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart" /></a>
 
-                                
-                                        <span class="span_price span_price_sum TFDA" style="MARGIN-RIGHT: 20PX;">تاریخ: @Mediska.Classes.Utility.myConvertMiladiToShamsi(product.contractDate)</span>
-                                   
-                                    @if (!string.IsNullOrEmpty(product.OffCode))
-                                    {
-                                        
-                                            <span class="span_price span_price_sum TFCode" style="MARGIN-RIGHT: 20PX;">کد تخفیف: @product.OffCode</span>
-                                        
-                                    }
-                                   
-                                        <span class="span_price span_price_sum TFMR" style="MARGIN-RIGHT: 20PX;">مرکز: @product.customerCompanyName</span>
-                                    
-                                 
-                                        <span class="span_price span_price_sum TFMo"style="MARGIN-RIGHT: 20PX;" >مدیریت: @product.ManagerFullName</span>
-                                   
-                                    @if (!string.IsNullOrEmpty(product.prdxtraOnlineLicense1Title))
-                                    {
-                                        
-                                            <span class="span_price span_price_sum" style="MARGIN-RIGHT: 20PX;">@product.prdxtraOnlineLicense1Title: @product.contractOnlineLicense1</span>
-                                       
-                                    }
-                                    @if (!string.IsNullOrEmpty(product.prdxtraOnlineLicense2Title))
-                                    {
-                                        
-                                            <span class="span_price span_price_sum" style="MARGIN-RIGHT: 20PX;">@product.prdxtraOnlineLicense2Title: @product.contractOnlineLicense2</span>
-                                        
-                                    }
-                                </div>
-                            </div>
+                                <a href="/Home/ShowProduct/@product.ProductID"><span class="span_price span_price_sum TFTITLE">@product.prdxtraTitle</span></a>
 
-                        </div>
-                    </div>
-                    <div id="collapse_@product.ProductID" class="collapse show" aria-labelledby="heading_@product.ProductID" data-parent="#accordion">
-                        <div class="card-body padding_right_30">
+                                <span class="span_price span_price_sum TFPrice" style="MARGIN-RIGHT: 20PX;">@product.contractFinalPrice.ToString("N0") تومان</span>
 
-                            <table class="table table-hover table_shop_cart" id="table_@product.ProductID">
-                                @foreach (var pack in Model.Where(i => i.ProductID == product.ProductID).ToList())
+                                <span class="span_price span_price_sum TFDA" style="MARGIN-RIGHT: 20PX;">تاریخ: @Mediska.Classes.Utility.myConvertMiladiToShamsi(product.contractDate)</span>
+
+                                @if (!string.IsNullOrEmpty(product.OffCode))
                                 {
-                                    <tr class="cursor_pointer data_row" id="packageID_@pack.PackageID" data-ProductID="@product.ProductID">
-                                        <td data-id="@pack.PackageID" class="width_250">
-                                            @pack.packageName
-                                        </td>
-                                        <td data-id="@pack.PackageID" class="width_150">
-                                            @if (pack.conpackOffPrice > 0)
-                                            {
-                                                <span class="font_15" style="color:#b0aeae;text-decoration:line-through">@((pack.conpackPrice/10).ToString("N0"))</span>
-                                                <br />
-                                            }
-                                            <span class="font_15">@((pack.conpackFinalPrice/10).ToString("N0"))</span><span class="span_tooman font_12">تومان</span>
-                                        </td>
-                                    </tr>
+
+                                    <span class="span_price span_price_sum TFCode" style="MARGIN-RIGHT: 20PX;">کد تخفیف: @product.OffCode</span>
 
                                 }
-                            </table>
 
+                                <span class="span_price span_price_sum TFMR" style="MARGIN-RIGHT: 20PX;">مرکز: @product.customerCompanyName</span>
+
+
+                                <span class="span_price span_price_sum TFMo" style="MARGIN-RIGHT: 20PX;">مدیریت: @product.ManagerFullName</span>
+
+                                @if (!string.IsNullOrEmpty(product.prdxtraOnlineLicense1Title))
+                                {
+
+                                    <span class="span_price span_price_sum" style="MARGIN-RIGHT: 20PX;">@product.prdxtraOnlineLicense1Title: @product.contractOnlineLicense1</span>
+
+                                }
+                                @if (!string.IsNullOrEmpty(product.prdxtraOnlineLicense2Title))
+                                {
+
+                                    <span class="span_price span_price_sum" style="MARGIN-RIGHT: 20PX;">@product.prdxtraOnlineLicense2Title: @product.contractOnlineLicense2</span>
+
+                                }
+                            </div>
                         </div>
+
                     </div>
                 </div>
+                <div id="collapse_@product.ProductID" class="collapse show" aria-labelledby="heading_@product.ProductID" data-parent="#accordion">
+                    <div class="card-body padding_right_30">
+
+                        <table class="table table-hover table_shop_cart" id="table_@product.ProductID">
+                            @foreach (var pack in Model.Where(i => i.ProductID == product.ProductID).ToList())
+                            {
+                                <tr class="cursor_pointer data_row" id="packageID_@pack.PackageID" data-ProductID="@product.ProductID">
+                                    <td data-id="@pack.PackageID" class="width_250">
+                                        @pack.packageName
+                                    </td>
+                                    <td data-id="@pack.PackageID" class="width_150">
+                                        @if (pack.conpackOffPrice > 0)
+                                        {
+                                            <span class="font_15" style="color:#b0aeae;text-decoration:line-through">@((pack.conpackPrice/10).ToString("N0"))</span>
+                                            <br />
+                                        }
+                                        <span class="font_15">@((pack.conpackFinalPrice/10).ToString("N0"))</span><span class="span_tooman font_12">تومان</span>
+                                    </td>
+                                </tr>
+
+                            }
+                        </table>
+
+                    </div>
+                </div>
+            </div>
             }
 
         </div>

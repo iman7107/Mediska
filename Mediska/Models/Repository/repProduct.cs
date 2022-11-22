@@ -126,16 +126,9 @@ namespace Mediska.Models.Repository
         public List<cmplxCheckOffCode> CheckOffCode(string offCode)
         {
             
-            try
-            {
                 var result = Context.MDSKCheckOffCode(offCode).ToList();
                 return result;
-            }
-            catch (Exception)
-            {
-                return null;
-                throw;
-            }
+
 
         }
 

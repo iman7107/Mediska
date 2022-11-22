@@ -189,13 +189,13 @@
 
                     <div class="col-3 basketpage_cart_footer_inner_div">
                         <span class="basketpage_cart_footer_sum_span" style=" float: right;">مبلغ تخفیف :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font-size:15px">@((TotalPrice ?? 0 - TotalOff ?? 0).ToString("N0"))</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font-size:15px">@(((TotalOff ?? 0) > 0 ?( TotalPrice ?? 0 - TotalOff ?? 0) : 0).ToString("N0"))</span>
                         <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
                     </div>
 
                     <div class="col-3 basketpage_cart_footer_inner_div">
                         <span class="basketpage_cart_footer_sum_span"style=" float: right">قابل پرداخت :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPrice"style="font-size:15px">@(TotalOff?.ToString("N0"))</span>
+                        <span class="basketpage_cart_footer_price_span" id="totalPrice"style="font-size:15px">@(TotalPrice?.ToString("N0"))</span>
                         <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
                     </div>
                     <div class="col-3">
