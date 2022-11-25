@@ -44,11 +44,56 @@
     label {
         width: 20%;
     }
-    @@media (min-width: 330px) and (max-width: 500px) {
+    @@media (min-width: 780px) and (max-width: 991px){
+        .basketpage_cart_footer_sum_span {
+            font-size: 14px;
+            margin-right: 3px;
+        }
 
+        .basketpage_cart_footer_price_span {
+            font-size: 12px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 14px;
+            margin-right: 3px;
+        }
+
+        #compeletCart {
+            margin-right: -27px;
+            width: 80px;
+            font-size: 10px
+        }
+    }
+    @@media (min-width: 501px) and (max-width: 780px) {
+        .basketpage_cart_footer_sum_span {
+            font-size: 10px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 7px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 5px;
+            margin-right: 3px;
+        }
+
+        #compeletCart {
+            margin-right: -30px;
+            width: 60px;
+            font-size: 10px
+        }
+
+        .TFCode {
+            font-size: 9px;
+        }
 
         .TFPrice {
-            display: none;
+            font-size: 9px;
         }
 
         .TFTITLE {
@@ -67,10 +112,57 @@
             font-size: 8px;
         }
     }
+    @@media (min-width: 330px) and (max-width: 500px) {
+        .basketpage_cart_footer_sum_span {
+            font-size: 8px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 7px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 5px;
+            margin-right: 3px;
+        }
+
+        #compeletCart {
+            width: 100px;
+            font-size: 10px
+        }
+        .TFCode {
+            display: none;
+        }
+        .TFPrice {
+            display: none;
+        }
+
+        .TFTITLE {
+            display: none;
+            /*  font-size: 9px;*/
+        }
+
+        .basketpage_cart_footer_sum_span {
+            font-size: 8px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 8px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 8px;
+        }
+    }
 
     @@media (min-width: 10px) and (max-width: 330px) {
+       
 
-
+        .TFCode {
+            display: none;
+        }
         .TFPrice {
             display: none;
         }
@@ -121,7 +213,7 @@
                 <div class="card">
                     <div class="card-header" id="heading_@product.prdxtraProductID">
                         <div class="display_flex">
-                            
+
                             <a href="/Home/ShowProduct/@product.prdxtraProductID"><img src="~/Content/image/Products/@product.prdxtraAvatarPhotoName" class="product_img_cart TFImage" /></a>
                             <button class="btn btn-link btn_product_title TFTITLE" data-toggle="collapse" data-target="#collapse_@product.prdxtraProductID" aria-expanded="true" style="margin-right: -3px;" aria-controls="collapse_@product.prdxtraProductID">
                                 @product.prdxtraTitle
@@ -178,33 +270,66 @@
 
                 c++;
             }
-        <div class="container-full basketpage_cart_footer_div">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-3 basketpage_cart_footer_inner_div">
-                        <span class="basketpage_cart_footer_sum_span"style="float:right">مبلغ کل :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff" style="font-size:15px">@(totalProduct?.ToString("N0"))</span>
-                        <span class="basketpage_cart_footer_tooman_span"style="font-size:11px"> تومـان</span>
+
+            <div class="card">
+                <div class="card-footer basketpage_cart_footer_div">
+                    <div class=" container-full">
+                        <div class="">
+                            <div class="row">
+                                <div class=" basketpage_cart_footer_inner_div">
+                                    <span class="basketpage_cart_footer_sum_span" style="float:right;margin-right:20px">مبلغ کل :</span>
+                                    <span class="basketpage_cart_footer_price_span" style="font:bold" id="totalPriceWithoutOff">@(totalProduct?.ToString("N0"))</span>
+                                    <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                                </div>
+
+                                <div class=" basketpage_cart_footer_inner_div">
+                                    <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">مبلغ تخفیف :</span>
+                                    <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font:bold">@(((TotalOff ?? 0) > 0 ?( TotalPrice ?? 0 - TotalOff ?? 0) : 0).ToString("N0"))</span>
+                                    <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                                </div>
+
+                                <div class=" basketpage_cart_footer_inner_div">
+                                    <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">قابل پرداخت :</span>
+                                    <span class="basketpage_cart_footer_price_span" id="totalPrice" style="font:bold">@(TotalPrice?.ToString("N0"))</span>
+                                    <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                                </div>
+                                <div class="" style="float:left; margin-right: 10px;margin-left:20px">
+                                    <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="col-3 basketpage_cart_footer_inner_div">
-                        <span class="basketpage_cart_footer_sum_span" style=" float: right;">مبلغ تخفیف :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font-size:15px">@(((TotalOff ?? 0) > 0 ?( TotalPrice ?? 0 - TotalOff ?? 0) : 0).ToString("N0"))</span>
-                        <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
-                    </div>
+                </div>
+            </div>
+            @*<div class="container-full basketpage_cart_footer_div">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-3 basketpage_cart_footer_inner_div">
+                            <span class="basketpage_cart_footer_sum_span" style="float:right">مبلغ کل :</span>
+                            <span class="basketpage_cart_footer_price_span" id="totalPriceWithoutOff" style="font-size:15px">@(totalProduct?.ToString("N0"))</span>
+                            <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
+                        </div>
 
-                    <div class="col-3 basketpage_cart_footer_inner_div">
-                        <span class="basketpage_cart_footer_sum_span"style=" float: right">قابل پرداخت :</span>
-                        <span class="basketpage_cart_footer_price_span" id="totalPrice"style="font-size:15px">@(TotalPrice?.ToString("N0"))</span>
-                        <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
-                    </div>
-                    <div class="col-3">
-                        <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+                        <div class="col-3 basketpage_cart_footer_inner_div">
+                            <span class="basketpage_cart_footer_sum_span" style=" float: right;">مبلغ تخفیف :</span>
+                            <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font-size:15px">@(((TotalOff ?? 0) > 0 ?( TotalPrice ?? 0 - TotalOff ?? 0) : 0).ToString("N0"))</span>
+                            <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
+                        </div>
+
+                        <div class="col-3 basketpage_cart_footer_inner_div">
+                            <span class="basketpage_cart_footer_sum_span" style=" float: right">قابل پرداخت :</span>
+                            <span class="basketpage_cart_footer_price_span" id="totalPrice" style="font-size:15px">@(TotalPrice?.ToString("N0"))</span>
+                            <span class="basketpage_cart_footer_tooman_span" style="font-size:11px"> تومـان</span>
+                        </div>
+                        <div class="col-3">
+                            <a href="#" id="compeletCart" class="btn btn-success">پرداخت</a>
+                        </div>
                     </div>
                 </div>
-                </div>
-            
-        </div>
+
+            </div>*@
         </div>
     </div>
 </div>

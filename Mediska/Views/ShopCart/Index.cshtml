@@ -24,19 +24,171 @@
     }
 }
 <style>
+    .TbtnOFF {
+        width: 200PX;
+    }
+    .TFCode {
+        width: 400px;
+        margin-left: 20px;
+        margin-right: 20px
+    }
+    @@media (min-width: 768px) and (max-width: 990px)  {
+
+        .basketpage_cart_footer_sum_span {
+            font-size: 15px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 10px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 13px;
+        }
+
+        .TFCode {
+            width: 400px;
+            margin-left: 20px;
+            margin-right: 20px
+        }
+    }
+    @@media (min-width: 701px) and (max-width: 768px) {
+        .basketpage_cart_footer_sum_span {
+            font-size: 10px;
+            margin-right:3px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 7px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 5px;
+            margin-right: 3px;
+        }
+        #compeletCart {
+            margin-right: -27px;
+            width: 50px;
+            font-size: 10px
+        }
+        .TFTITLE {
+            font-size:9px;
+        }
+        .TFPrice {
+            font-size: 9px;
+        }
+
+        .TFCode {
+            width: 180px;
+
+            margin-left: 20px;
+            margin-right: 20px
+        }
 
 
 
-   
+
+
+
+    }
+    @@media (min-width: 501px) and (max-width: 700px) {
+        .TFTITLE {
+            font-size: 9px;
+        }
+
+        .TFCode {
+            width: 200px;
+            margin-left: 5px;
+            margin-right: 5px
+        }
+        .TFPrice {
+            display: none;
+        }
+        .basketpage_cart_footer_sum_span {
+            font-size: 10px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 7px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 5px;
+            margin-right: 3px;
+        }
+
+        #compeletCart {
+            margin-right: -27px;
+            width: 50px;
+            font-size: 10px
+        }
+    }
     @@media (min-width: 330px) and (max-width: 500px) {
 
 
+        .TFCode {
+            width: 69%;
+            font-size: 8px
+        }
+        .TbtnOFF {
+            width: 30%;
+            
+        }
         .TFPrice {
             display: none;
         }
 
         .TFTITLE {
-            font-size: 9px;
+            display: none;
+        }
+        .basketpage_cart_footer_sum_span {
+            font-size: 8px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_price_span {
+            font-size: 7px;
+            margin-right: 3px;
+        }
+
+        .basketpage_cart_footer_tooman_span {
+            font-size: 5px;
+            margin-right: 3px;
+        }
+
+        #compeletCart {
+          
+            width: 100px;
+            font-size: 10px
+        }
+    }
+    @@media (min-width: 10px) and (max-width: 330px) {
+        #compeletCart {
+            width: 50px;
+            font-size: 10px
+        }
+       
+      
+        .TbtnOFF {
+            width: 30%;
+            font-size: 8px
+        }
+
+        .TFCode {
+            width: 50%;
+           
+        }
+        .product_img_cart {
+            width: 60px;
+        }
+        .TFPrice {
+            display: none;
+        }
+        .TFTITLE {
+            display: none;
         }
         .basketpage_cart_footer_sum_span {
             font-size: 8px;
@@ -50,19 +202,8 @@
             font-size: 8px;
         }
     }
-    @@media (min-width: 10px) and (max-width: 330px) {
 
-      
-        .TFPrice {
-            display: none;
-        }
-        .TFTITLE {
-            display: none;
-        }
 
-    }
-
-   
 </style>
 
 <div class="container">
@@ -92,13 +233,13 @@
                                 </button>
                                 <span class="span_price span_price_sum TFPrice">@SumPrice.ToString("N0") تومان</span>
                                 <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
-                                <input type="text" name="OffCodeList[@k].OffCode" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" class="form-control offCode TFCode" placeholder="کد تخفیف" />
+                                <input type="text" name="OffCodeList[@k].OffCode" style="" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" class="form-control offCode TFCode" placeholder="کد تخفیف" />
 
-                                <span id="btnOff_@product.prdxtraProductID" class="btn btn-info " onclick="offCode($(this).attr('id'));" data-IsClick="" style="width:200px">اعمال تخفیف</span>
+                                <span id="btnOff_@product.prdxtraProductID" class="btn btn-info TbtnOFF" onclick="offCode($(this).attr('id'));" data-IsClick="" style="">اعمال تخفیف</span>
 
                             </div>
                         </div>
-
+                       
                         <div id="collapse_@product.prdxtraProductID" class="collapse show" aria-labelledby="heading_@product.prdxtraProductID" data-parent="#accordion">
                             <div class="card-body padding_right_30">
 
@@ -140,8 +281,40 @@
                     k++;
                 }
             </form>
+            <div class="card">
+                <div class="card-footer basketpage_cart_footer_div">
+                    <div class=" container-full">
+                          <div class="">
+                        <div class="row">
+                            <div class=" basketpage_cart_footer_inner_div">
+                                <span class="basketpage_cart_footer_sum_span" style="float:right;margin-right:20px">مبلغ کل :</span>
+                                <span class="basketpage_cart_footer_price_span" style="font:bold" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
+                                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                            </div>
 
-            <div class=" container-full basketpage_cart_footer_div">
+                            <div class=" basketpage_cart_footer_inner_div">
+                                <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">مبلغ تخفیف :</span>
+                                <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font:bold">0</span>
+                                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                            </div>
+
+                            <div class=" basketpage_cart_footer_inner_div">
+                                <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">قابل پرداخت :</span>
+                                <span class="basketpage_cart_footer_price_span" id="totalPrice" style="font:bold">@TotalPrice.ToString("N0")</span>
+                                <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
+                            </div>
+                            <div class="" style="float:left; margin-right: 10px;margin-left:20px">
+                                <a href="#" id="compeletCart" class="btn btn-success">تکمیل خرید</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                  
+                </div>
+                </div>
+           
+            @*<div class=" container-full basketpage_cart_footer_div">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 basketpage_cart_footer_inner_div">
@@ -168,7 +341,7 @@
 
                 </div>
 
-            </div>
+            </div>*@
            
         </div>
     </div>
