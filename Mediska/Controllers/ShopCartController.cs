@@ -73,7 +73,7 @@ namespace Mediska.Controllers
             if (Session["ShopCart"] == null)
                 return RedirectToAction("Index", "Home");
 
-            Session["OffCodeList"] = null;
+            //Session["OffCodeList"] = null;
             return View();
         }
 
@@ -172,7 +172,7 @@ namespace Mediska.Controllers
         //    return RedirectToAction("Index");
         //}
 
-        public ActionResult RemovePackageFromCart(int id, string offCodes)
+        public ActionResult RemovePackageFromCart(int id, string offCodes, List<clsCompeletCart> offCodeList)
         {
             List<int> cart = Session["ShopCart"] as List<int>;
             int index = cart.FindIndex(p => p == id);
@@ -182,6 +182,56 @@ namespace Mediska.Controllers
             }
             Session["offCodes"] = offCodes;
             Session["ShopCart"] = cart;
+
+            if (offCodeList != null)
+            {
+
+                try
+                {
+                    var details = offCodeList.Select(i => i.CompeletCartDetails).FirstOrDefault();
+                    var detail = details.FirstOrDefault(i => i.PackageID == id);
+                    details.Remove(detail);
+
+                    if (offCodeList.Count > 0)
+                    {
+                        var offCodeCheckList = offCodeList.Where(i => i.OffCode != null).ToList();
+                        List<cmplxCheckOffCode> list = null;
+                        if (offCodeCheckList != null && offCodeCheckList.Count > 0)
+                            list = bll.CheckOffCode(offCodeList.Select(i => i.OffCode).FirstOrDefault());
+
+                        List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
+                        List<clsCompeletCartDetail> compeletCartDetailList = new List<clsCompeletCartDetail>();
+                        var offCode = offCodeList.FirstOrDefault();
+                        clsCompeletCart compeletCart = new clsCompeletCart()
+                        {
+                            OffCode = offCode.OffCode,
+                            ProductID = offCode.ProductID
+                        };
+
+                        foreach (var item in offCode.CompeletCartDetails)
+                        {
+                            var finalPrice = list?.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault() ?? bll.GetPackagesByIDs(offCode.CompeletCartDetails.Select(i => i.PackageID).ToList()).Where(i => i.ID == item.PackageID).Select(i => i.packagePrice).FirstOrDefault();
+
+                            clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
+                            {
+                                FinalPrice = finalPrice,
+                                PackageID = item.PackageID
+                            };
+                            compeletCartDetailList.Add(compeletCartDetail);
+                        }
+                        compeletCart.CompeletCartDetails = compeletCartDetailList;
+                        offCodeListResult.Add(compeletCart);
+                        Session["OffCodeList"] = offCodeListResult;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", myErrorMessageString(ex));
+                }
+
+            }
+
+
             return RedirectToAction("Index");
         }
         #region CompeletCart
@@ -197,51 +247,48 @@ namespace Mediska.Controllers
                 return View();
             }
 
-            if (Session["OffCodeList"] == null)
+            if (offCodeList != null && offCodeList.Count > 0)
             {
-                if (offCodeList != null && offCodeList.Count > 0)
+
+                try
                 {
-
-                    try
+                    if (offCodeList.Count > 0)
                     {
-                        if (offCodeList.Count > 0)
+                        var offCodeCheckList = offCodeList.Where(i => i.OffCode != null).ToList();
+                        List<cmplxCheckOffCode> list = null;
+                        if (offCodeCheckList != null && offCodeCheckList.Count > 0)
+                            list = bll.CheckOffCode(offCodeList.Select(i => i.OffCode).FirstOrDefault());
+
+                        List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
+                        List<clsCompeletCartDetail> compeletCartDetailList = new List<clsCompeletCartDetail>();
+                        var offCode = offCodeList.FirstOrDefault();
+                        clsCompeletCart compeletCart = new clsCompeletCart()
                         {
-                            var offCodeCheckList = offCodeList.Where(i => i.OffCode != null).ToList();
-                            List<cmplxCheckOffCode> list = null;
-                            if (offCodeCheckList != null && offCodeCheckList.Count > 0)
-                                list = bll.CheckOffCode(offCodeList.Select(i => i.OffCode).FirstOrDefault());
+                            OffCode = offCode.OffCode,
+                            ProductID = offCode.ProductID
+                        };
 
-                            List<clsCompeletCart> offCodeListResult = new List<clsCompeletCart>();
-                            List<clsCompeletCartDetail> compeletCartDetailList = new List<clsCompeletCartDetail>();
-                            var offCode = offCodeList.FirstOrDefault();
-                            clsCompeletCart compeletCart = new clsCompeletCart()
+                        foreach (var item in offCode.CompeletCartDetails)
+                        {
+                            var finalPrice = list?.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault() ?? bll.GetPackagesByIDs(offCode.CompeletCartDetails.Select(i => i.PackageID).ToList()).Where(i => i.ID == item.PackageID).Select(i => i.packagePrice).FirstOrDefault();
+
+                            clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
                             {
-                                OffCode = offCode.OffCode,
-                                ProductID = offCode.ProductID
+                                FinalPrice = finalPrice,
+                                PackageID = item.PackageID
                             };
-
-                            foreach (var item in offCode.CompeletCartDetails)
-                            {
-                                var finalPrice = list?.Where(i => i.PackageID == item.PackageID).Select(i => i.FinalPrice).FirstOrDefault() ?? bll.GetPackagesByIDs(offCode.CompeletCartDetails.Select(i => i.PackageID).ToList()).Where(i=>i.ID == item.PackageID).Select(i=>i.packagePrice).FirstOrDefault();
-
-                                clsCompeletCartDetail compeletCartDetail = new clsCompeletCartDetail()
-                                {
-                                    FinalPrice = finalPrice,
-                                    PackageID = item.PackageID
-                                };
-                                compeletCartDetailList.Add(compeletCartDetail);
-                            }
-                            compeletCart.CompeletCartDetails = compeletCartDetailList;
-                            offCodeListResult.Add(compeletCart);
-                            Session["OffCodeList"] = offCodeListResult;
+                            compeletCartDetailList.Add(compeletCartDetail);
                         }
+                        compeletCart.CompeletCartDetails = compeletCartDetailList;
+                        offCodeListResult.Add(compeletCart);
+                        Session["OffCodeList"] = offCodeListResult;
                     }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", myErrorMessageString(ex));
-                    }
-
                 }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", myErrorMessageString(ex));
+                }
+
             }
 
             if (Session["userID"] == null)

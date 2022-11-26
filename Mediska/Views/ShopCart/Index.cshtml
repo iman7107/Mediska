@@ -7,11 +7,17 @@
 
 @{
     repProduct RepP = new repProduct();
-    decimal TotalPrice = 0;
+    decimal? TotalPrice = 0;
+    decimal? TotalOff = 0;
+    decimal? totalProduct = 0;
+
     int k = 0, d = 0;
 
     List<cmplxProduct> ProductList = new List<cmplxProduct>();
     List<cmplxPackage> PackageList = new List<cmplxPackage>();
+    List<clsCompeletCart> offCodeList = new List<clsCompeletCart>();
+    List<cmplxGetUnConfirmPackage> unConfirmPackage = new List<cmplxGetUnConfirmPackage>();
+
     if (Session["ShopCart"] != null)
     {
         List<int> cart = Session["ShopCart"] as List<int>;
@@ -20,6 +26,21 @@
         var ProductIDs = PackageList.Select(i => i.packageProductID).Distinct().ToList();
         ProductList = RepP.GetProductsByIDs(ProductIDs);
         TotalPrice = PackageList.Sum(i => i.packagePrice);
+        offCodeList = Session["OffCodeList"] as List<clsCompeletCart>;
+        if (offCodeList != null)
+        {
+            var compeletCartDetails = offCodeList?.Select(i => i.CompeletCartDetails).FirstOrDefault();
+
+            if (compeletCartDetails != null)
+            {
+                TotalPrice = compeletCartDetails.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum() /10;
+            }
+
+            totalProduct = PackageList.Sum(i => i.packagePrice);
+            unConfirmPackage = RepP.UnConfirmPackage(Session["userID"] as int?);
+            TotalOff = totalProduct - TotalPrice;
+
+        }
 
     }
 }
@@ -127,7 +148,7 @@
         }
     }
     @@media (min-width: 330px) and (max-width: 500px) {
-
+        
 
         .TFCode {
             width: 69%;
@@ -166,11 +187,8 @@
         }
     }
     @@media (min-width: 10px) and (max-width: 330px) {
-        #compeletCart {
-            width: 50px;
-            font-size: 10px
-        }
-       
+      
+      
       
         .TbtnOFF {
             width: 30%;
@@ -222,6 +240,10 @@
                 {
                     var MyPackageList = PackageList.Where(i => i.packageProductID == product.prdxtraProductID).ToList();
                     var SumPrice = MyPackageList.Sum(i => i.packagePrice);
+                    var offCode = offCodeList?.Where(i => i.ProductID == product.ID).Select(i => i.OffCode).FirstOrDefault();
+                    var contractID = unConfirmPackage?.Where(i => i.ProductID == product.ID).Select(i => i.ContractID).FirstOrDefault();
+
+                    var offCodeDetail = offCodeList?.Where(i => i.ProductID == product.ID).Select(i => i.CompeletCartDetails).FirstOrDefault();
 
                     <div class="card">
                         <div class="card-header" id="heading_@product.prdxtraProductID">
@@ -233,7 +255,7 @@
                                 </button>
                                 <span class="span_price span_price_sum TFPrice">@SumPrice.ToString("N0") تومان</span>
                                 <input type="hidden" name="OffCodeList[@k].ProductID" value="@product.prdxtraProductID" />
-                                <input type="text" name="OffCodeList[@k].OffCode" style="" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" class="form-control offCode TFCode" placeholder="کد تخفیف" />
+                                <input type="text" name="OffCodeList[@k].OffCode" style="" onkeypress="myCheckOffCode(event)" id="offCode_@product.prdxtraProductID" value="@offCode" class="form-control offCode TFCode" placeholder="کد تخفیف" />
 
                                 <span id="btnOff_@product.prdxtraProductID" class="btn btn-info TbtnOFF" onclick="offCode($(this).attr('id'));" data-IsClick="" style="">اعمال تخفیف</span>
 
@@ -246,6 +268,8 @@
                                 <table class="table table-hover table_shop_cart" id="table_@product.prdxtraProductID">
                                     @foreach (var pack in MyPackageList)
                                     {
+                                        var finalPrice = offCodeDetail?.Where(i => i.PackageID == pack.ID).Select(i => i.FinalPrice).FirstOrDefault() ?? 0;
+
                                         <tr class="cursor_pointer data_row" id="packageID_@pack.ID" data-ProductID="@product.prdxtraProductID">
                                             <td data-id="@pack.ID" class="width_250">
                                                 @pack.packageName
@@ -253,7 +277,8 @@
 
                                                 <input id="finalPrice_@pack.ID" type="hidden" name="OffCodeList[@k].CompeletCartDetails[@d].FinalPrice" value="" />
                                             </td>
-                                            <td data-id="@pack.ID" class="width_150"><span class="font_15">@pack.packagePrice.ToString("N0") </span><span data-OffPrice="" class="font_15"></span><span class="span_tooman font_12">تومان</span></td>
+                                            <td data-id="@pack.ID" class="width_150">
+                                            <span class="font_15" style="@(finalPrice > 0 ? Html.Raw("color:#b0aeae;text-decoration:line-through") : Html.Raw(""))">@pack.packagePrice.ToString("N0") </span><span data-OffPrice="" class="font_15">@(finalPrice > 0 ? (finalPrice/10).ToString("N0") : "")</span><span class="span_tooman font_12">تومان</span></td>
                                             <td class="td_trash">
                                                 @if (pack.packagePartitionIndex == 0)
                                                 {
@@ -288,19 +313,19 @@
                         <div class="row">
                             <div class=" basketpage_cart_footer_inner_div">
                                 <span class="basketpage_cart_footer_sum_span" style="float:right;margin-right:20px">مبلغ کل :</span>
-                                <span class="basketpage_cart_footer_price_span" style="font:bold" id="totalPriceWithoutOff">@TotalPrice.ToString("N0")</span>
+                                <span class="basketpage_cart_footer_price_span" style="font:bold" id="totalPriceWithoutOff">@(totalProduct?.ToString("N0"))</span>
                                 <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
                             </div>
 
                             <div class=" basketpage_cart_footer_inner_div">
                                 <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">مبلغ تخفیف :</span>
-                                <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font:bold">0</span>
+                                <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font:bold">@(TotalOff?.ToString("N0"))</span>
                                 <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
                             </div>
 
                             <div class=" basketpage_cart_footer_inner_div">
                                 <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">قابل پرداخت :</span>
-                                <span class="basketpage_cart_footer_price_span" id="totalPrice" style="font:bold">@TotalPrice.ToString("N0")</span>
+                                <span class="basketpage_cart_footer_price_span" id="totalPrice" style="font:bold">@(TotalPrice?.ToString("N0"))</span>
                                 <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
                             </div>
                             <div class="" style="float:left; margin-right: 10px;margin-left:20px">
@@ -374,7 +399,10 @@
                 }
             });
 
-            window.location = "/ShopCart/RemovePackageFromCart/?id=" + id + "&offCodes=" + offCodes;
+            $("#compeletCartForm").prop("action", "/ShopCart/RemovePackageFromCart/?id=" + id + "&offCodes=" + offCodes);
+
+            $("#compeletCartForm").submit();
+            //window.location = "/ShopCart/RemovePackageFromCart/?id=" + id + "&offCodes=" + offCodes;
         }
         function addComma(str) {
             var objRegex = new RegExp("(-?[0-9]+)([0-9]{3})");
@@ -456,14 +484,15 @@
                 }
 
             });
+
             var totalPrice = '@TotalPrice';
-            
+
             var result = parseInt(totalPrice) - parseInt(totalOff) / 10;
             $("#totalPriceOff").text(addComma((parseInt(totalOff) / 10).toString()));
-            $("#totalPrice").text(addComma(result.toString()));
+            $("#totalPrice").text(addComma(parseInt(totalPrice).toString()));
         }
         $(function () {
-            var offCodes = '@Session["offCodes"]';
+            @*var offCodes = '@Session["offCodes"]';
 
             if (offCodes !== "") {
                 var t = offCodes.split(',');
@@ -510,7 +539,7 @@
                     }
                 });
 
-            }
+            }*@
             $("#compeletCart").click(function (e) {
                 e.stopPropagation();
                 $("#compeletCartForm").submit();

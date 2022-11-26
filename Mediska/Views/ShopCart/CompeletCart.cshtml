@@ -25,7 +25,7 @@
 
         if (compeletCartDetails != null)
         {
-            TotalOff = compeletCartDetails.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum();
+            TotalPrice = compeletCartDetails.Select(g => g.FinalPrice).DefaultIfEmpty(0).Sum()/ 10;
         }
 
         PackageList = RepP.GetPackagesByIDs(cart);
@@ -33,7 +33,7 @@
         ProductList = RepP.GetProductsByIDs(ProductIDs);
         totalProduct = PackageList.Sum(i => i.packagePrice);
         unConfirmPackage = RepP.UnConfirmPackage(Session["userID"] as int?);
-        TotalPrice = totalProduct - (TotalOff / 10);
+        TotalOff = totalProduct - TotalPrice ;
     }
 }
 <style>
@@ -284,7 +284,7 @@
 
                                 <div class=" basketpage_cart_footer_inner_div">
                                     <span class="basketpage_cart_footer_sum_span" style="float: right; margin-right: 10px">مبلغ تخفیف :</span>
-                                    <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font:bold">@(((TotalOff ?? 0) > 0 ?( TotalPrice ?? 0 - TotalOff ?? 0) : 0).ToString("N0"))</span>
+                                    <span class="basketpage_cart_footer_price_span" id="totalPriceOff" style="font:bold">@(TotalOff?.ToString("N0"))</span>
                                     <span class="basketpage_cart_footer_tooman_span"> تومـان</span>
                                 </div>
 
@@ -352,7 +352,7 @@
                 <a href="#" id="btnCancel" class="btn btn-warning btncancel" data-dismiss="modal" aria-hidden="true">
                     انصراف
                 </a>
-                <a href="#" class="btn btn-success" id="btnOK" data-dismiss="modal" aria-hidden="true">
+                <a href="#" class="btn btn-success" data-target="html" id="btnOK" data-dismiss="modal" aria-hidden="true">
                     شرایط توافق نامه را میپذیرم
                 </a>
             </div>
@@ -570,7 +570,16 @@
                 $("#OnlineLicense2").val(onlineLicense2Value);
             });
 
-            $("#btnOK , #btnInsertCustomer").click(function () {
+            //$("#btnOK , #btnInsertCustomer").click(function () {
+            //    btnCancelClick = true;
+            //});
+
+            $("#btnOK").click(function () {
+                btnCancelClick = true;
+                $('body').scrollTop(0);
+            });
+
+            $("#btnInsertCustomer").click(function () {
                 btnCancelClick = true;
             });
 
